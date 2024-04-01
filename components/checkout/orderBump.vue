@@ -58,7 +58,7 @@ const configCheckbox = ref({
 	"label": 'fm3 textColor cursor-pointer'
 });
 
-onMounted(() => {
+onNuxtReady(() => {
 	// aplicando classe de fonte para a descrição do order bump
 	Array.from(document.getElementById('descriptionOB').getElementsByTagName('strong')).forEach(element => {
 		element.classList.add('fm3');

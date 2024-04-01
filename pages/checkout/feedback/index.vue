@@ -47,7 +47,7 @@ const feedbackDescription = computed(() => {
 	if (storeCheckout.formRegister.feedbackPayment === 'credit-card') return app.checkout_feedback_card_credit_text_list_description.list;
 });
 
-onMounted(() => {
+onNuxtReady(() => {
 	storeCheckout.progressPurchase(
 		[
 			{ step: 1, complete: true },

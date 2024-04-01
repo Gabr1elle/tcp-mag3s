@@ -27,7 +27,7 @@ const titleText = computed(() => {
 	return `${app.login_user_text_title}`;
 });
 
-onMounted(() => {
+onNuxtReady(() => {
 	storeCheckout.progressPurchase(
 		[
 			{ step: 1, complete: false },

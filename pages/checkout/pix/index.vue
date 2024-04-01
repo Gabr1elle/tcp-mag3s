@@ -76,7 +76,7 @@ function copyAndPasteCodePix() {
 	});
 }
 
-onMounted(() => {
+onNuxtReady(() => {
 	storeCheckout.progressPurchase(
 		[
 			{ step: 1, complete: true },

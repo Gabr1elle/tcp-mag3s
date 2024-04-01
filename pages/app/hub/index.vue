@@ -130,7 +130,7 @@ const bgCarouselPaginationActive = computed(() => {
 	return app.colors_emphasis_active_and_hover;
 });
 
-onMounted(async () => {
+onNuxtReady(async () => {
 	await storeIncentive.userInventory(useToast);
 	await storeIncentive.lotteryDraws(useToast);
 

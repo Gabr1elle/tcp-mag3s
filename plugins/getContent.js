@@ -67,4 +67,28 @@ export default defineNuxtPlugin((nuxt) => {
 			});
 		}
 	}, { global: true });
+
+	addRouteMiddleware('meta-header', (to, from) => {
+		// Ignorar o middleware em determinadas páginas
+		if (to.fullPath.includes('admin')) return;
+
+		const { pathAssets } = useRuntimeConfig().public;
+
+		useHead({
+			link: [{rel: 'icon', type: 'image/png', href: storeApp.contentApp.config_meta_tags_page_seo_favicon ? `${pathAssets}${storeApp.contentApp.config_meta_tags_page_seo_favicon}` : 'favicon.png'}],
+			meta: [{name: 'keywords', content: ''}]
+		});
+
+		useSeoMeta({
+			title: storeApp.contentApp.config_meta_tags_page_seo_title,
+			description: storeApp.contentApp.config_meta_tags_page_seo_description,
+			ogType: 'website',
+			ogLocale: 'pt_BR',
+			ogTitle: storeApp.contentApp.config_meta_tags_page_seo_title,
+			ogDescription: storeApp.contentApp.config_meta_tags_page_seo_description,
+			ogUrl: storeApp.contentApp.config_meta_tags_page_seo_og_url,
+			ogImage: storeApp.contentApp.config_meta_tags_page_seo_og_image ? `${pathAssets}${storeApp.contentApp.config_meta_tags_page_seo_og_image}` : 'og-image.png',
+		});
+
+	}, { global: true });
 });

@@ -75,7 +75,7 @@ const descriptionText = computed(() => {
 	return `${app.create_user_text_description_two}`;
 });
 
-onMounted(() => {
+onNuxtReady(() => {
 	storeCheckout.progressPurchase(
 		[
 			{ step: 1, complete: false },
@@ -97,6 +97,7 @@ const colorTextButton = computed(() => {
 
 const configInput = ref({
 	rounded: 'rounded-full',
+	variant: { outline: 'bg-white' }
 });
 
 const configButton = ref({

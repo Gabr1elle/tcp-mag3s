@@ -84,7 +84,7 @@ const back = () => {
 	router.go(-1);
 }
 
-onMounted(() => {
+onNuxtReady(() => {
 	headerScrollStyle('header-app', 20, 'animate__fadeInDown');
 });
 </script>

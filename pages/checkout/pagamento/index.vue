@@ -66,7 +66,7 @@ const titleText = computed(() => {
 	return `${app.create_user_text_title_three}`;
 });
 
-onMounted(() => {
+onNuxtReady(() => {
 	storeCheckout.progressPurchase(
 		[
 			{ step: 1, complete: true },

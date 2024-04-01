@@ -136,6 +136,12 @@ export function enumsResponseServer(code) {
 					'O método de pagamento ou operador não foram configurados, contate o Administrador do Sistema!',
 			};
 
+		case 'UserNotFound':
+			return {
+				title: 'Ops, algo deu errado!',
+				message: 'Usuário não encontrado, tente outro e-mail!',
+			};
+
 		default:
 			return {
 				title: 'Ops, algo deu errado!',

@@ -124,6 +124,41 @@ export const listSchemaDataMedia = [
 		tag: 'config',
 		type: typesMedia[0],
 	},
+	{
+		name: 'config_meta_tags_page_seo_title',
+		description: 'Título do site que aparece no title da página de toda a aplicação',
+		value: 'Super Promo | Campanha de Incentivo - Mag3s Tecnologia',
+		tag: 'config',
+		type: typesMedia[0],
+	},
+	{
+		name: 'config_meta_tags_page_seo_description',
+		description: 'Descrição do site que aparece nas pesquisas de página de toda a aplicação',
+		value: 'Descubra como nossa campanha de incentivo pode impulsionar a motivação e o desempenho da sua equipe. Oferecemos um template eficaz para criar uma campanha personalizada que recompensa e reconhece o esforço dos colaboradores, impulsionando o sucesso da sua empresa.',
+		tag: 'config',
+		type: typesMedia[0],
+	},
+	{
+		name: 'config_meta_tags_page_seo_og_url',
+		description: 'Link de OG para SEO',
+		value: 'https://mag3s.com',
+		tag: 'config',
+		type: typesMedia[1],
+	},
+	{
+		name: 'config_meta_tags_page_seo_favicon',
+		description: 'Imagem de Favicon para SEO do site',
+		placeholder: '/favicon.png',
+		tag: 'config',
+		type: typesMedia[3],
+	},
+	{
+		name: 'config_meta_tags_page_seo_og_image',
+		description: 'Imagem de OG para SEO',
+		placeholder: '/og-image.png',
+		tag: 'config',
+		type: typesMedia[3],
+	},
 
 	// Brand
 	{

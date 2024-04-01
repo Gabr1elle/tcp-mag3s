@@ -4,12 +4,13 @@
 			@submit="storeIncentive.userLogin(useToast, true, props.isCheckout)">
 			<UFormGroup label="Seu e-mail" name="user">
 				<UInput size="xl" icon="i-material-symbols-person-check-outline-rounded" v-model="storeIncentive.formLogin.user"
-					type="text" color="white" variant="outline" :ui="configInput" inputmode="email" />
+					type="text" color="white" variant="outline" :ui="{ ...configInput, variant: { outline: 'bg-white' } }"
+					inputmode="email" />
 			</UFormGroup>
 
 			<UFormGroup label="Sua senha" name="password">
 				<UInput size="xl" v-model="storeIncentive.formLogin.password" color="white" :type="passView.password"
-					:ui="{ ...configInput, icon: { trailing: { pointer: '' } } }"
+					:ui="{ ...configInput, icon: { trailing: { pointer: '' } }, variant: { outline: 'bg-white' } }"
 					icon="i-material-symbols-passkey-outline-rounded">
 					<template #trailing>
 						<UButton v-show="storeIncentive.formLogin.password !== ''" color="gray" variant="link"

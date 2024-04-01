@@ -25,7 +25,7 @@ const background = computed(() => {
 	return `background-color: ${app.colors_background_one}`;
 });
 
-onMounted(() => {
+onNuxtReady(() => {
 	widthWindow.value = window.innerWidth;
 });
 </script>

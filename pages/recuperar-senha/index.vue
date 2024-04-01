@@ -1,35 +1,19 @@
 <template>
 	<!-- BG padrão de fundo da página -->
 	<div class="absolute">
-		<LpBgDefault
-			v-if="app.config_will_have_hotsite"
-			:image="app.layout_background_app_two"
-			:imageMobile="app.layout_background_app_mobile_two"
-			placeholderImage="/imgs/lp/cover_banner_3.png"
-			placeholderImageMobile="/imgs/lp/cover_banner_mobile_3.png"
-			:bgColor="app.layout_background_colors_app_two"
-			position="fixed"
-		/>
+		<LpBgDefault v-if="app.config_will_have_hotsite" :image="app.layout_background_app_two"
+			:imageMobile="app.layout_background_app_mobile_two" placeholderImage="/imgs/lp/cover_banner_3.png"
+			placeholderImageMobile="/imgs/lp/cover_banner_mobile_3.png" :bgColor="app.layout_background_colors_app_two"
+			position="fixed" />
 		<AppLayoutBgDefault v-else />
 	</div>
 
-	<AppLayoutHeader
-		v-if="app.config_will_have_hotsite"
-		:hasLogout="false"
-		:bgColor="app.header_colors_background_app_two"
-		:textColor="app.header_colors_text_app"
-		:isLogoDark="true"
-	/>
+	<AppLayoutHeader v-if="app.config_will_have_hotsite" :hasLogout="false"
+		:bgColor="app.header_colors_background_app_two" :textColor="app.header_colors_text_app" :isLogoDark="true" />
 
-	<UContainer
-		class="flex justify-center min-h-screen pt-14 lg:pt-0"
-		:class="isItemsCenter"
-		:style="textColor"
-	>
-		<div
-			class="grid-cols-1 lg:grid-cols-[500px_1fr] gap-8 lg:gap-16 justify-center items-center w-screen"
-			:class="isGridLayout"
-		>
+	<UContainer class="flex justify-center min-h-screen pt-14 lg:pt-0" :class="isItemsCenter" :style="textColor">
+		<div class="grid-cols-1 lg:grid-cols-[500px_1fr] gap-8 lg:gap-16 justify-center items-center w-screen"
+			:class="isGridLayout">
 			<!-- brand -->
 			<div class="hidden md:flex justify-center">
 				<AppOthersImageBrandSession />
@@ -45,37 +29,16 @@
 				</p>
 
 				<!-- E-mail cadastrado para recuperar a senha -->
-				<UForm
-					id="resetUser"
-					class="space-y-4"
-					@submit="storeIncentive.userReset(useToast)"
-					:state="storeIncentive.resetUser"
-					:schema="schema"
-				>
+				<UForm id="resetUser" class="space-y-4" @submit="storeIncentive.userReset(useToast)"
+					:state="storeIncentive.resetUser" :schema="schema">
 					<UFormGroup label="Seu e-mail cadastrado" name="email">
-						<UInput
-							size="xl"
-							icon="i-material-symbols-mail-lock-outline-rounded"
-							v-model="storeIncentive.resetUser.email"
-							type="text"
-							color="white"
-							variant="outline"
-							:ui="configInput"
-						/>
+						<UInput size="xl" icon="i-material-symbols-mail-lock-outline-rounded"
+							v-model="storeIncentive.resetUser.email" type="text" color="white" variant="outline" :ui="configInput" />
 					</UFormGroup>
 
 					<div class="flex justify-center">
-						<UButton
-							size="xl"
-							label="enviar instruções"
-							type="submit"
-							:ui="configButton"
-							:style="[colorBgButton, colorTextButton]"
-							class="fm3"
-							:disabled="buttonDisabled"
-							:loading="!storeIncentive.loading"
-							trailing
-						/>
+						<UButton size="xl" label="enviar instruções" type="submit" :ui="configButton"
+							:style="[colorBgButton, colorTextButton]" class="fm3" :loading="!storeIncentive.loading" trailing />
 					</div>
 				</UForm>
 			</div>
@@ -93,13 +56,9 @@ const app = store.contentApp;
 const storeIncentive = useStoreIncentive();
 
 
-const schema = object ({
+const schema = object({
 	email: string().email('E-mail inválido').required('Campo obrigatório')
 })
-
-const buttonDisabled = computed(() => {
-  return !storeIncentive.resetUser.email
-});
 
 const colorBgButton = computed(() => {
 	return `background-color: ${app.colors_background_button_hotsite}`;
@@ -123,6 +82,7 @@ const isItemsCenter = computed(() => {
 
 const configInput = ref({
 	rounded: 'rounded-full',
+	variant: { outline: 'bg-white' }
 });
 
 const configButton = ref({

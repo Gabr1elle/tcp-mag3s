@@ -50,7 +50,7 @@ const optionsButton = ref({
 	}
 });
 
-onMounted(() => {
+onNuxtReady(() => {
 	headerScrollStyle('header-hotsite', 200, 'animate__fadeInDown');
 });
 </script>
