@@ -42,6 +42,14 @@ export const listSchemaDataMedia = [
 		type: typesMedia[6],
 	},
 	{
+		name: 'config_name_client_project',
+		description:
+			'Nome do cliente exibido em algumas áreas do site como o footer da landing page (hotsite)',
+		value: 'Incentiva',
+		tag: 'config',
+		type: typesMedia[1],
+	},
+	{
 		name: 'config_will_have_raffle',
 		description:
 			'Utilizado para exibir elementos que só possuem em sites de rifas.',

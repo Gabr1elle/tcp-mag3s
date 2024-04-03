@@ -38,7 +38,7 @@
 
 				<div>
 					<p class="text-sm sm:text-base text-center mt-12">&copy; {{ $year() }} <span
-							class="fm3 uppercase">Incentiva</span> - Todos direitos reservados</p>
+							class="fm3 uppercase">{{ app.config_name_client_project }}</span> - Todos os direitos reservados</p>
 				</div>
 			</div>
 		</UContainer>
