@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - homolog
 name: 📟 Deploy Promo Seu Toba FTP Production
 defaults:
   run:

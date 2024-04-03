@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - homolog
 name: 📟 Deploy Fiel da Sorte FTP Production
 defaults:
   run:
