@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
 	const mediasDB = await MediasModel.findAll({
 		attributes: {
 			exclude: ['createdAt', 'updatedAt', 'tag', 'id'],
+			include: ['name', 'value'],
 		},
 	});
 
@@ -12,7 +13,7 @@ export default defineEventHandler(async (event) => {
 		let medias = {};
 
 		mediasDB.forEach((media) => {
-			medias[media.name] = media.value;
+			medias[media.name] = media.value !== undefined ? media.value : '';
 		});
 
 		return {

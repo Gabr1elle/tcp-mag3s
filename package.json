@@ -9,6 +9,7 @@
 		"raffles": "npx nuxi dev --dotenv .env.raffles --host",
 		"fieldasorte": "npx nuxi dev --dotenv .env.fieldasorte --host",
 		"seutoba": "npx nuxi dev --dotenv .env.seutoba --host",
+		"explosaogr6": "npx nuxi dev --dotenv .env.explosaogr6 --host",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
 		"postinstall": "nuxt prepare"
@@ -48,7 +49,7 @@
 		"mysql2": "^3.6.1",
 		"nuxt3-meta-pixel": "^1.0.9",
 		"pinia": "^2.1.6",
-		"sequelize": "^6.33.0",
+		"sequelize": "^6.37.2",
 		"vue3-carousel-nuxt": "^1.1.0",
 		"yup": "^1.3.3"
 	}
