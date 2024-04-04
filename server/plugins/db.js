@@ -7,13 +7,14 @@ export default defineNitroPlugin(async (nitro) => {
 		await sequelize.sync({
 			alter: config.forceAlterDb,
 			force: config.forceDropDb,
+			logging: false,
 		});
-		await MediasModel.sync();
+		await MediasModel.sync({ logging: false });
 		await createAdmin();
 		await createTypesMedia();
 		await createSchemaDataMedia();
 		console.log('conectado ao banco!');
 	} catch (err) {
-		console.log(`Não foi possível conectar ao banco: ${err}`);
+		throw new Error(`Não foi possível conectar ao banco: ${err}`);
 	}
 });
