@@ -64,3 +64,20 @@ jobs:
             .editorconfig
             README.md
           dry-run: false
+
+      - name: 🌎 Sync files to FTP Explosao GR6
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: 35.199.123.44
+          username: tcp.mag3s.com_github
+          password: ${{ secrets.PASS_FTP_EXPLOSAOGR6 }}
+          local-dir: ./
+          server-dir: /
+          exclude: |
+            **/.github/**
+            **/.git/**
+            **/.vscode/**
+            .gitignore
+            .editorconfig
+            README.md
+          dry-run: false
