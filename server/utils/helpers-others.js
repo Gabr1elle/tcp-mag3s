@@ -112,15 +112,15 @@ export const listSchemaDataMedia = [
 	},
 	{
 		name: 'config_meta_pixel_code_id',
-		description: 'ID utilizado na configuração e importação do Meta Pixel Code do Facebook.',
+		description:
+			'ID utilizado na configuração e importação do Meta Pixel Code do Facebook.',
 		value: '',
 		tag: 'config',
 		type: typesMedia[0],
 	},
 	{
 		name: 'config_maintenance_will_have_app',
-		description:
-			'Utilizado para exibir a página de manutenção do site.',
+		description: 'Utilizado para exibir a página de manutenção do site.',
 		value: '0',
 		tag: 'config',
 		type: typesMedia[6],
@@ -128,21 +128,25 @@ export const listSchemaDataMedia = [
 	{
 		name: 'config_maintenance_text_description',
 		description: 'Título/Descrição da página de manutanção da aplicação.',
-		value: '<br>Estamos temporariamente fora do ar para atualizações e melhorias. <br>Fique tranquilo, voltaremos em breve, melhor do que nunca!',
+		value:
+			'<br>Estamos temporariamente fora do ar para atualizações e melhorias. <br>Fique tranquilo, voltaremos em breve, melhor do que nunca!',
 		tag: 'config',
 		type: typesMedia[0],
 	},
 	{
 		name: 'config_meta_tags_page_seo_title',
-		description: 'Título do site que aparece no title da página de toda a aplicação',
+		description:
+			'Título do site que aparece no title da página de toda a aplicação',
 		value: 'Super Promo | Campanha de Incentivo - Mag3s Tecnologia',
 		tag: 'config',
 		type: typesMedia[0],
 	},
 	{
 		name: 'config_meta_tags_page_seo_description',
-		description: 'Descrição do site que aparece nas pesquisas de página de toda a aplicação',
-		value: 'Descubra como nossa campanha de incentivo pode impulsionar a motivação e o desempenho da sua equipe. Oferecemos um template eficaz para criar uma campanha personalizada que recompensa e reconhece o esforço dos colaboradores, impulsionando o sucesso da sua empresa.',
+		description:
+			'Descrição do site que aparece nas pesquisas de página de toda a aplicação',
+		value:
+			'Descubra como nossa campanha de incentivo pode impulsionar a motivação e o desempenho da sua equipe. Oferecemos um template eficaz para criar uma campanha personalizada que recompensa e reconhece o esforço dos colaboradores, impulsionando o sucesso da sua empresa.',
 		tag: 'config',
 		type: typesMedia[0],
 	},
@@ -1312,6 +1316,27 @@ export const listSchemaDataMedia = [
 			'{"list":[{"one": "", "two": "cremosinha", "type": "archive"}, {"one": "", "two": "cremosinho", "type": "archive"}]}',
 		tag: 'hotsite',
 		type: typesMedia[7],
+	},
+	{
+		name: 'influencer_race_card_hub_image',
+		description: 'Imagem de destaque do card do hub para corrida dos influencers',
+		placeholder: '/imgs/icon_runner_influencers.png',
+		tag: 'app',
+		type: typesMedia[3],
+	},
+	{
+		name: 'influencer_race_card_hub_description',
+		description: 'Descrição do card do hub para corrida dos influencers',
+		value: 'Ir para a CORRIDA DE INFLUENCERS',
+		tag: 'app',
+		type: typesMedia[0],
+	},
+	{
+		name: 'influencer_race_card_hub_colors_background',
+		description: 'Cor de fundo compartilhado para corrida dos influencers',
+		value: '#FF00FF',
+		tag: 'app',
+		type: typesMedia[2],
 	},
 	{
 		name: 'config_will_have_influencer_race',
