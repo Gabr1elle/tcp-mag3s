@@ -17,14 +17,15 @@
 						class="w-full flex flex-col justify-between" autoplay="6500" :wrap-around="true" snap-align="center-odd"
 						:pause-autoplay-on-hover="true">
 						<template #slides>
-							<Slide v-for="slide in storeIncentive.listDrawsUpcomingLimited(Number(app.carousel_banner_main_qtd_items))"
+							<Slide
+								v-for="slide in storeIncentive.listDrawsUpcomingLimited(Number(app.carousel_banner_main_qtd_items))"
 								:key="slide" class="flex flex-col">
 								<AppBannersCard :linkSource="storeIncentive.NextDrawLink(slide)"
-									:hasImageDetach="app.config_will_have_image_detach_banner_main" :imageDetach="app.banner_image_card_one"
-									:loading="storeIncentive.nextDrawLoading(true)" :title="store.titleCardNextDraw(slide.date)"
-									:subtitle="store.subtitleCardNextDraw(slide.date)" :countdown="slide.date"
-									:callToAction="store.labelButtonCardNextDraw(slide.date)" :hasDescription="false" :description="false"
-									:imageAward="slide.image" />
+									:hasImageDetach="app.config_will_have_image_detach_banner_main"
+									:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading(true)"
+									:title="store.titleCardNextDraw(slide.date)" :subtitle="store.subtitleCardNextDraw(slide.date)"
+									:countdown="slide.date" :callToAction="store.labelButtonCardNextDraw(slide.date)"
+									:hasDescription="false" :description="false" :imageAward="slide.image" />
 							</Slide>
 						</template>
 						<template #addons>
@@ -65,22 +66,31 @@
 					<!-- Lado Esquerdo -->
 					<AppBannersCard4 :linkSource="storeIncentive.lastDrawHeldLink" :background="app.banner_background_card_three"
 						:title="app.banner_text_card_title_three" :callToAction="app.banner_text_card_label_button_one"
-						:loading="storeIncentive.lastDrawLoading" :awards="[storeIncentive.lastDrawHeldFull]" :carouselAutoPlay="0" />
+						:loading="storeIncentive.lastDrawLoading" :awards="[storeIncentive.lastDrawHeldFull]"
+						:carouselAutoPlay="0" />
 
-					<!-- Lado Direito -->
+					// <!-- Lado Direito -->
 					<AppBannersCard4 linkSource="" :background="app.banner_background_card_four"
 						:title="app.banner_text_card_title_four" :callToAction="false" :loading="storeIncentive.nextDrawLoading()"
 						:awards="storeIncentive.listDrawsUpcomingLimited(5)" :carouselAutoPlay="5000" />
 				</div>
 
-				<!-- Banner final -->
-				<AppBannersCard5 class="lg:order-3 row-span-1"
-					:linkSource="`${app.banner_final_link_card_hub}${app.config_will_have_raffle ? '/' + storeIncentive.gamification.lotteryDraws.nextDraw.id : ''}`"
-					:imageDetach="app.banner_final_image_card_hub" :description="app.banner_final_text_description_card_hub"
-					:isPositionElementsOther="app.banner_final_is_position_el_card_hub" />
+
+				<div>
+					<AppBannersCard5 class="row-span-1"
+						:linkSource="`${app.banner_final_link_card_hub}${app.config_will_have_raffle ? '/' + storeIncentive.gamification.lotteryDraws.nextDraw.id : ''}`"
+						:imageDetach="app.banner_final_image_card_hub" :description="app.banner_final_text_description_card_hub"
+						:isPositionElementsOther="app.banner_final_is_position_el_card_hub" />
+				</div>
+
+				<div v-if="app.config_will_have_influencer_race">
+					<AppBannersCard5 class="row-span-1" :imageDetach="app.influencer_race_card_hub_image"
+						:description="app.influencer_race_card_hub_description"
+						:style="`background-color: ${app.influencer_race_card_hub_colors_background}`" />
+				</div>
 			</div>
 
-			<!-- Menu Behaviour -->
+			// <!-- Menu Behaviour -->
 			<div v-if="storeIncentive.userLoggedIn">
 				<AppLayoutOverlay :showing="store.isOpenMenuBehaviour" />
 				<div v-if="app.config_will_have_hotsite">
