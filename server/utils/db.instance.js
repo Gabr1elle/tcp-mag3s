@@ -6,7 +6,7 @@ const configDB = {
 	port: config.portDb ? config.portDb : '',
 	name: config.nameDb,
 	user: config.userDb,
-	pass: config.passDb,
+	pass: String(config.passDb),
 };
 
 export const sequelize = new Sequelize(configDB.name, configDB.user, configDB.pass, {
