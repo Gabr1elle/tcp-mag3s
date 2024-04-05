@@ -24,10 +24,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 				to.params.influencer
 			);
 		}
-
-		// Exibe o influencer no hotsite
-		storeApp.chosenInfluencer(to.params.influencer);
 	}
+
+	// Exibe o influencer no hotsite
+	storeApp.chosenInfluencer(to.params.influencer);
 
 	return;
 });

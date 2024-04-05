@@ -19,8 +19,8 @@
 			</div>
 
 			<!-- Influencer -->
-			<UContainer v-if="app.config_will_have_influencer_race" :style="colorTextTwo"
-				class="absolute bottom-[10%] lg:bottom-[20%] z-10">
+			<UContainer v-if="app.config_will_have_effect_banner_main"
+				:style="colorTextTwo" class="absolute bottom-[10%] lg:bottom-[20%] z-10">
 
 				<div v-if="store.influencerChosen" class="absolute left-0 bottom-1/2 lg:flex items-end">
 					<!-- Imagem -->
