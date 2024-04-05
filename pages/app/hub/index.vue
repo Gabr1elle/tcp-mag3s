@@ -69,28 +69,21 @@
 						:loading="storeIncentive.lastDrawLoading" :awards="[storeIncentive.lastDrawHeldFull]"
 						:carouselAutoPlay="0" />
 
-					// <!-- Lado Direito -->
+					<!-- Lado Direito -->
 					<AppBannersCard4 linkSource="" :background="app.banner_background_card_four"
 						:title="app.banner_text_card_title_four" :callToAction="false" :loading="storeIncentive.nextDrawLoading()"
 						:awards="storeIncentive.listDrawsUpcomingLimited(5)" :carouselAutoPlay="5000" />
 				</div>
 
 
-				<div>
-					<AppBannersCard5 class="row-span-1"
-						:linkSource="`${app.banner_final_link_card_hub}${app.config_will_have_raffle ? '/' + storeIncentive.gamification.lotteryDraws.nextDraw.id : ''}`"
-						:imageDetach="app.banner_final_image_card_hub" :description="app.banner_final_text_description_card_hub"
-						:isPositionElementsOther="app.banner_final_is_position_el_card_hub" />
-				</div>
-
-				<div v-if="app.config_will_have_influencer_race">
-					<AppBannersCard5 class="row-span-1" :imageDetach="app.influencer_race_card_hub_image"
-						:description="app.influencer_race_card_hub_description"
-						:style="`background-color: ${app.influencer_race_card_hub_colors_background}`" />
-				</div>
+				<!-- Banner final -->
+				<AppBannersCard5 class="lg:order-3 row-span-1"
+					:linkSource="`${app.banner_final_link_card_hub}${app.config_will_have_raffle ? '/' + storeIncentive.gamification.lotteryDraws.nextDraw.id : ''}`"
+					:imageDetach="app.banner_final_image_card_hub" :description="app.banner_final_text_description_card_hub"
+					:isPositionElementsOther="app.banner_final_is_position_el_card_hub" />
 			</div>
 
-			// <!-- Menu Behaviour -->
+			<!-- Menu Behaviour -->
 			<div v-if="storeIncentive.userLoggedIn">
 				<AppLayoutOverlay :showing="store.isOpenMenuBehaviour" />
 				<div v-if="app.config_will_have_hotsite">
