@@ -199,7 +199,7 @@ export const useStoreApp = defineStore('storeApp', {
 					return state.contentApp.banner_text_card_title_six;
 
 				return state.contentApp.banner_text_card_title_one;
-			}
+			};
 		},
 		subtitleCardNextDraw: (state) => {
 			return (payload) => {
@@ -210,7 +210,7 @@ export const useStoreApp = defineStore('storeApp', {
 					return state.contentApp.banner_text_card_subtitle_four;
 
 				return state.contentApp.banner_text_card_subtitle_one;
-			}
+			};
 		},
 		labelButtonCardNextDraw: (state) => {
 			return (payload) => {
@@ -221,7 +221,7 @@ export const useStoreApp = defineStore('storeApp', {
 					return state.contentApp.banner_text_card_label_button_three;
 
 				return false;
-			}
+			};
 		},
 
 		// Revelar Prêmio
@@ -392,17 +392,15 @@ export const useStoreApp = defineStore('storeApp', {
 		// Chosen Influencer Hotsite
 		chosenInfluencer(influencer) {
 			this.influencerChosen =
-				this.contentApp.influencer_race_hotsite_list.list.find(
+				this.influencerList.list.find(
 					(item) => item.two === influencer
-				);
+			);
 
 			// Exibe um influencer aleatório caso o usuário não tenha informado um
 			if (!influencer) {
 				this.influencerChosen =
-					this.contentApp.influencer_race_hotsite_list.list[
-					generateRandomNumber(
-						this.contentApp.influencer_race_hotsite_list.list.length - 1
-					)
+					this.influencerList.list[
+						generateRandomNumber(this.influencerList.list.length - 1)
 					];
 			}
 		},
@@ -415,11 +413,11 @@ export const useStoreApp = defineStore('storeApp', {
 					if (item.enable) {
 						item.enable = false;
 					}
-				})
+				});
 			}
 
 			// Caso não tem menu para habilitar
-			if(!id) return;
+			if (!id) return;
 
 			// Caso seja uma configuração de submenu
 			if (submenu) {
