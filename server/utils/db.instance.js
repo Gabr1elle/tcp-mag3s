@@ -12,5 +12,6 @@ const configDB = {
 export const sequelize = new Sequelize(configDB.name, configDB.user, configDB.pass, {
   host: "localhost",
   dialect: "mysql",
-  port: configDB.port
+  port: configDB.port,
+	logging: false,
 });

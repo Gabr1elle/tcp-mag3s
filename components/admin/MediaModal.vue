@@ -292,7 +292,7 @@ const options = ref({
 });
 
 const handleFileUpload = (event) => {
-	store.formMedia.valueFilesMedia = event.target.files || event.dataTransfer.files;
+	store.formMedia.valueFilesMedia = event;
 }
 
 const handleFileUploadMultiple = (event, index) => {
