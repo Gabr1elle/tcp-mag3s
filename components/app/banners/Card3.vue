@@ -4,7 +4,7 @@
 		:target="props.positionLeftImageDetach ? '_blank' : '_self'">
 		<!-- Background -->
 		<div :style="backgroundColor"
-			class="absolute  -translate-y-[50%] top-[50%] right-0 left-0 min-h-[45px] sm:h-[60px] md:h-[70px] rounded-lg md:rounded-2xl -z-10 animate__animated animate__zoomIn"
+			class="absolute -translate-y-[50%] top-[50%] right-0 left-0 min-h-[45px] sm:h-[60px] md:h-[70px] rounded-lg md:rounded-2xl -z-10 animate__animated animate__zoomIn"
 			:class="props.positionLeftImageDetach ? 'opacity-100' : 'opacity-70'">
 		</div>
 
