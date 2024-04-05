@@ -61,7 +61,7 @@ const { pathAssets } = useRuntimeConfig().public;
 
 const influencerImage = computed(() => {
 	if (store.influencerChosen.one) {
-		return `${pathAssets}${store.influencerChosen.one}`;
+		return `${pathAssets}${store.influencerChosen.one}?${new Date().getMilliseconds()}`;
 	} else {
 		return `/imgs/lp/influencer.jpg`;
 	}

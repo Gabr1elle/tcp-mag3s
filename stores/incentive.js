@@ -124,7 +124,11 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 			return '';
 		},
 		lastDrawHeldFull: (state) => {
-			return state.gamification.lotteryDraws.lastDrawHeld;
+			if (state.gamification.lotteryDraws.lastDrawHeld.loading) {
+				return state.gamification.lotteryDraws.lastDrawHeld;
+			}
+
+			return [];
 		},
 		lastDrawLoading: (state) => {
 			return state.gamification.lotteryDraws.lastDrawHeld.loading;
@@ -886,13 +890,10 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 				);
 				const mostRecentDate = $mostRecentDate(datesDraws, 'max');
 
-				if (this.gamification.lotteryDraws.lastDrawHeld.length) {
-					this.gamification.lotteryDraws.lastDrawHeld =
-						this.gamification.lotteryDraws.listDrawsLatest.find(
-							(item) =>
-								item.fullDate === $formatDayMonthYearFull(mostRecentDate)
-						);
-				}
+				this.gamification.lotteryDraws.lastDrawHeld =
+					this.gamification.lotteryDraws.listDrawsLatest.find(
+						(item) => item.fullDate === $formatDayMonthYearFull(mostRecentDate)
+					);
 
 				this.gamification.lotteryDraws.lastDrawHeld.loading = true;
 			} catch (error) {
@@ -1159,7 +1160,7 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 					loading: false,
 				};
 
-				if(route.path.includes('/stats')) {
+				if (route.path.includes('/stats')) {
 					if (data.score) {
 						toast.add({
 							id: 'info_influencer_data',
