@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	const toast = useToast();
 
 	// Caso a aplicação tenha autenticação obrigatória do usuário redirecionar para a tela de Login
-	if (storeApp.contentApp.config_will_have_hotsite) {
+	if (storeApp.contentApp.config_will_have_hotsite && process.client) {
 		if (!useCookie('tokenUser').value) {
 			console.log('sem cookie de autenticação, refaça o login.');
 			toast.add({
