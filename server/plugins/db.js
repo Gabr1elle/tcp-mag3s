@@ -7,9 +7,8 @@ export default defineNitroPlugin(async (nitro) => {
 		await sequelize.sync({
 			alter: config.forceAlterDb,
 			force: config.forceDropDb,
-			logging: false,
 		});
-		await MediasModel.sync({ logging: false });
+		await MediasModel.sync();
 		await createAdmin();
 		await createTypesMedia();
 		await createSchemaDataMedia();
