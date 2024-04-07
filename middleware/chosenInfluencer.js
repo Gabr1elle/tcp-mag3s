@@ -10,7 +10,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	if (to.params.influencer) {
 		const cookieInfluencer = useCookie('influencerCode', {
 			maxAge: 86400,
-			sameSite: true,
+			sameSite: 'lax',
 			httpOnly: false,
 		});
 

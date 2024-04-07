@@ -362,7 +362,7 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 				if (hasHostsite) {
 					const cookieAuth = useCookie('tokenUser', {
 						maxAge: +data.expires_in,
-						sameSite: true,
+						sameSite: 'lax',
 						httpOnly: false,
 					});
 					cookieAuth.value = data.access_token;
