@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
 	setCookie(event, 'idUser', user.id, {
 		maxAge: 86400,
 		httpOnly: false,
-		sameSite: true,
+		sameSite: 'lax',
 	});
 
 	return {

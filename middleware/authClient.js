@@ -12,7 +12,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		const data = await storeIncentive.clientLogin(useToast);
 		let cookie = useCookie('tokenClient', {
 			maxAge: +data.expires_in,
-			sameSite: true,
+			sameSite: 'lax',
 			httpOnly: false,
 		});
 		cookie.value = data.access_token;
