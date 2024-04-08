@@ -1,6 +1,7 @@
 import { MediasModel } from '../../../models/Medias.model';
 import { readFiles } from 'h3-formidable';
 import { firstValues } from 'h3-formidable/helpers';
+import { readBooleans } from 'h3-formidable/helpers';
 import { TagsMediaModel } from '~/server/models/TagsMedia.model';
 import fs from 'fs';
 import path from 'path';
