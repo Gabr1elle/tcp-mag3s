@@ -46,7 +46,7 @@ import { useStoreApp } from '~/stores/app';
 const store = useStoreApp();
 const { pathAssets } = useRuntimeConfig().public;
 
-const props = defineProps(['linkSource', 'description', 'imageDetach', 'positionLeftImageDetach']);
+const props = defineProps(['linkSource', 'linkOpenTarget', 'description', 'imageDetach', 'positionLeftImageDetach']);
 
 const backgroundColor = computed(() => {
 	return `background-color: ${store.contentApp.banner_detach_colors_background_hub}`;

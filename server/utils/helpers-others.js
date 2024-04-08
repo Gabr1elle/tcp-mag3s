@@ -746,6 +746,13 @@ export const listSchemaDataMedia = [
 		type: typesMedia[6],
 	},
 	{
+		name: 'banner_detach_link_open_blank_hub',
+		description: 'Habilitar a abetura do link para outra aba do Banner Destacado (Card3)',
+		value: '1',
+		tag: 'app',
+		type: typesMedia[6],
+	},
+	{
 		name: 'config_will_have_image_detach_banner_main',
 		description:
 			'Habilitar ou não a imagem de destaque do banner principal do hub',
