@@ -15,7 +15,7 @@
 		</div>
 
 		<!-- Lado Direito -->
-		<div class="justify-start items-center">
+		<div class="flex justify-end items-center">
 
 			<!-- Conteúdo de texto -->
 			<div :style="`color: ${app.banner_final_colors_text_card_hub}`" class="py-10 md:py-8 lg:py-6">
@@ -39,10 +39,10 @@ const store = useStoreApp();
 const app = store.contentApp;
 const { pathAssets } = useRuntimeConfig().public;
 
-const props = defineProps(['linkSource', 'description', 'imageDetach', 'isPositionElementsOther']);
+const props = defineProps(['linkSource', 'description', 'imageDetach', 'isPositionElementsOther', 'colorsBackground']);
 
 const backgroundColor = computed(() => {
-	return `background-color: ${app.banner_final_colors_background_card_hub}`;
+	return `background-color: ${props.colorsBackground}`;
 });
 
 const borderColor = computed(() => {
