@@ -75,11 +75,17 @@
 						:awards="storeIncentive.listDrawsUpcomingLimited(5)" :carouselAutoPlay="5000" />
 				</div>
 
-				<!-- Banner final -->
+				<!-- Banners final -->
 				<AppBannersCard5 class="lg:order-3 row-span-1"
 					:linkSource="`${app.banner_final_link_card_hub}${app.config_will_have_raffle ? '/' + storeIncentive.gamification.lotteryDraws.nextDraw.id : ''}`"
 					:imageDetach="app.banner_final_image_card_hub" :description="app.banner_final_text_description_card_hub"
-					:isPositionElementsOther="app.banner_final_is_position_el_card_hub" />
+					:isPositionElementsOther="app.banner_final_is_position_el_card_hub"
+					:colorsBackground="app.banner_final_colors_background_card_hub" />
+
+				<AppBannersCard5 class="lg:order-3 row-span-1"
+					:isPositionElementsOther="app.banner_final_is_position_el_card_hub"
+					:imageDetach="app.influencer_race_card_hub_image" :description="app.influencer_race_card_hub_description"
+					:colorsBackground="app.influencer_race_card_hub_colors_background" />
 			</div>
 
 			<!-- Menu Behaviour -->
@@ -117,6 +123,7 @@ const hasHeader = computed(() => {
 		'pt-14 lg:pt-20': app.config_will_have_hotsite
 	}
 });
+
 
 const hasRafflesSimplePurchase = computed(() => {
 	return {
