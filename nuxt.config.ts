@@ -77,7 +77,34 @@ export default defineNuxtConfig({
 		'vue3-carousel-nuxt',
 		'@formkit/auto-animate/nuxt',
 		'nuxt3-meta-pixel',
+		'@vite-pwa/nuxt',
 	],
+
+	pwa: {
+		mode: 'development',
+		strategies: 'generateSW',
+		registerType: 'autoUpdate',
+		manifest: {
+			name: 'Incentiva',
+			short_name: 'Incentiva',
+			theme_color: '#FFBE00',
+		},
+		pwaAssets: {
+			config: true,
+		},
+		workbox: {
+			globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+		},
+		client: {
+			installPrompt: true,
+		},
+		devOptions: {
+			enabled: true,
+			suppressWarnings: true,
+			navigateFallback: '/',
+			navigateFallbackAllowlist: [/^\/$/],
+		},
+	},
 
 	facebook: {
 		/* module options */

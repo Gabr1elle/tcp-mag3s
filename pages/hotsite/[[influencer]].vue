@@ -31,6 +31,8 @@
 
 <script setup>
 import { useStoreApp } from '~/stores/app';
+const { $pwa } = useNuxtApp();
+const toast = useToast();
 
 const store = useStoreApp();
 const app = useStoreApp().contentApp;
@@ -61,6 +63,10 @@ const bgImageSessionTwo = computed(() => {
 const startInstall = async () => {
 	await useNuxtApp().$pwa?.install()
 }
+
+onNuxtReady(() => {
+	if ($pwa.offlineReady) toast.success('App ready to work offline')
+});
 </script>
 
 <style scoped></style>

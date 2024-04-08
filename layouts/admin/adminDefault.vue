@@ -1,4 +1,5 @@
 <template>
+	<NuxtPwaAssets />
 	<div>
 		<NuxtPage :page-key="route => route.fullPath" />
 	</div>
