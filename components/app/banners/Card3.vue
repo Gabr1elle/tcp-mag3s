@@ -9,8 +9,8 @@
 		</div>
 
 		<!-- Conteúdo de texto -->
-		<div class="items-center col-span-2"
-			:class="props.positionLeftImageDetach ? 'flex justify-end order-2' : 'order-1 me-4 justify-start'">
+		<div class="flex items-center col-span-2"
+			:class="props.positionLeftImageDetach ? 'justify-end order-2' : 'order-1 me-4 justify-start'">
 
 			<div :style="`color: ${store.contentApp.banner_detach_colors_text_hub}`"
 				class="py-6 sm:py-12 md:py-14 lg:py-9 h-fit">
@@ -46,7 +46,7 @@ import { useStoreApp } from '~/stores/app';
 const store = useStoreApp();
 const { pathAssets } = useRuntimeConfig().public;
 
-const props = defineProps(['linkSource', 'description', 'imageDetach', 'positionLeftImageDetach']);
+const props = defineProps(['linkSource', 'linkOpenTarget', 'description', 'imageDetach', 'positionLeftImageDetach']);
 
 const backgroundColor = computed(() => {
 	return `background-color: ${store.contentApp.banner_detach_colors_background_hub}`;

@@ -57,7 +57,7 @@
 
 				<!-- Banner Destacado -->
 				<AppBannersCard3 class="lg:order-2 row-span-1" :linkSource="app.banner_detach_link_card_description_hub"
-					:imageDetach="app.banner_detach_image_card_hub"
+					:linkOpenTarget="app.banner_detach_link_open_blank_hub" :imageDetach="app.banner_detach_image_card_hub"
 					:positionLeftImageDetach="app.banner_detach_position_image_left_hub"
 					:description="app.banner_detach_text_card_description_hub" />
 
