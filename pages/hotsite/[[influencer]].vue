@@ -19,7 +19,7 @@
 			positionText="right" positionImage="left" />
 
 		<!-- Influencers Ranking -->
-		<LpInfluencerRace v-if="app.config_will_have_influencer_race" />
+		<LpInfluencerRace v-if="app.config_will_have_influencer_race" :isDark="true" :backgroundColor="app.session_background_colors_hotsite_one" />
 
 		<!-- Footer -->
 		<LpFooter />
