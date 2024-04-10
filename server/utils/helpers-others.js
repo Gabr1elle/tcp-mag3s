@@ -1479,6 +1479,13 @@ export const listSchemaDataMedia = [
 		type: typesMedia[0],
 	},
 	{
+		name: 'session_text_title_hotsite_four',
+		description: 'Título da seção do hotsite',
+		value: 'RANGE ROVER',
+		tag: 'hotsite',
+		type: typesMedia[0],
+	},
+	{
 		name: 'session_text_description_hotsite_one',
 		description: 'Descrição da seção do hotsite',
 		value:
@@ -1503,6 +1510,13 @@ export const listSchemaDataMedia = [
 		type: typesMedia[0],
 	},
 	{
+		name: 'session_text_description_hotsite_four',
+		description: 'Descrição da seção do hotsite',
+		value:'CONCORRA A UMA RANGE ROVER NO FINAL DA PROMOÇÃO COM SEUS NÚMEROS DA SORTE!',
+		tag: 'hotsite',
+		type: typesMedia[0],
+	},
+	{
 		name: 'session_image_hotsite_one',
 		description: 'Imagem da seção do hotsite',
 		placeholder: '/imgs/lp/session_placeholder.png',
@@ -1511,6 +1525,13 @@ export const listSchemaDataMedia = [
 	},
 	{
 		name: 'session_image_hotsite_two',
+		description: 'Imagem da seção do hotsite',
+		placeholder: '/imgs/lp/session_placeholder_2.png',
+		tag: 'hotsite',
+		type: typesMedia[3],
+	},
+	{
+		name: 'session_image_hotsite_three',
 		description: 'Imagem da seção do hotsite',
 		placeholder: '/imgs/lp/session_placeholder_2.png',
 		tag: 'hotsite',
