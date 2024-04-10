@@ -83,7 +83,7 @@ const doYouHaveMedia = computed(() => {
 
 definePageMeta({
 	layout: 'admin-default',
-	middleware: ["auth"]
+	middleware: ["auth-admin"]
 })
 
 await store.getContent(useToast);
