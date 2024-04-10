@@ -904,6 +904,14 @@ export const listSchemaDataMedia = [
 		type: typesMedia[1],
 	},
 	{
+		name: 'banner_final_link_card_hub_two',
+		description:
+			'Insira um link de redirecionamento, ficará fixado dentro do Segundo Banner Final do hub (Coorida dos influencers).',
+		value: '/influencers',
+		tag: 'app',
+		type: typesMedia[1],
+	},
+	{
 		name: 'banner_link_before_prize_draw_card_hub',
 		description:
 			'Link de redirecionamento do banner responsável por exibir o final do sorteio no hub.',
