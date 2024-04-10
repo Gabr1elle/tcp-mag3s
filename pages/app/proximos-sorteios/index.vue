@@ -1,4 +1,7 @@
 <template>
+	<AppLayoutHeader v-if="app.config_will_have_hotsite" :hasLogout="true" :bgColor="app.header_colors_background_app"
+		:textColor="app.header_colors_text_app" :isLogoDark="false" />
+
 	<AppLayoutBgDefault />
 
 	<div v-show="!storeIncentive.loading">
@@ -7,11 +10,14 @@
 
 		<UContainer class="py-12" :class="hasHeader">
 			<!-- Banner Principal com Carousel -->
-			<Carousel id="carousel-next-prizes" :autoplay="5000" :wrap-around="true" :pause-autoplay-on-hover="true">
-				<Slide v-for="slide in 4" :key="slide">
-					<AppBannersCard linkSource="/app/revelar-premio" :hasImageDetach="false" imageDetach=""
-						title="21 DE NOVEMBRO, 2023" subtitle="Luva autografada do Cassio" :countdown="false" :callToAction="false"
-						description="Números válidos até 21/11/2023" imageAward="https://imagedaapi.com" />
+			<Carousel v-if="app.config_will_have_carousel_banner_main" id="carousel-next-prizes" :autoplay="6500"
+				:wrap-around="true" :pause-autoplay-on-hover="true">
+				<Slide v-for="slide in 4" :key="slide" class="flex flex-col">
+					<AppBannersCard :linkSource="storeIncentive.NextDrawLink(slide)" :hasImageDetach="!store.hasHotSiteOrRaffle"
+						:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading(true)"
+						:title="store.titleCardNextDraw(slide.date)" :subtitle="store.subtitleCardNextDraw(slide.date)"
+						:countdown="slide.date" :callToAction="store.labelButtonCardNextDraw(slide.date)" :hasDescription="false"
+						:description="false" :imageAward="slide.image" />
 				</Slide>
 
 				<template #addons>
@@ -24,6 +30,16 @@
 
 			<AppGameInfoCard v-for="card in cards" class="mt-8" :titulo="card.titulo" :subtitulo="card.subtitulo"
 				:customBackground="card.hasBg" :imagemSrc="card.img" :source="card.source" :date="card.date" />
+
+			<!-- Menu Behaviour -->
+			<div v-if="storeIncentive.userLoggedIn">
+				<AppLayoutOverlay :showing="store.isOpenMenuBehaviour" />
+				<div v-if="app.config_will_have_hotsite">
+					<div class="md:mt-14"></div>
+					<AppLayoutMenuBehaviour />
+					<div class="mt-16 md:mt-24"></div>
+				</div>
+			</div>
 		</UContainer>
 	</div>
 
@@ -32,9 +48,10 @@
 
 <script setup>
 import { useStoreApp } from '~/stores/app';
-const app = useStoreApp().contentApp;
-
 import { useStoreIncentive } from '~/stores/incentive';
+
+const store = useStoreApp();
+const app = useStoreApp().contentApp;
 const storeIncentive = useStoreIncentive();
 
 definePageMeta({
