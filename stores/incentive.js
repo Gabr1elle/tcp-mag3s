@@ -201,6 +201,9 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 				}
 			};
 		},
+		listDrawsUpcomingFull: (state) => {
+			return state.gamification.lotteryDraws.listDrawsUpcoming;
+		},
 		listDrawsUpcomingLimited: (state) => {
 			return (payload) =>
 				state.gamification.lotteryDraws.listDrawsUpcoming.slice(0, payload);
@@ -216,6 +219,10 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		revealChosenDrawDateYearFull: (state) => {
 			return state.gamification.lotteryDraws.revealChosenDraw
 				.fullDateYearComplete;
+		},
+		//
+		currentAward: (state) => {
+			return state.gamification.lotteryDraws.listDrawsUpcoming.name;
 		},
 		revealLatestDrawDateYearFull: (state) => {
 			return state.gamification.lotteryDraws.lastDraw.fullDateYearComplete;

@@ -10,14 +10,14 @@
 
 		<UContainer class="py-12" :class="hasHeader">
 			<!-- Banner Principal com Carousel -->
-			<Carousel v-if="app.config_will_have_carousel_banner_main" id="carousel-next-prizes" :autoplay="6500"
+			<Carousel id="carousel-next-prizes" :autoplay="6500"
 				:wrap-around="true" :pause-autoplay-on-hover="true">
-				<Slide v-for="slide in 4" :key="slide" class="flex flex-col">
-					<AppBannersCard :linkSource="storeIncentive.NextDrawLink(slide)" :hasImageDetach="!store.hasHotSiteOrRaffle"
-						:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading(true)"
-						:title="store.titleCardNextDraw(slide.date)" :subtitle="store.subtitleCardNextDraw(slide.date)"
-						:countdown="slide.date" :callToAction="store.labelButtonCardNextDraw(slide.date)" :hasDescription="false"
-						:description="false" :imageAward="slide.image" />
+				<Slide v-for="slide in storeIncentive.listDrawsUpcomingFull" :key="slide" class="flex flex-col">
+					<AppBannersCard :linkSource="storeIncentive.NextDrawLink(slide)" :hasImageDetach="false"
+						imageDetach="" :loading="storeIncentive.nextDrawLoading(true)"
+						:title="slide.fullDate" :subtitle="store.descriptionAwardCurrent(slide.name)"
+						:countdown="false" :callToAction="false" :hasDescription="true"
+						:description="store.descriptionNextDrawPrize(slide.fullDateYearComplete)" :imageAward="slide.image" />
 				</Slide>
 
 				<template #addons>
@@ -28,7 +28,7 @@
 			<!-- Pesquisar -->
 			<AppOthersInputSearching class="mt-6" :inputModeOption="'search'" />
 
-			<AppGameInfoCard v-for="card in cards" class="mt-8" :titulo="card.titulo" :subtitulo="card.subtitulo"
+			<AppGameInfoCard v-for="card in cards" :key="card.id" class="mt-8" :titulo="card.titulo" :subtitulo="card.subtitulo"
 				:customBackground="card.hasBg" :imagemSrc="card.img" :source="card.source" :date="card.date" />
 
 			<!-- Menu Behaviour -->
@@ -75,6 +75,11 @@ const hasHeader = computed(() => {
 	return {
 		'py-14 lg:py-24': app.config_will_have_hotsite
 	}
+});
+
+onNuxtReady(async () => {
+	await storeIncentive.userInventory(useToast);
+	await storeIncentive.lotteryDraws(useToast);
 });
 </script>
 
