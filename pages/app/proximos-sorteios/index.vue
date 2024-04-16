@@ -17,7 +17,7 @@
 						imageDetach="" :loading="storeIncentive.nextDrawLoading(true)"
 						:title="slide.fullDate" :subtitle="store.descriptionAwardCurrent(slide.name)"
 						:countdown="false" :callToAction="false" :hasDescription="true"
-						:description="store.descriptionNextDrawPrize(slide.fullDateYearComplete)" :imageAward="slide.image" />
+						:description="store.descriptionNextDrawPrize(slide.fullDateYearComplete)" :imageAward="slide.image"  />
 				</Slide>
 
 				<template #addons>
@@ -26,10 +26,12 @@
 			</Carousel>
 
 			<!-- Pesquisar -->
-			<AppOthersInputSearching class="mt-6" :inputModeOption="'search'" />
+			<AppOthersInputSearching inputPlaceholder="Buscar por prêmio" :hasMaskInput="null"
+						@input="storeIncentive.upcomingDrawsNextList(store.searchingValue)"
+						:inputModeOption="'search'" /> 
 
-			<AppGameInfoCard v-for="card in cards" :key="card.id" class="mt-8" :titulo="card.titulo" :subtitulo="card.subtitulo"
-				:customBackground="card.hasBg" :imagemSrc="card.img" :source="card.source" :date="card.date" />
+			<AppGameInfoCard v-for="card in storeIncentive.upcomingDrawsNext" :key="card.id" class="mt-8" :titulo="card.name"
+				:customBackground="false" :imagemSrc="card.image" :link="`/app/detalhe-premio/${card.id}`" :date="card.date"/>
 
 			<!-- Menu Behaviour -->
 			<div v-if="storeIncentive.userLoggedIn">
@@ -65,11 +67,6 @@ const bgCarouselPagination = computed(() => {
 const bgCarouselPaginationActive = computed(() => {
 	return app.colors_emphasis_active_and_hover;
 })
-
-let cards = ref([
-	{ titulo: 'Camisa de jogo autografada', subtitulo: 'Você foi o sorteado!', source: '/detalhes-premios', hasBg: true, img: '/imgs/premio_02.png', date: { day: '24', month: 'Jun' } },
-	{ titulo: 'Luva do cassio autografada', subtitulo: '', source: '/detalhes-premios', hasBg: false, img: '/imgs/exemplo_premio_luva.png', date: { day: '12', month: 'Fev' } },
-]);
 
 const hasHeader = computed(() => {
 	return {
