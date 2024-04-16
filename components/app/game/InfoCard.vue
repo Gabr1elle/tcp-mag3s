@@ -3,8 +3,8 @@
 		class="relative w-full flex justify-between border rounded-xl">
 		<div :style="textColor" class="flex items-center">
 			<!-- imagem do prêmio -->
-			<div class="mx-5">
-				<img :src="props.imagemSrc" class="scale-150 top-0 left-0 object-cover w-[60px] sm:w-[60px] md:w-[60px] lg:w-[60px] animate__animated animate__zoomIn" />
+			<div class="mx-6">
+				<img :src="props.imagemSrc" class="scale-150 top-0 left-0 object-cover w-[60px] sm:w-[60px] md:w-[60px] lg:w-[90px] animate__animated animate__zoomIn" />
 			</div>
 
 			<!-- Data -->
@@ -32,7 +32,7 @@
 		</div>
 
 		<!-- Botão -->
-		<div class="flex items-center text-xl md:text-3xl rounded-e-xl" :style="[backgroundColorButton, textColorButton]">
+		<div v-if="props.link" class="flex items-center text-xl md:text-3xl rounded-e-xl" :style="[backgroundColorButton, textColorButton]">
 			<UIcon class="mx-1" name="i-material-symbols-arrow-forward-ios" />
 		</div>
 	</NuxtLink>

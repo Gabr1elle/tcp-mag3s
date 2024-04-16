@@ -208,6 +208,16 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 			return (payload) =>
 				state.gamification.lotteryDraws.listDrawsUpcoming.slice(0, payload);
 		},
+		filterListUpcomingDraws: (state) => {
+			return (payload) => {
+				if (!payload) {
+					return state.listDrawsUpcomingFull;
+				}
+				return state.listDrawsUpcomingFull.filter((item) =>
+			  item.name.toLowerCase().includes(payload.toLowerCase())
+				);
+			};
+		},
 
 		// Sorteio Escolhido
 		loadingChosenDrawFull: (state) => {
