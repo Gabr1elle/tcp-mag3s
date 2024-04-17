@@ -3,14 +3,14 @@
 		class="relative w-full flex justify-between border rounded-xl">
 		<div :style="textColor" class="flex items-center">
 			<!-- imagem do prêmio -->
-			<div class="mx-5">
-				<img :src="props.imagemSrc" class="scale-150 top-0 left-0 object-cover w-[50px] sm:w-[70px] md:w-[90px] lg:w-[100px] animate__animated animate__zoomIn" />
+			<div class="mx-6">
+				<img :src="props.imagemSrc" class="scale-150 top-0 left-0 object-cover w-[60px] sm:w-[60px] md:w-[60px] lg:w-[90px] animate__animated animate__zoomIn" />
 			</div>
 
 			<!-- Data -->
 			<div v-if="props.date" class="text-center me-5">
-				<p class="fm3 text-[26px] text-md-[30px] leading-5 md:leading-6">{{ props.date.day }}</p>
-				<p class="uppercase text-base">{{ props.date.month }}</p>
+				<p class="fm3 text-[26px] text-md-[30px] leading-5 md:leading-6">{{ $getDayMonth(props.date, 'DD') }}</p>
+				<p class="uppercase text-base">{{ $getDayMonth(props.date, 'MMM') }}</p>
 			</div>
 
 			<!-- Imagem do tipo de prêmio -->
@@ -32,7 +32,7 @@
 		</div>
 
 		<!-- Botão -->
-		<div class="flex items-center text-xl md:text-3xl rounded-e-xl" :style="[backgroundColorButton, textColorButton]">
+		<div v-if="props.link" class="flex items-center text-xl md:text-3xl rounded-e-xl" :style="[backgroundColorButton, textColorButton]">
 			<UIcon class="mx-1" name="i-material-symbols-arrow-forward-ios" />
 		</div>
 	</NuxtLink>
@@ -41,8 +41,9 @@
 <script setup>
 import { useStoreApp } from '~/stores/app';
 const store = useStoreApp();
+const { $getDayMonth } = useNuxtApp();
 
-const props = defineProps(['titulo', 'subtitulo', 'imagemSrc', 'link', 'hasBgGradient', 'date', 'imgCard']);
+const props = defineProps(['titulo', 'subtitulo', 'imagemSrc', 'link', 'hasBgGradient', 'date', 'imgCard', 'getDayMonth']);
 
 const textColor = computed(() => {
 	return `color: ${store.contentApp.colors_text_one}`;

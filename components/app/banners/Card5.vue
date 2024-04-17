@@ -9,8 +9,8 @@
 		<!-- Lado Esquerdo -->
 		<div class="flex items-center">
 			<!-- Imagem de destaque -->
-			<div class="animate__animated animate__tada" :class="props.isPositionElementsOther ? 'w-[90px] sm:w-[120px] md:w-[135px]' : 'w-[55px] sm:w-[65px] md:w-[80px]'">
-				<img :src="imageDT" onerror="this.src='/imgs/selo_fiel.png'" :class="props.isPositionElementsOther ? 'w-[inherit]' : ''" />
+			<div class="animate__animated animate__tada" :class="props.isPositionElementsOther ? 'w-[90px] sm:w-[120px] md:max-w-[135px]' : 'w-[55px] sm:w-[65px] md:w-[80px]'">
+				<img :src="imageDT" onerror="this.src='/imgs/selo_fiel.png'" :class="props.isPositionElementsOther ? 'w-auto' : ''" />
 			</div>
 		</div>
 

@@ -201,9 +201,22 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 				}
 			};
 		},
+		listDrawsUpcomingFull: (state) => {
+			return state.gamification.lotteryDraws.listDrawsUpcoming;
+		},
 		listDrawsUpcomingLimited: (state) => {
 			return (payload) =>
 				state.gamification.lotteryDraws.listDrawsUpcoming.slice(0, payload);
+		},
+		filterListUpcomingDraws: (state) => {
+			return (payload) => {
+				if (!payload) {
+					return state.listDrawsUpcomingFull;
+				}
+				return state.listDrawsUpcomingFull.filter((item) =>
+			  item.name.toLowerCase().includes(payload.toLowerCase())
+				);
+			};
 		},
 
 		// Sorteio Escolhido
@@ -216,6 +229,9 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		revealChosenDrawDateYearFull: (state) => {
 			return state.gamification.lotteryDraws.revealChosenDraw
 				.fullDateYearComplete;
+		},
+		upcomingDrawsNext: (state) => {
+			return state.gamification.lotteryDraws.listDrawsUpcoming;
 		},
 		revealLatestDrawDateYearFull: (state) => {
 			return state.gamification.lotteryDraws.lastDraw.fullDateYearComplete;

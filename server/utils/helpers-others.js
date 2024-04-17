@@ -66,6 +66,14 @@ export const listSchemaDataMedia = [
 		type: typesMedia[6],
 	},
 	{
+		name: 'config_will_have_streaming_of_video',
+		description:
+			'Utilizado para exibir elementos que só fazem parte dos conteúdos exclusivos de vídeo.',
+		value: '0',
+		tag: 'config',
+		type: typesMedia[6],
+	},
+	{
 		name: 'config_will_have_freemium_purchase',
 		description:
 			'Utilizado para exibir a opção de cadastramento sem a aquisição de um pacote (Freemium).',
@@ -1479,6 +1487,13 @@ export const listSchemaDataMedia = [
 		type: typesMedia[0],
 	},
 	{
+		name: 'session_text_title_hotsite_four',
+		description: 'Título da seção do hotsite',
+		value: 'Conteúdos exclusivos',
+		tag: 'hotsite',
+		type: typesMedia[0],
+	},
+	{
 		name: 'session_text_description_hotsite_one',
 		description: 'Descrição da seção do hotsite',
 		value:
@@ -1503,6 +1518,13 @@ export const listSchemaDataMedia = [
 		type: typesMedia[0],
 	},
 	{
+		name: 'session_text_description_hotsite_four',
+		description: 'Descrição da seção do hotsite',
+		value:'Tenha acesso a muitos conteúdos de vídeo do seu influencer favorito!',
+		tag: 'hotsite',
+		type: typesMedia[0],
+	},
+	{
 		name: 'session_image_hotsite_one',
 		description: 'Imagem da seção do hotsite',
 		placeholder: '/imgs/lp/session_placeholder.png',
@@ -1511,6 +1533,13 @@ export const listSchemaDataMedia = [
 	},
 	{
 		name: 'session_image_hotsite_two',
+		description: 'Imagem da seção do hotsite',
+		placeholder: '/imgs/lp/session_placeholder_2.png',
+		tag: 'hotsite',
+		type: typesMedia[3],
+	},
+	{
+		name: 'session_image_hotsite_three',
 		description: 'Imagem da seção do hotsite',
 		placeholder: '/imgs/lp/session_placeholder_2.png',
 		tag: 'hotsite',
