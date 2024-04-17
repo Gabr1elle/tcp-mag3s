@@ -23,9 +23,9 @@
 				</Carousel>
 
 				<!-- Campo de pesquisa -->
-				<AppOthersInputSearching inputPlaceholder="Buscar por prêmio" :hasMaskInput="null"
-					@input="storeIncentive.filterListUpcomingDraws(store.searchingValue)" :inputModeOption="'search'"
-					class="my-8" />
+				<AppOthersInputSearching v-if="storeIncentive.listDrawsUpcomingFull" inputPlaceholder="Buscar por prêmio"
+					:hasMaskInput="null" @input="storeIncentive.filterListUpcomingDraws(store.searchingValue)"
+					:inputModeOption="'search'" class="my-8" />
 
 				<!-- Card mostrando os próximos sorteios -->
 				<div class="grid gap-10 lg:gap-14 mt-16">
@@ -36,9 +36,9 @@
 				</div>
 
 				<!-- Feedback de pesquisa caso não exista o sorteio -->
-				<div v-if="!storeIncentive.filterListUpcomingDraws(store.searchingValue).length"
+				<div v-if="!storeIncentive.filterListUpcomingDraws(store.searchingValue).length && store.searchingValue"
 					class="text-1xl md:text-2xl lg:text-3xl flex justify-center items-center text-center animate__animated animate__fadeIn">
-					<h2 class="text-white">Esse prêmio não existe!</h2>
+					<h2 class="text-white">Busca de prêmio não encontrada!</h2>
 				</div>
 			</div>
 
