@@ -54,7 +54,7 @@
 				</template>
 			</Carousel>
 
-			<!-- Pesquisar -->
+			<!-- Campo de pesquisa -->
 			<AppOthersInputSearching
 				inputPlaceholder="Buscar por prêmio"
 				:hasMaskInput="null"
@@ -63,7 +63,7 @@
 				class="py-2 mb-8 max-w-[700px] m-auto flex justify-center"
 			/>
 
-			<!-- Card mostrando os próximos prêmios -->
+			<!-- Card mostrando os próximos sorteios -->
 			<div class="grid gap-10 lg:gap-14">
 				<AppGameInfoCard
 					v-for="card in storeIncentive.filterListUpcomingDraws(
@@ -79,12 +79,14 @@
 				/>
 			</div>
 
-			<!-- Feedback de pesquisa caso não possuir o número da sorte -->
+			<!-- Feedback de pesquisa caso não exista o sorteio -->
 			<div
-			v-if="storeIncentive.filterListUpcomingDraws(store.searchingValue).length === 0"
+				v-if="
+					storeIncentive.filterListUpcomingDraws(store.searchingValue)
+						.length === 0
+				"
 				class="text-1xl md:text-2xl lg:text-3xl flex justify-center items-center text-center animate__animated animate__fadeIn"
 			>
-				<Icon name="i-ic-baseline-warning" class="me-4 w-5 lg:w-8 h-5 lg:h-8" />
 				<h2 class="text-white">Esse prêmio não existe!</h2>
 			</div>
 
