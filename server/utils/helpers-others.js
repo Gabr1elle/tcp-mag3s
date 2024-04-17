@@ -66,6 +66,14 @@ export const listSchemaDataMedia = [
 		type: typesMedia[6],
 	},
 	{
+		name: 'config_will_have_streaming_of_video',
+		description:
+			'Utilizado para exibir elementos que só fazem parte dos conteúdos exclusivos de vídeo.',
+		value: '0',
+		tag: 'config',
+		type: typesMedia[6],
+	},
+	{
 		name: 'config_will_have_freemium_purchase',
 		description:
 			'Utilizado para exibir a opção de cadastramento sem a aquisição de um pacote (Freemium).',
@@ -1481,7 +1489,7 @@ export const listSchemaDataMedia = [
 	{
 		name: 'session_text_title_hotsite_four',
 		description: 'Título da seção do hotsite',
-		value: 'RANGE ROVER',
+		value: 'Conteúdos exclusivos',
 		tag: 'hotsite',
 		type: typesMedia[0],
 	},
@@ -1512,7 +1520,7 @@ export const listSchemaDataMedia = [
 	{
 		name: 'session_text_description_hotsite_four',
 		description: 'Descrição da seção do hotsite',
-		value:'CONCORRA A UMA RANGE ROVER NO FINAL DA PROMOÇÃO COM SEUS NÚMEROS DA SORTE!',
+		value:'Tenha acesso a muitos conteúdos de vídeo do seu influencer favorito!',
 		tag: 'hotsite',
 		type: typesMedia[0],
 	},

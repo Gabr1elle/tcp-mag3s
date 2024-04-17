@@ -18,9 +18,10 @@
 			:images="app.session_image_hotsite_two" :bgImage="bgImageSessionTwo" :bgImageMobile="bgMobileImageSessionTwo"
 			positionText="right" positionImage="left" />
 
-		<LpSession :title="app.session_text_title_hotsite_four" :description="app.session_text_description_hotsite_four"
-			:images="app.session_image_hotsite_three" :bgImage="bgImageSessionThree"
-			:bgImageMobile="bgMobileImageSessionThree" positionText="left" positionImage="right" />
+		<LpSession v-if="app.config_will_have_streaming_of_video" :title="app.session_text_title_hotsite_four"
+			:description="app.session_text_description_hotsite_four" :images="app.session_image_hotsite_three"
+			:bgImage="bgImageSessionThree" :bgImageMobile="bgMobileImageSessionThree" positionText="left"
+			positionImage="right" />
 
 		<!-- Influencers Ranking -->
 		<LpInfluencerRace v-if="app.config_will_have_influencer_race" :isDark="true"
