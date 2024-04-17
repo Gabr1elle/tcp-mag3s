@@ -1,100 +1,52 @@
 <template>
-	<AppLayoutHeader
-		v-if="app.config_will_have_hotsite"
-		:hasLogout="true"
-		:bgColor="app.header_colors_background_app"
-		:textColor="app.header_colors_text_app"
-		:isLogoDark="false"
-	/>
+	<AppLayoutHeader v-if="app.config_will_have_hotsite" :hasLogout="true" :bgColor="app.header_colors_background_app"
+		:textColor="app.header_colors_text_app" :isLogoDark="false" />
 
 	<AppLayoutBgDefault />
 
 	<div v-show="!storeIncentive.loading">
-		<AppLayoutHeader
-			v-if="app.config_will_have_hotsite"
-			:hasLogout="false"
-			:bgColor="app.header_colors_background_app"
-			:textColor="app.header_colors_text_app"
-			:isLogoDark="false"
-		/>
-
 		<UContainer class="py-12" :class="hasHeader">
-			<!-- Banner Principal com Carousel -->
-			<Carousel
-				id="carousel-next-prizes"
-				:autoplay="6500"
-				:wrap-around="true"
-				:pause-autoplay-on-hover="true"
-			>
-				<Slide
-					v-for="slide in storeIncentive.listDrawsUpcomingFull"
-					:key="slide"
-					class="flex flex-col"
-				>
-					<AppBannersCard
-						:linkSource="storeIncentive.NextDrawLink(slide)"
-						:hasImageDetach="false"
-						imageDetach=""
-						:loading="storeIncentive.nextDrawLoading(true)"
-						:title="slide.fullDate"
-						:subtitle="store.descriptionAwardCurrent(slide.name)"
-						:countdown="false"
-						:callToAction="false"
-						:hasDescription="true"
-						:description="
-							store.descriptionNextDrawPrize(slide.fullDateYearComplete)
-						"
-						:imageAward="slide.image"
-						class="max-w-[700px] m-auto flex justify-center"
-					/>
-				</Slide>
+			<div class="max-w-[700px] m-auto">
+				<!-- Banner Principal com Carousel -->
+				<Carousel id="carousel-next-prizes" :autoplay="6500" :wrap-around="true" :pause-autoplay-on-hover="true">
+					<Slide v-for="slide in storeIncentive.listDrawsUpcomingFull" :key="slide" class="flex flex-col">
+						<AppBannersCard :linkSource="storeIncentive.NextDrawLink(slide)" :hasImageDetach="false" imageDetach=""
+							:loading="storeIncentive.nextDrawLoading(true)" :title="slide.fullDate"
+							:subtitle="store.descriptionAwardCurrent(slide.name)" :countdown="false" :callToAction="false"
+							:hasDescription="true" :description="store.descriptionNextDrawPrize(slide.fullDateYearComplete)
+		" :imageAward="slide.image" />
+					</Slide>
 
-				<template #addons>
-					<Pagination />
-				</template>
-			</Carousel>
+					<template #addons>
+						<Pagination />
+					</template>
+				</Carousel>
 
-			<!-- Campo de pesquisa -->
-			<AppOthersInputSearching
-				inputPlaceholder="Buscar por prêmio"
-				:hasMaskInput="null"
-				@input="storeIncentive.filterListUpcomingDraws(store.searchingValue)"
-				:inputModeOption="'search'"
-				class="py-2 mb-8 max-w-[700px] m-auto flex justify-center"
-			/>
+				<!-- Campo de pesquisa -->
+				<AppOthersInputSearching inputPlaceholder="Buscar por prêmio" :hasMaskInput="null"
+					@input="storeIncentive.filterListUpcomingDraws(store.searchingValue)" :inputModeOption="'search'"
+					class="my-8" />
 
-			<!-- Card mostrando os próximos sorteios -->
-			<div class="grid gap-10 lg:gap-14">
-				<AppGameInfoCard
-					v-for="card in storeIncentive.filterListUpcomingDraws(
-						store.searchingValue
-					)"
-					:key="card.id"
-					:titulo="card.name"
-					:customBackground="false"
-					:imagemSrc="card.image"
-					:link="false"
-					:date="card.date"
-					class="max-w-[700px] m-auto flex justify-center"
-				/>
-			</div>
+				<!-- Card mostrando os próximos sorteios -->
+				<div class="grid gap-10 lg:gap-14 mt-16">
+					<AppGameInfoCard v-for="card in storeIncentive.filterListUpcomingDraws(
+		store.searchingValue
+	)" :key="card.id" :titulo="card.name" :customBackground="false" :imagemSrc="card.image" :link="false"
+						:date="card.date" />
+				</div>
 
-			<!-- Feedback de pesquisa caso não exista o sorteio -->
-			<div
-				v-if="
-					storeIncentive.filterListUpcomingDraws(store.searchingValue)
-						.length === 0
-				"
-				class="text-1xl md:text-2xl lg:text-3xl flex justify-center items-center text-center animate__animated animate__fadeIn"
-			>
-				<h2 class="text-white">Esse prêmio não existe!</h2>
+				<!-- Feedback de pesquisa caso não exista o sorteio -->
+				<div v-if="!storeIncentive.filterListUpcomingDraws(store.searchingValue).length"
+					class="text-1xl md:text-2xl lg:text-3xl flex justify-center items-center text-center animate__animated animate__fadeIn">
+					<h2 class="text-white">Esse prêmio não existe!</h2>
+				</div>
 			</div>
 
 			<!-- Menu Behaviour -->
 			<div v-if="storeIncentive.userLoggedIn">
 				<AppLayoutOverlay :showing="store.isOpenMenuBehaviour" />
 				<div v-if="app.config_will_have_hotsite">
-					<div class="md:mt-14"></div>
+					<div class="md:mt-24"></div>
 					<AppLayoutMenuBehaviour />
 					<div class="mt-16 md:mt-24"></div>
 				</div>
