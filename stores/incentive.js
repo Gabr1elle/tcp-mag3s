@@ -116,7 +116,6 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		listDrawsLatest: (state) => {
 			return state.gamification.lotteryDraws.listDrawsLatest;
 		},
-
 		lastDrawHeldLink: (state) => {
 			if (state.gamification.lotteryDraws.lastDrawHeld.loading)
 				return `/app/revelar-premio/${state.gamification.lotteryDraws.lastDrawHeld.id}`;
@@ -132,6 +131,17 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		},
 		lastDrawLoading: (state) => {
 			return state.gamification.lotteryDraws.lastDrawHeld.loading;
+		},
+		filterListDrawsLatest: (state) => {
+			return (payload) => {
+				const draws = state.listDrawsLatest.slice().reverse();
+				if (!payload) {
+					return draws
+				}
+				return draws.filter((item) =>
+			  item.name.toLowerCase().includes(payload.toLowerCase())
+				);
+			};
 		},
 
 		// Próximos sorteios
