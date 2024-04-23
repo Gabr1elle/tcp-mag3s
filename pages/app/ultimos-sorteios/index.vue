@@ -53,11 +53,11 @@
 						:key="card"
 						:titulo="card.name"
 						:subtitulo="card.subtitulo"
-						:customBackground="card.hasBg"
+						:hasBgGradient="true"
 						:imagemSrc="card.image"
 						:source="card.source"
 						:date="card.date"
-						:link="true"
+						:link="`detalhe-premio/${card.id}`"
 					/>
 				</div>
 
