@@ -13,24 +13,24 @@
 			<div class="max-w-[700px] m-auto">
 				<!-- Banner -->
 
-				<div v-if="storeIncentive.listDrawsLatest.length > 0">
+				<div v-if="storeIncentive.lastDrawHeldFull">
 					<AppBannersCard
 						:linkSource="
-							storeIncentive.NextDrawLink(storeIncentive.listDrawsLatest[0])
+							storeIncentive.lastDrawHeldLink
 						"
 						:hasImageDetach="false"
-						:loading="storeIncentive.nextDrawLoading(true)"
-						:title="storeIncentive.listDrawsLatest[0].fullDate"
+						:loading="storeIncentive.lastDrawLoading"
+						:title="storeIncentive.lastDrawHeldFull.fullDate"
 						:subtitle="
 							store.descriptionAwardCurrent(
-								storeIncentive.listDrawsLatest[0].name
+								storeIncentive.lastDrawHeldFull.name
 							)
 						"
-						:countdown="true"
-						:callToAction="false"
-						:hasDescription="true"
+						:countdown="false"
+						:callToAction="app.banner_text_card_label_button_one"
+						:hasDescription="false"
 						:description="false"
-						:imageAward="storeIncentive.listDrawsLatest[0].image"
+						:imageAward="storeIncentive.lastDrawHeldFull.image"
 					/>
 				</div>
 

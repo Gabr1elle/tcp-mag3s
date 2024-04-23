@@ -115,8 +115,8 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		// Sorteios realizados
 		listDrawsLatest: (state) => {
 			// Retorna a lista de sorteios mais recentes, invertida para exibir os últimos primeiro
-			return state.gamification.lotteryDraws.listDrawsLatest.slice().reverse();
-	},
+			return state.gamification.lotteryDraws.listDrawsLatest;
+		},
 	
 
 		lastDrawHeldLink: (state) => {
@@ -137,10 +137,11 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		},
 		filterListDrawsLatest: (state) => {
 			return (payload) => {
+				const draws = state.listDrawsLatest.slice().reverse();
 				if (!payload) {
-					return state.listDrawsLatest;
+					return draws
 				}
-				return state.listDrawsLatest.filter((item) =>
+				return draws.filter((item) =>
 			  item.name.toLowerCase().includes(payload.toLowerCase())
 				);
 			};
