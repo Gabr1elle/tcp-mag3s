@@ -114,11 +114,8 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 
 		// Sorteios realizados
 		listDrawsLatest: (state) => {
-			// Retorna a lista de sorteios mais recentes, invertida para exibir os últimos primeiro
 			return state.gamification.lotteryDraws.listDrawsLatest;
 		},
-	
-
 		lastDrawHeldLink: (state) => {
 			if (state.gamification.lotteryDraws.lastDrawHeld.loading)
 				return `/app/revelar-premio/${state.gamification.lotteryDraws.lastDrawHeld.id}`;
