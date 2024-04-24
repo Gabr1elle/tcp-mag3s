@@ -69,7 +69,7 @@
 					"
 					class="text-1xl md:text-2xl lg:text-3xl flex justify-center items-center text-center animate__animated animate__fadeIn"
 				>
-					<h2 class="text-white">Busca de prêmio não encontrada!</h2>
+					<h2 class="text-white">{{ app.text_prize_search_text_not_found }}</h2>
 				</div>
 			</div>
 		</UContainer>

@@ -667,6 +667,21 @@ export const listSchemaDataMedia = [
 		type: typesMedia[0],
 	},
 	{
+		name: 'text_prize_search_text_not_found',
+		description:
+			'Texto exibido quando não há prêmios que foram procurados.',
+		value: 'Busca de prêmio não encontrada!',
+		tag: 'app',
+		type: typesMedia[0],
+	},
+	{
+		name: 'session_text_drawn',
+		description: 'Texto que aparece dentro do card caso o usuário seja o ganhador do prêmio.',
+		value: 'Você foi sorteado!',
+		tag: 'app',
+		type: typesMedia[0],
+	},
+	{
 		name: 'banner_background_card_one',
 		description:
 			'Imagem do Banner principal que está localizado como o primeiro banner da página.',

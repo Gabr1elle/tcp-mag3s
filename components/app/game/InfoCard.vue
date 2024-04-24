@@ -50,7 +50,7 @@
 					v-if="props.hasBgGradient"
 					class="fm1 text-[10px] md:text-sm leading-3 md:leading-normal"
 				>
-					<p>Você foi sorteado!</p>
+					<p>{{ app.session_text_drawn }}</p>
 				</div>
 			</div>
 		</div>
@@ -68,6 +68,7 @@
 
 <script setup>
 import { useStoreApp } from '~/stores/app';
+const app = useStoreApp().contentApp;
 const store = useStoreApp();
 const { $getDayMonth } = useNuxtApp();
 
