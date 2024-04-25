@@ -57,7 +57,7 @@
 
 		<!-- Botão -->
 		<div
-			v-if="props.link"
+			v-if="props.link && props.hasBgGradient"
 			class="flex items-center text-xl md:text-3xl rounded-e-xl"
 			:style="[backgroundColorButton, textColorButton]"
 		>
@@ -68,9 +68,12 @@
 
 <script setup>
 import { useStoreApp } from '~/stores/app';
-const app = useStoreApp().contentApp;
-const store = useStoreApp();
+import { useStoreIncentive } from '~/stores/incentive';
+
 const { $getDayMonth } = useNuxtApp();
+const store = useStoreApp();
+const app = useStoreApp().contentApp;
+const storeIncentive = useStoreIncentive();
 
 const props = defineProps([
 	'titulo',

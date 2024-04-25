@@ -53,11 +53,11 @@
 						:key="card"
 						:titulo="card.name"
 						:subtitulo="card.subtitulo"
-						:hasBgGradient="true"
+						:hasBgGradient="card.winnerUser"
 						:imagemSrc="card.image"
 						:source="card.source"
 						:date="card.date"
-						:link="`detalhe-premio/${card.id}`"
+						:link=" card.winnerUser ? `detalhe-premio/${card.id}` : false"
 					/>
 				</div>
 

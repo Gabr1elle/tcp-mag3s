@@ -907,6 +907,7 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 						),
 						image: draw.content.images.find((img) => img.subType === 'Splash')
 							.uri,
+						winnerUser: draw.winnerUserId === this.inventory.userId ? "Premiado" : false,
 					});
 				});
 
