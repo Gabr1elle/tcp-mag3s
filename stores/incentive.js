@@ -1147,7 +1147,7 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 				);
 		},
 		prizeDetails(id) {
-			this.inventory.choosePrizeDetails = this.inventory.allPrizes.find(
+			this.inventory.choosePrizeDetails = this.gamification.lotteryDraws.listDrawsLatest.find(
 				(prize) => prize.id === id
 			);
 		},
