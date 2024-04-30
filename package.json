@@ -46,7 +46,7 @@
 		"h3-formidable": "^1.0.0",
 		"maska": "^2.1.11",
 		"moment": "^2.29.4",
-		"mysql2": "^3.9.4",
+		"mysql2": "^3.9.7",
 		"nuxt3-meta-pixel": "^1.0.9",
 		"pinia": "^2.1.6",
 		"sequelize": "^6.37.2",
