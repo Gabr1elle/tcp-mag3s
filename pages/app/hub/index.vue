@@ -13,9 +13,10 @@
 				<!-- Banner Principal -->
 				<div>
 					<!-- Caso seja um banner com carousel -->
-					<Carousel v-if="app.config_will_have_carousel_banner_main" id="carousel-card-main"
-						class="w-full flex flex-col justify-between" autoplay="6500" :wrap-around="true" snap-align="center-odd"
-						:pause-autoplay-on-hover="true">
+					<Carousel
+						v-if="app.config_will_have_carousel_banner_main && storeIncentive.listDrawsUpcomingLimited().length > 1"
+						id="carousel-card-main" class="w-full flex flex-col justify-between" autoplay="6500" :wrap-around="true"
+						snap-align="center-odd" :pause-autoplay-on-hover="true">
 						<template #slides>
 							<Slide
 								v-for="slide in storeIncentive.listDrawsUpcomingLimited(Number(app.carousel_banner_main_qtd_items))"

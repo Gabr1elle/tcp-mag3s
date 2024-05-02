@@ -999,7 +999,7 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 
 			// Obtendo um Objeto contendo as informações do último sorteio
 			this.gamification.lotteryDraws.lastDraw = {
-				...this.gamification.lotteryDraws.listDrawsUpcoming.pop(),
+				...this.gamification.lotteryDraws.listDrawsUpcoming.slice().pop(),
 				loading: true,
 			};
 
