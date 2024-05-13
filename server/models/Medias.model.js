@@ -58,7 +58,7 @@ MediasModel.init(
 					this.setDataValue('value', payload);
 				}
 			},
-		},		
+		},
 		placeholder: {
 			type: DataTypes.STRING,
 			required: false,
