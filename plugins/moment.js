@@ -51,6 +51,9 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 				return null;
 			},
+			getDayMonth(date, type) {
+				return moment(date).format(type);
+		  },
 		},
 	};
 });

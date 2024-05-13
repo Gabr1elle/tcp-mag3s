@@ -1,5 +1,5 @@
 <template>
-	<div class="relative" :style="background">
+	<div class="relative" :style="backgroundColor">
 		<UContainer :style="colorText" class="py-12">
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
 
@@ -31,7 +31,9 @@
 
 					<!-- Lista dos influencers -->
 					<h4 class="fm3 mt-12 mb-5 uppercase text-md lg:text-xl">Ranking</h4>
-					<div v-for="(influencer, index) in store.influencerList.list.slice(1, 6)" :key="index" class="grid grid-cols-[20px_56px_1fr_1fr] gap-2 items-center" :class="index + 1 < store.influencerList.list.length ? 'mb-4' : ''">
+					<div v-for="(influencer, index) in store.influencerList.list.slice(1, 6)" :key="index"
+						class="grid grid-cols-[20px_56px_1fr_1fr] gap-2 items-center"
+						:class="index + 1 < store.influencerList.list.length ? 'mb-4' : ''">
 
 						<!-- Posição -->
 						<span class="fm3 text-md lg:text-xl">{{ index + 2 }}&ordm;</span>
@@ -62,16 +64,18 @@ const app = useStoreApp().contentApp;
 
 const { pathAssets } = useRuntimeConfig().public;
 
+const props = defineProps(['backgroundColor', 'isDark'])
+
 const colorText = computed(() => {
-	return `color: ${app.session_colors_text_one};`;
+	return `color: ${props.isDark ? app.session_colors_text_one : 'white'};`;
 });
 
 const borderColor = computed(() => {
 	return `border-color: ${app.colors_border_two}`
 });
 
-const background = computed(() => {
-	return `background-color: ${app.session_background_colors_hotsite_one}`;
+const backgroundColor = computed(() => {
+	return `background-color: ${props.backgroundColor}`;
 });
 
 const backgroundInfluencer = computed(() => {
