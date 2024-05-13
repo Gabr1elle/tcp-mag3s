@@ -1,4 +1,5 @@
 <template>
+	<NuxtPwaManifest />
 	<div v-show="!storeIncentive.loading" class="min-h-screen flex flex-col justify-between">
 		<AppLayoutBgDefault />
 

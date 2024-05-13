@@ -1,5 +1,4 @@
 <template>
-	<NuxtPwaManifest />
 	<div
 		:class="
 			isUserAdminLogIn ? 'lg:mt-[30px] animate__animated animate__fadeIn' : ''
