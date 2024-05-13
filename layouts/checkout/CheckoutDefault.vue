@@ -1,5 +1,4 @@
 <template>
-	<NuxtPwaAssets />
 	<!-- BG padrão de fundo da página -->
 	<div class="absolute">
 		<LpBgDefault v-if="app.config_will_have_hotsite" :image="app.layout_background_app_two"

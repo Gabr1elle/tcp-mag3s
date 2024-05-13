@@ -1,41 +1,52 @@
 <template>
-	<NuxtPwaAssets />
-	<div :class="isUserAdminLogIn ? 'lg:mt-[30px] animate__animated animate__fadeIn' : ''">
-		<NuxtPage :page-key="route => route.fullPath" />
+	<NuxtPwaManifest />
+	<div
+		:class="
+			isUserAdminLogIn ? 'lg:mt-[30px] animate__animated animate__fadeIn' : ''
+		"
+	>
+		<NuxtPage :page-key="(route) => route.fullPath" />
 		<OthersIndicatorAdmin />
 	</div>
 
 	<ClientOnly>
-		PWA Installed: {{ $pwa?.isPWAInstalled }} <br> show prompt: {{ $pwa?.showInstallPrompt }} <br> ready: {{
-	$pwa?.offlineReady }}
+		PWA Installed: {{ $pwa?.isPWAInstalled }} <br />
+		show prompt: {{ $pwa?.showInstallPrompt }} <br />
+		ready: {{ $pwa?.offlineReady }}
 	</ClientOnly>
 
 	<!-- You can use $pwa directly in templates! -->
 	<ClientOnly>
-		<div v-show="$pwa.needRefresh">
-			<span>
-				New content available, click on reload button to update.
-			</span>
-
-			<button @click="$pwa.updateServiceWorker()">
-				Reload
-			</button>
-		</div>
-
-		<div v-show="$pwa?.showInstallPrompt && !$pwa?.offlineReady && !$pwa?.needRefresh" class="pwa-toast" role="alert">
-			<div class="message">
-				<span>
-					Install PWA
-				</span>
-			</div>
-			<button @click="$pwa.install()">
-				Install
-			</button>
-			<button @click="$pwa.cancelInstall()">
-				Cancel
-			</button>
-		</div>
-	</ClientOnly>
+      <div
+        v-if="$pwa?.offlineReady || $pwa?.needRefresh"
+        class="pwa-toast"
+        role="alert"
+      >
+        <div class="message">
+          <span v-if="$pwa.offlineReady"> App ready to work offline </span>
+          <span v-else>
+            New content available, click on reload button to update.
+          </span>
+        </div>
+        <button v-if="$pwa.needRefresh" @click="$pwa.updateServiceWorker()">
+          Reload
+        </button>
+        <button @click="$pwa.cancelPrompt()">Close</button>
+      </div>
+      <div
+        v-if="
+          $pwa?.showInstallPrompt && !$pwa?.offlineReady && !$pwa?.needRefresh
+        "
+        class="pwa-toast"
+        role="alert"
+      >
+        <div class="message">
+          <span> Install PWA </span>
+        </div>
+        <button @click="$pwa.install()">Install</button>
+        <button @click="$pwa.cancelInstall()">Cancel</button>
+      </div>
+    </ClientOnly>
 
 	<UNotifications />
 </template>
@@ -44,8 +55,10 @@
 const isUserAdminLogIn = useCookie('idUser').value;
 const { $pwa } = useNuxtApp();
 
-onNuxtReady(() => {
-})
+const toast = useToast();
+
+onMounted(() => {
+});
 </script>
 
 <style>

@@ -88,6 +88,24 @@ export default defineNuxtConfig({
 			name: 'Incentiva',
 			short_name: 'Incentiva',
 			theme_color: '#FFBE00',
+			icons: [
+				{
+					src: 'pwa-192x192.png',
+					sizes: '192x192',
+					type: 'image/png',
+				},
+				{
+					src: 'pwa-512x512.png',
+					sizes: '512x512',
+					type: 'image/png',
+				},
+				{
+					src: 'pwa-512x512.png',
+					sizes: '512x512',
+					type: 'image/png',
+					purpose: 'any maskable',
+				},
+			],
 		},
 		pwaAssets: {
 			config: true,
@@ -97,12 +115,14 @@ export default defineNuxtConfig({
 		},
 		client: {
 			installPrompt: true,
+			periodicSyncForUpdates: 20,
 		},
 		devOptions: {
 			enabled: true,
 			suppressWarnings: true,
 			navigateFallback: '/',
 			navigateFallbackAllowlist: [/^\/$/],
+			type: 'module',
 		},
 	},
 
@@ -121,11 +141,16 @@ export default defineNuxtConfig({
 	},
 
 	imports: {
+		autoImport: true,
 		dirs: ['.stores'],
 	},
 
 	pinia: {
 		autoImports: ['defineStore'],
+	},
+
+	vite: {
+		logLevel: 'info',
 	},
 
 	css: ['animate.css/animate.min.css', '~/assets/css/main.css'],
