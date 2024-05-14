@@ -55,6 +55,9 @@ const store = useStoreApp();
 const app = store.contentApp;
 const storeIncentive = useStoreIncentive();
 
+definePageMeta({
+	middleware: ['auth-client']
+});
 
 const schema = object({
 	email: string().email('E-mail inválido').required('Campo obrigatório')
