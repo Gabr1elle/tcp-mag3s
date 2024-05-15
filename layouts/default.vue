@@ -9,9 +9,11 @@
 	</div>
 
 	<ClientOnly>
-		PWA Installed: {{ $pwa?.isPWAInstalled }} <br />
-		show prompt: {{ $pwa?.showInstallPrompt }} <br />
-		ready: {{ $pwa?.offlineReady }}
+		<div class="text-white fixed top-[50%]">
+			PWA Installed: {{ $pwa?.isPWAInstalled }} <br />
+			show prompt: {{ $pwa?.showInstallPrompt }} <br />
+			ready: {{ $pwa?.offlineReady }}
+		</div>
 	</ClientOnly>
 
 	<!-- You can use $pwa directly in templates! -->
@@ -55,11 +57,12 @@ const actions = ref([
 ]);
 
 watchEffect(() => {
-	if ($pwa?.showInstallPrompt && !$pwa?.offlineReady && !$pwa?.needRefresh) {
+	if ($pwa?.showInstallPrompt && !$pwa?.needRefresh) {
 		toast.add({
 			title: 'Install PWA',
 			description: 'Install this app on your device for a better experience',
 			timeout: 0,
+			closeButton: false,
 			actions,
 		});
 	}
