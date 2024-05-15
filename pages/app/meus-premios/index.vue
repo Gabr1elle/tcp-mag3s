@@ -34,7 +34,7 @@
 
 					<!-- Filtro dos prêmios -->
 					<div v-if="storeIncentive.hasLotteryPrizesWon && app.config_will_have_scratch_card"
-						class="fm1 flex items-center animate__animated animate__zoomInDown">
+						class="fm1 flex items-center animate__animated animate__zoomInDown mb-10">
 						<div
 							:style="[textColorButton, borderColor, storeIncentive.filterPrizes === 0 ? backgroundColorActive : backgroundColor]"
 							class="flex justify-center items-center border mt-6 w-full h-8 rounded-s-lg border-e-0 text-[10px] md:text-sm cursor-pointer"
@@ -45,7 +45,7 @@
 						<div
 							:style="[textColorButton, borderColor, storeIncentive.filterPrizes === 1 ? backgroundColorActive : backgroundColor]"
 							class="buttons flex justify-center items-center border mt-6 w-full h-8 text-[10px] md:text-sm cursor-pointer"
-							@click="handleClick(1, 'luckyNumber')">
+							@click="handleClick(1, 'Prize')">
 							<p>{{ app.sessions_button_label_two }}</p>
 						</div>
 
@@ -57,13 +57,13 @@
 						</div>
 					</div>
 
+					<!-- Lista dos prêmios -->
 					<div v-if="storeIncentive.hasLotteryPrizesWonFilter">
-						<!-- Lista dos prêmios -->
-						<div class="animate__animated animate__fadeInUp" ref="animateMyPrizes">
-							<AppGameInfoCard v-for="prize in storeIncentive.lotteryPrizesWonFilter" class="mt-8" :titulo="prize.name"
-								:subtitulo="store.descriptionPrizes(prize.typePrize)" :hasBgGradient="prize.prizeTypeStyle"
+						<div class="animate__animated animate__fadeInUp grid gap-10 lg:gap-14" ref="animateMyPrizes">
+							<AppGameInfoCard v-for="prize in storeIncentive.lotteryPrizesWonFilter" :titulo="prize.name"
+								:subtitulo="store.descriptionPrizes(prize.typePrize)" :hasBgGradient="prize.winnerUser"
 								:imagemSrc="prize.image" :link="`/app/detalhe-premio/${prize.id}`" date=""
-								:imgCard="store.imgTypePrizes(prize.typePrize)" :key="prize.id" />
+								:imgCard="store.imgTypePrizes(prize.typePrize)" :key="prize.id"  />
 						</div>
 					</div>
 

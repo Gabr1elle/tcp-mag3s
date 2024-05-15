@@ -260,7 +260,7 @@ export const useStoreApp = defineStore('storeApp', {
 			const { pathAssets } = useRuntimeConfig().public;
 
 			return (payload) => {
-				if (payload === 'luckyNumber')
+				if (payload === 'Prize')
 					return `${pathAssets}${state.contentApp.sessions_image_one}`;
 				if (payload === 'ScratchCard')
 					return `${pathAssets}${state.contentApp.sessions_image_two}`;
