@@ -458,6 +458,9 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 							code: `Requisição de nova senha`,
 							callbackURL: `${window.location.protocol}//${window.location.host}/confirmar-senha/`,
 						},
+						headers: {
+							Authorization: `Bearer ${useCookie('tokenClient').value}`,
+						},
 					}
 				);
 

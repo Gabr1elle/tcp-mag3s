@@ -1,10 +1,8 @@
 import { MediasModel } from '../../../models/Medias.model';
 import { readFiles } from 'h3-formidable';
 import { firstValues } from 'h3-formidable/helpers';
-import { readBooleans } from 'h3-formidable/helpers';
 import { TagsMediaModel } from '~/server/models/TagsMedia.model';
 import fs from 'fs';
-import path from 'path';
 
 const config = useRuntimeConfig();
 
@@ -19,7 +17,7 @@ export default defineEventHandler(async (event) => {
 		maxFiles: 10,
 		maxFilesSize: 5 * 1024 * 1024,
 		maxFields: 8,
-		filter: function ({ name, originalFilename, mimetype }) {
+		filter: function ({ mimetype }) {
 			// keep only images and pdf's
 			let valid =
 				mimetype && (mimetype.includes('image') || mimetype.includes('pdf'));
