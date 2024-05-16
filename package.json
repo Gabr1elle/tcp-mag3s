@@ -5,6 +5,7 @@
 	"scripts": {
 		"build": "nuxt build",
 		"dev": "nuxt dev --dotenv .env.development",
+		"reset": "rm -rf ./node_modules && rm -rf package-lock.json && npm install",
 		"pgi": "npx nuxi dev --dotenv .env.pginfluencer --host",
 		"raffles": "npx nuxi dev --dotenv .env.raffles --host",
 		"fieldasorte": "npx nuxi dev --dotenv .env.fieldasorte --host",
