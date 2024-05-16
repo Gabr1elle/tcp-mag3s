@@ -107,9 +107,6 @@ export default defineNuxtConfig({
 				},
 			],
 		},
-		pwaAssets: {
-			config: true,
-		},
 		workbox: {
 			globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
 		},

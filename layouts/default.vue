@@ -47,11 +47,11 @@ const toast = useToast();
 
 const actions = ref([
 	{
-		label: 'Install',
+		label: 'Instalar',
 		click: () => $pwa.install(),
 	},
 	{
-		label: 'Cancel',
+		label: 'Cancelar',
 		click: () => $pwa.cancelInstall(),
 	},
 ]);
@@ -59,8 +59,11 @@ const actions = ref([
 watchEffect(() => {
 	if ($pwa?.showInstallPrompt && !$pwa?.needRefresh) {
 		toast.add({
-			title: 'Install PWA',
-			description: 'Install this app on your device for a better experience',
+			id: 'install-pwa',
+			color: 'green',
+			icon: 'i-material-symbols-download-for-offline-outline',
+			title: 'Instalação de Aplicativo!',
+			description: 'Instale o aplicativo e tenha uma experiência melhor!',
 			timeout: 0,
 			closeButton: false,
 			actions,
