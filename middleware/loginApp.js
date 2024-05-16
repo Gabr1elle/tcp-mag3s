@@ -12,13 +12,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		if (useCookie('tokenUser').value) {
 			toast.add({
 				id: 'show_status_login_back_error',
-				color: `red`,
-				title: `Atenção!`,
+				color: `green`,
+				title: `Sucesso!`,
 				description: `Você já fez o login.`,
-				icon: `i-material-symbols-warning-outline-rounded`,
+				icon: `i-material-symbols-check-circle`,
 				timeout: 3500,
 			});
-			
+
 			storeIncentive.loading = false;
 			return navigateTo({ path: '/app/hub' });
 		}
