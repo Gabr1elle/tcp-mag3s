@@ -20,7 +20,7 @@
 							<Slide
 								v-for="slide in storeIncentive.listDrawsUpcomingLimited(Number(app.carousel_banner_main_qtd_items))"
 								:key="slide" class="flex flex-col">
-								<AppBannersCard :linkSource="storeIncentive.NextDrawLink(slide)"
+								<AppBannersCardFull :linkSource="storeIncentive.NextDrawLink(slide)"
 									:hasImageDetach="app.config_will_have_image_detach_banner_main"
 									:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading(true)"
 									:title="store.titleCardNextDraw(slide.date)" :subtitle="store.subtitleCardNextDraw(slide.date)"
@@ -36,7 +36,7 @@
 						</template>
 					</Carousel>
 
-					<AppBannersCard v-else :linkSource="storeIncentive.NextDrawLink()"
+					<AppBannersCardFull v-else :linkSource="storeIncentive.NextDrawLink()"
 						:hasImageDetach="app.config_will_have_image_detach_banner_main" :imageDetach="app.banner_image_card_one"
 						:loading="storeIncentive.nextDrawLoading()" :title="store.titleCardNextDraw()"
 						:subtitle="store.subtitleCardNextDraw()" :countdown="storeIncentive.nextDrawDate"
