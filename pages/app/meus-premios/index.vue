@@ -9,24 +9,19 @@
 			<div class="max-w-[700px] m-auto flex flex-col justify-center">
 				<!-- Banner Principal -->
 				<div>
-					<!-- Caso seja um banner com carousel -->
-					<Carousel v-if="app.config_will_have_carousel_banner_main" id="carousel-card-main"
-						class="w-full flex flex-col justify-between" autoplay="6500" :wrap-around="true"
-						:pause-autoplay-on-hover="true">
-						<Slide v-for="slide in storeIncentive.listDraws" :key="slide" class="flex flex-col">
-							<AppBannersCard :linkSource="storeIncentive.NextDrawLink(slide)" :hasImageDetach="!store.hasHotSiteOrRaffle"
+					<UCarousel :items="storeIncentive.listDraws" ref="carouselRef" :ui="{ item: 'basis-full', indicators: { wrapper: 'relative bottom-0 mt-4' } }" indicators>
+						<template #default="{ item }">
+							<AppBannersCard :linkSource="storeIncentive.NextDrawLink(item)" :hasImageDetach="!store.hasHotSiteOrRaffle"
 								:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading(true)"
-								:title="store.titleCardNextDraw(slide.date)" :subtitle="store.subtitleCardNextDraw(slide.date)"
-								:countdown="slide.date" :callToAction="store.labelButtonCardNextDraw(slide.date)" :hasDescription="false"
-								:description="false" :imageAward="slide.image" />
-						</Slide>
-					</Carousel>
+								:title="store.titleCardNextDraw(item.date)" :subtitle="store.subtitleCardNextDraw(item.date)"
+								:countdown="item.date" :callToAction="store.labelButtonCardNextDraw(item.date)" :hasDescription="false"
+								:description="false" :imageAward="item.image" />
+						</template>
 
-					<AppBannersCard v-else :linkSource="storeIncentive.NextDrawLink()" :hasImageDetach="!store.hasHotSiteOrRaffle"
-						:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading()"
-						:title="store.titleCardNextDraw()" :subtitle="store.subtitleCardNextDraw()"
-						:countdown="storeIncentive.nextDrawDate" :callToAction="store.labelButtonCardNextDraw()"
-						:hasDescription="false" :description="false" :imageAward="storeIncentive.nextDrawFull.image" />
+						<template #indicator="{ onClick, page, active }">
+							<div :class="active ? 'bullet-active' : 'bullet-outline'" class="cursor-pointer rounded-full min-w-7 min-h-1.5 justify-center" @click="onClick(page)"></div>
+						</template>
+					</UCarousel>
 				</div>
 
 				<!-- Conteúdo -->
@@ -128,6 +123,14 @@ const borderColor = computed(() => {
 	return `border-color: ${app.colors_border_one}`;
 });
 
+const bgCarouselPagination = computed(() => {
+	return app.colors_carousel_pagination_background;
+});
+
+const bgCarouselPaginationActive = computed(() => {
+	return app.colors_emphasis_active_and_hover;
+});
+
 const handleClick = (position, filter) => {
 	storeIncentive.filterPrizes = position;
 
@@ -140,6 +143,8 @@ const hasHeader = computed(() => {
 	}
 });
 
+const carouselRef = ref();
+
 onNuxtReady(async () => {
 	await storeIncentive.userInventory(useToast);
 	await storeIncentive.lotteryDraws(useToast);
@@ -150,7 +155,42 @@ onNuxtReady(async () => {
 	store.selectMenuBehaviour(2, 'showing', app.config_will_have_scratch_card && storeIncentive.hasScratchCardQtd);
 	// Inserindo o link para a opção dos números da sorte no Menu
 	store.selectMenuBehaviour(4, 'path', `/app/revelar-premio/${storeIncentive.gamification.lotteryDraws.nextDraw.id}`);
+
+	// Iniciando o carrossel de prêmios
+	const startCarouselInterval = () => {
+		return setInterval(() => {
+			if (!carouselRef.value) return;
+
+			if (carouselRef.value.page === carouselRef.value.pages) {
+				return carouselRef.value.select(0);
+			}
+
+			carouselRef.value.next();
+		}, 3000);
+	};
+
+	let carouselInterval = startCarouselInterval();
+
+	const stopCarouselInterval = () => {
+		clearInterval(carouselInterval);
+	}
+
+	const initCarouselInterval = () => {
+		stopCarouselInterval();
+		carouselInterval = startCarouselInterval();
+	}
+
+	initCarouselInterval();
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.bullet-outline {
+	background-color: v-bind(bgCarouselPagination);
+	opacity: .5;
+}
+
+.bullet-active {
+	background-color: v-bind(bgCarouselPaginationActive);
+}
+</style>
