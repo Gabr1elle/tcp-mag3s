@@ -35,18 +35,14 @@
 						<p class="animate__animated animate__fadeInUp">#{{ influencerName }}</p>
 					</div>
 				</div>
-
 			</UContainer>
 
 			<!-- Imagem de destaque (Brand secundário) -->
 			<div class="m-auto animate__animated animate__zoomIn">
-				<Carousel id="carousel-next-prizes" :autoplay="0" :wrap-around="false" :pause-autoplay-on-hover="true"
-					:mouse-drag="app.brand_image_session.length > 1" :touch-drag="app.brand_image_session.length > 1">
-					<Slide v-for="(image, index) in app.brand_image_session" :key="index">
-						<img class="md:max-w-[90%] lg:w-[150%]" :src="`${pathAssets}${image}`"
+				<UCarousel :items="app.brand_image_session" v-slot="image" :ui="{ item: 'basis-full' }">
+					<img class="md:max-w-[90%] lg:w-[150%]" :src="`${pathAssets}${image.item}`"
 							onerror="this.src='/imgs/lp/landing_cover_image.png'" alt="">
-					</Slide>
-				</Carousel>
+				</UCarousel>
 			</div>
 		</UContainer>
 	</div>

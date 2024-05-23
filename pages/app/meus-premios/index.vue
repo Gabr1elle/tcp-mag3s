@@ -8,8 +8,8 @@
 		<UContainer class="pt-12 py-24" :class="hasHeader">
 			<div class="max-w-[700px] m-auto flex flex-col justify-center">
 				<!-- Banner Principal -->
-				<div>
-					<UCarousel :items="storeIncentive.listDraws" ref="carouselRef" :ui="{ item: 'basis-full', indicators: { wrapper: 'relative bottom-0 mt-4' } }" indicators>
+				<div @mouseenter="carouselPauseAutoPlay(false)" @mouseleave="carouselPauseAutoPlay(true)">
+					<UCarousel :items="storeIncentive.listDraws" :ref="carouselSetup.autoPlay ? 'carouselRef' : ''" :ui="carouselSetup.ui" indicators arrows>
 						<template #default="{ item }">
 							<AppBannersCard :linkSource="storeIncentive.NextDrawLink(item)" :hasImageDetach="!store.hasHotSiteOrRaffle"
 								:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading(true)"
@@ -19,7 +19,15 @@
 						</template>
 
 						<template #indicator="{ onClick, page, active }">
-							<div :class="active ? 'bullet-active' : 'bullet-outline'" class="cursor-pointer rounded-full min-w-7 min-h-1.5 justify-center" @click="onClick(page)"></div>
+							<div :class="active ? 'bullet-active' : 'bullet-outline'" class="cursor-pointer rounded-full min-w-2 min-h-2 lg:min-w-7 lg:min-h-1.5 justify-center" @click="onClick(page)"></div>
+						</template>
+
+						<template #prev="{ onClick, disabled }">
+							<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-back-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+						</template>
+
+						<template #next="{ onClick, disabled }">
+							<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-forward-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
 						</template>
 					</UCarousel>
 				</div>
@@ -143,7 +151,25 @@ const hasHeader = computed(() => {
 	}
 });
 
+// Carrossel de prêmios
 const carouselRef = ref();
+const carouselSetup = reactive({
+	autoPlay: true,
+	timer: 3500,
+	ui: {
+		item: 'basis-full',
+		indicators: { wrapper: 'relative bottom-0 mt-4' },
+		arrows: {
+			wrapper: 'absolute top-1/2 transform -translate-y-1/2 w-full',
+			next: 'right-0',
+			prev: 'left-0'
+		},
+	},
+});
+
+const carouselPauseAutoPlay = (toggle) => {
+	carouselSetup.autoPlay = toggle;
+};
 
 onNuxtReady(async () => {
 	await storeIncentive.userInventory(useToast);
@@ -166,7 +192,7 @@ onNuxtReady(async () => {
 			}
 
 			carouselRef.value.next();
-		}, 3000);
+		}, carouselSetup.timer);
 	};
 
 	let carouselInterval = startCarouselInterval();
