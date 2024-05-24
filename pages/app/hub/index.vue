@@ -5,44 +5,66 @@
 		<AppLayoutHeader v-if="app.config_will_have_hotsite" :hasLogout="true" :bgColor="app.header_colors_background_app"
 			:textColor="app.header_colors_text_app" :isLogoDark="false" />
 
-		<UContainer class="pt-12" :class="hasHeader">
+<!-- Banner para dimensôes de tablet e celular -->
+		<Ucontainer>
+			<div @mouseenter="carouselPauseAutoPlay(false)" @mouseleave="carouselPauseAutoPlay(true)">
+					<UCarousel :items="storeIncentive.listDrawsUpcomingLimited(Number(app.carousel_banner_main_qtd_items))" :ref="carouselSetup.autoPlay ? 'carouselRef' : ''" :ui="carouselSetup.ui" indicators arrows v-if="app.config_will_have_carousel_banner_main"
+					>
+						<template #default="{ item }" >
+								<AppBannersCardFull :linkSource="storeIncentive.NextDrawLink(item)"
+									hasImageDetach=""
+									:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading(true)"
+									:title="store.titleCardNextDraw(item.date)" :subtitle="store.subtitleCardNextDraw(item.date)"
+									:countdown="item.date" :callToAction="store.labelButtonCardNextDraw(item.date)"
+									:hasDescription="false" :description="false" :imageAward="item.image" />
+						</template>
+						
+						<template #indicator="{ onClick, page, active }">
+							<div :class="active ? 'bullet-active' : 'bullet-outline'" class="cursor-pointer rounded-full min-w-2 min-h-2 lg:min-w-7 lg:min-h-1.5 justify-center" @click="onClick(page)"></div>
+						</template>
 
-			<div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 lg:gap-3 auto-rows-auto"
+						<template #prev="{ onClick, disabled }">
+							<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-back-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+						</template>
+
+						<template #next="{ onClick, disabled }">
+							<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-forward-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+						</template>
+					</UCarousel>
+					</div>
+		</Ucontainer>
+
+<!-- Banner principal -->
+		<UContainer class="pt-12" :class="hasHeader">
+			<div class="grid grid-cols-1 items-center gap-2 lg:gap-3 auto-rows-auto"
 				:class="hasRafflesSimplePurchase">
 
-				<!-- Banner Principal -->
-				<div>
-					<!-- Caso seja um banner com carousel -->
-					<Carousel v-if="app.config_will_have_carousel_banner_main" id="carousel-card-main"
-						class="w-full flex flex-col justify-between" autoplay="6500" :wrap-around="true" snap-align="center-odd"
-						:pause-autoplay-on-hover="true">
-						<template #slides>
-							<Slide
-								v-for="slide in storeIncentive.listDrawsUpcomingLimited(Number(app.carousel_banner_main_qtd_items))"
-								:key="slide" class="flex flex-col">
-								<AppBannersCardFull :linkSource="storeIncentive.NextDrawLink(slide)"
-									:hasImageDetach="app.config_will_have_image_detach_banner_main"
+					<!-- Banner Principal com Carousel -->
+					<div @mouseenter="carouselPauseAutoPlay(false)" @mouseleave="carouselPauseAutoPlay(true)">
+					<UCarousel :items="storeIncentive.listDrawsUpcomingLimited(Number(app.carousel_banner_main_qtd_items))" :ref="carouselSetup.autoPlay ? 'carouselRef' : ''" :ui="carouselSetup.ui" indicators arrows v-if="app.config_will_have_carousel_banner_main"
+					>
+						<template #default="{ item }" >
+								<AppBannersCard :linkSource="storeIncentive.NextDrawLink(item)"
+									hasImageDetach=""
 									:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading(true)"
-									:title="store.titleCardNextDraw(slide.date)" :subtitle="store.subtitleCardNextDraw(slide.date)"
-									:countdown="slide.date" :callToAction="store.labelButtonCardNextDraw(slide.date)"
-									:hasDescription="false" :description="false" :imageAward="slide.image" />
-							</Slide>
+									:title="store.titleCardNextDraw(item.date)" :subtitle="store.subtitleCardNextDraw(item.date)"
+									:countdown="item.date" :callToAction="store.labelButtonCardNextDraw(item.date)"
+									:hasDescription="false" :description="false" :imageAward="item.image" />
 						</template>
-						<template #addons>
-							<div class="carousel__navegation hidden lg:block">
-								<Navigation />
-							</div>
-							<Pagination />
+						
+						<template #indicator="{ onClick, page, active }">
+							<div :class="active ? 'bullet-active' : 'bullet-outline'" class="cursor-pointer rounded-full min-w-2 min-h-2 lg:min-w-7 lg:min-h-1.5 justify-center" @click="onClick(page)"></div>
 						</template>
-					</Carousel>
 
-					<AppBannersCardFull v-else :linkSource="storeIncentive.NextDrawLink()"
-						:hasImageDetach="app.config_will_have_image_detach_banner_main" :imageDetach="app.banner_image_card_one"
-						:loading="storeIncentive.nextDrawLoading()" :title="store.titleCardNextDraw()"
-						:subtitle="store.subtitleCardNextDraw()" :countdown="storeIncentive.nextDrawDate"
-						:callToAction="store.labelButtonCardNextDraw()" :hasDescription="false" :description="false"
-						:imageAward="storeIncentive.nextDrawFull.image" />
-				</div>
+						<template #prev="{ onClick, disabled }">
+							<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-back-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+						</template>
+
+						<template #next="{ onClick, disabled }">
+							<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-forward-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+						</template>
+					</UCarousel>
+					</div>
 
 				<!-- Compra simplificada de pacote -->
 				<CheckoutSimplePurchase v-if="app.config_will_have_raffle" :isDark="false" pathRedirect="/checkout/pagamento"
@@ -140,6 +162,28 @@ const bgCarouselPaginationActive = computed(() => {
 	return app.colors_emphasis_active_and_hover;
 });
 
+
+// Carrossel de prêmios
+const carouselRef = ref();
+const carouselSetup = reactive({
+	autoPlay: true,
+	timer: 3500,
+	ui: {
+		item: 'basis-full',
+		indicators: { wrapper: 'relative bottom-0 mt-4' },
+		arrows: {
+			wrapper: 'absolute top-1/2 transform -translate-y-1/2 w-full',
+			next: 'right-0',
+			prev: 'left-0'
+		},
+	},
+});
+
+
+const carouselPauseAutoPlay = (toggle) => {
+	carouselSetup.autoPlay = toggle;
+};
+
 onNuxtReady(async () => {
 	await storeIncentive.userInventory(useToast);
 	await storeIncentive.lotteryDraws(useToast);
@@ -150,6 +194,32 @@ onNuxtReady(async () => {
 	store.selectMenuBehaviour(2, 'showing', app.config_will_have_scratch_card && storeIncentive.hasScratchCardQtd);
 	// Inserindo o link para a opção dos números da sorte no Menu
 	store.selectMenuBehaviour(4, 'path', `/app/revelar-premio/${storeIncentive.gamification.lotteryDraws.nextDraw.id}`);
+
+		// Iniciando o carrossel de prêmios
+	const startCarouselInterval = () => {
+		return setInterval(() => {
+			if (!carouselRef.value) return;
+
+			if (carouselRef.value.page === carouselRef.value.pages) {
+				return carouselRef.value.select(0);
+			}
+
+			carouselRef.value.next();
+		}, carouselSetup.timer);
+	};
+
+	let carouselInterval = startCarouselInterval();
+
+	const stopCarouselInterval = () => {
+		clearInterval(carouselInterval);
+	}
+
+	const initCarouselInterval = () => {
+		stopCarouselInterval();
+		carouselInterval = startCarouselInterval();
+	}
+
+	initCarouselInterval();
 });
 </script>
 
