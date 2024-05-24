@@ -15,30 +15,32 @@
 			</h1>
 
 			<!-- items -->
-			<Carousel v-if="props.loading" id="carousel-card" class="w-full flex flex-col justify-between"
-				:autoplay="carouselAutoPlay" :wrap-around="true" :pause-autoplay-on-hover="true">
-				<Slide v-for="slide in props.awards" :key="slide" class="flex flex-col">
+			<div v-if="props.loading" @mouseenter="carouselPauseAutoPlay(false)" @mouseleave="carouselPauseAutoPlay(true)">
+				<UCarousel :items="props.awards" :ref="carouselSetup.autoPlay ? 'carouselRef' : ''" :ui="carouselSetup.ui" :indicators="props.awards.length > 1" draggable>
+					<template #default="{ item }">
+						<div class="flex flex-col justify-center items-center w-full">
+							<!-- Image -->
+							<div v-if="props.loading" class="w-[100px] sm:w-[120px] md:w-[140px] animate__animated animate__tada">
+								<img :src="item.image" onerror="this.src='/imgs/premio_02.png'" />
+							</div>
 
-					<!-- Image -->
-					<div v-if="props.loading" class="w-[100px] sm:w-[120px] md:w-[140px] animate__animated animate__tada">
-						<img :src="slide.image" onerror="this.src='/imgs/premio_02.png'" />
-					</div>
+							<!-- Data -->
+							<div v-if="props.awards.length >= 1 && !props.callToAction" class="fm3 mt-1 text-[12px] sm:text-[16px]">
+								<h1 class="animate__animated animate__fadeIn">{{
+									$formatDayMonthYear(item.date) }}</h1>
+							</div>
+						</div>
+					</template>
 
-					<!-- Data -->
-					<div v-if="props.awards.length > 1" class="fm3 mt-1 text-[12px] sm:text-[16px]">
-						<h1 class="animate__animated animate__fadeIn">{{
-							$formatDayMonthYear(slide.date) }}</h1>
-					</div>
-				</Slide>
-				<template #addons>
-					<Pagination v-if="props.awards.length > 1" />
-				</template>
-			</Carousel>
+					<template #indicator="{ onClick, page, active }">
+						<div :class="active ? 'bullet-active' : 'bullet-outline'" class="cursor-pointer rounded-full min-w-2 min-h-2 lg:min-w-3 lg:min-h-3 justify-center" @click="onClick(page)"></div>
+					</template>
+				</UCarousel>
+			</div>
 
 			<div v-else class="h-full flex items-center">
 				<AppOthersSpin />
 			</div>
-
 
 			<!-- Call to action -->
 			<div v-if="props.callToAction"
@@ -68,31 +70,72 @@ const colorBgButton = computed(() => {
 
 const bgCarouselPagination = computed(() => {
 	return store.contentApp.colors_carousel_pagination_background;
-})
+});
 
 const bgCarouselPaginationActive = computed(() => {
 	return store.contentApp.colors_emphasis_active_and_hover;
-})
+});
 
+// Carrossel de prêmios
+const carouselRef = ref();
+const carouselSetup = reactive({
+	autoPlay: true,
+	timer: props.carouselAutoPlay,
+	ui: {
+		item: 'basis-full',
+		indicators: { wrapper: 'relative bottom-0 mt-4' },
+		arrows: {
+			wrapper: 'absolute top-1/2 transform -translate-y-1/2 w-full',
+			next: 'right-0',
+			prev: 'left-0'
+		},
+	},
+});
+
+const carouselPauseAutoPlay = (toggle) => {
+	carouselSetup.autoPlay = toggle;
+};
+
+onNuxtReady(async () => {
+	// Iniciando o carrossel de prêmios
+	const startCarouselInterval = () => {
+		return setInterval(() => {
+			if (!carouselRef.value) return;
+
+			if (carouselRef.value.page === carouselRef.value.pages) {
+				return carouselRef.value.select(0);
+			}
+
+			carouselRef.value.next();
+		}, carouselSetup.timer);
+	};
+
+	let carouselInterval = startCarouselInterval();
+
+	const stopCarouselInterval = () => {
+		clearInterval(carouselInterval);
+	}
+
+	const initCarouselInterval = () => {
+		stopCarouselInterval();
+		carouselInterval = startCarouselInterval();
+	}
+
+	initCarouselInterval();
+});
 </script>
 
-<style>
+<style scoped>
 .arrow {
 	background-color: v-bind(colorBgButton);
 }
 
-#carousel-card .carousel__pagination-button::after {
-	/* Your custom styles here */
-	width: 20px;
-	border-radius: 15px;
-	height: 4px;
+.bullet-outline {
 	background-color: v-bind(bgCarouselPagination);
-	opacity: .3;
+	opacity: .5;
 }
 
-#carousel-card .carousel__pagination-button--active::after {
-	/* Your custom styles here */
+.bullet-active {
 	background-color: v-bind(bgCarouselPaginationActive);
-	opacity: 1;
 }
 </style>
