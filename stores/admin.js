@@ -120,7 +120,7 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 				: state.listArchiveMedia.length;
 		},
 		carouselEnableLoop: (state) => {
-			return state.listArchiveMedia.length > 1 ? true : false;
+			return state.listArchiveMedia.length > 1;
 		},
 		filteredMedias: (state) => {
 			return (payload) => {
