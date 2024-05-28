@@ -12,7 +12,7 @@
 		<!-- Background -->
 		<div
 			:style="background"
-			class="absolute -translate-y-[50%] top-[50%] bottom-0 right-0 left-0 h-[inherit] lg:h-[180px] bg-no-repeat bg-right md:bg-center bg-cover lg:rounded-lg rounded-3xl -z-10 animate__animated animate__fadeIn"
+			class="absolute -translate-y-[50%] top-[50%] bottom-0 right-0 left-0 h-[inherit] lg:h-[180px] bg-no-repeat bg-right md:bg-center bg-cover lg:rounded-lg -z-10 animate__animated animate__fadeIn"
 		></div>
 
 		<!-- gradiente -->
@@ -36,7 +36,7 @@
 			<div
 				v-if="props.loading"
 				:style="textColor"
-				class="flex lg:flex-col h-full lg:items-center items-end"
+				class="flex lg:flex-col h-full lg:items-start items-end"
 				:class="
 					hasDescription
 						? 'justify-between py-6'
@@ -65,12 +65,10 @@
 							{{ countDW }}
 						</h1>
 					</div>
-				</div>
-
 				<!-- Call to action -->
 				<div
 					v-if="props.callToAction"
-					class="fm3 flex items-center text-[12px] sm:text-[12px] md:text-[14px] uppercase tracking-wider animate__animated animate__fadeInDown"
+					class="fm3 flex items-end text-[12px] sm:text-[12px] md:text-[14px] uppercase tracking-wider animate__animated animate__fadeInDown"
 				>
 					<p>{{ props.callToAction }}</p>
 					<UIcon
@@ -79,6 +77,8 @@
 						name="i-material-symbols-arrow-forward-ios"
 					/>
 				</div>
+				</div>
+
 
 				<!-- Description -->
 				<div v-if="props.description">

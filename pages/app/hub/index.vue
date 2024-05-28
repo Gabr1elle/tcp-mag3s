@@ -14,11 +14,11 @@
 		/>
 
 		<!-- Banner para dimensôes de tablet e celular -->
-		<Ucontainer>
+		<UContainer :ui="{base:'w-full', padding:'px-0 sm:px-0'}" class="lg:pt-28">
 			<div
 				@mouseenter="carouselPauseAutoPlay(false)"
 				@mouseleave="carouselPauseAutoPlay(true)"
-			>s
+			>
 				<UCarousel
 					:items="
 						storeIncentive.listDrawsUpcomingLimited(
@@ -82,12 +82,12 @@
 					</template>
 				</UCarousel>
 			</div>
-		</Ucontainer>
+		</UContainer>
 
 		<!-- Banner principal -->
-		<UContainer class="pt-12" :class="hasHeader">
+		<UContainer>
 			<div
-				class="grid grid-cols-1 items-center gap-2 lg:gap-3 auto-rows-auto"
+				class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 lg:gap-3 auto-rows-auto"
 				:class="hasRafflesSimplePurchase"
 			>
 				<!-- Banner Principal com Carousel -->
@@ -367,44 +367,12 @@ onNuxtReady(async () => {
 </script>
 
 <style>
-#carousel-card-main .carousel__navegation .carousel__prev {
-	/* Your custom styles here */
-	left: -10px;
-	transform: translateY(-20px);
-}
-
-#carousel-card-main .carousel__navegation .carousel__next {
-	/* Your custom styles here */
-	right: -10px;
-	transform: translateY(-20px);
-}
-
-#carousel-card-main .carousel__navegation .carousel__prev svg,
-#carousel-card-main .carousel__navegation .carousel__next svg {
-	/* Your custom styles here */
-	color: v-bind(bgCarouselPaginationActive);
-	width: 120px;
-	height: 120px;
-	transform: scale(1.3);
-}
-
-#carousel-card-main .carousel__pagination {
-	/* Your custom styles here */
-	margin: 0;
-}
-
-#carousel-card-main .carousel__pagination-button::after {
-	/* Your custom styles here */
-	width: 25px;
-	border-radius: 15px;
-	height: 6px;
+.bullet-outline {
 	background-color: v-bind(bgCarouselPagination);
-	opacity: 0.3;
+	opacity: .5;
 }
 
-#carousel-card-main .carousel__pagination-button--active::after {
-	/* Your custom styles here */
+.bullet-active {
 	background-color: v-bind(bgCarouselPaginationActive);
-	opacity: 1;
 }
 </style>
