@@ -11,11 +11,12 @@
 					:arrows="enableArrowsCarousel && storeIncentive.nextDrawLoading()">
 
 					<template #default="{ item }">
-						<AppBannersCardFull :linkSource="storeIncentive.NextDrawLink(item)" hasImageDetach="" :background="item.image"
-							:imageDetach="app.banner_image_card_one" :loading="storeIncentive.nextDrawLoading()"
-							:title="store.titleCardNextDraw(item.date)" :subtitle="store.subtitleCardNextDraw(item.date)"
-							:countdown="item.date" :callToAction="store.labelButtonCardNextDraw(item.date)" :hasDescription="false"
-							:description="false" :imageAward="item.image" />
+						<AppBannersCardFull :linkSource="storeIncentive.NextDrawLink(item)" hasImageDetach=""
+							:background="item.image" :imageDetach="app.banner_image_card_one"
+							:loading="storeIncentive.nextDrawLoading()" :title="store.titleCardNextDraw(item.date)"
+							:subtitle="store.subtitleCardNextDraw(item.date)" :countdown="item.date"
+							:callToAction="store.labelButtonCardNextDraw(item.date)" :hasDescription="false" :description="false"
+							:imageAward="item.image" />
 					</template>
 
 					<template #indicator="{ onClick, page, active }">
@@ -37,7 +38,7 @@
 			</div>
 
 			<div v-if="!storeIncentive.nextDrawLoading()"
-				class="w-full h-screen lg:h-full lg:min-h-52 flex justify-center items-center bg-slate-950">
+				class="w-full h-screen lg:h-full lg:min-h-44 flex justify-center items-center bg-slate-950 lg:rounded-3xl">
 				<AppOthersSpinLarge />
 			</div>
 		</UContainer>

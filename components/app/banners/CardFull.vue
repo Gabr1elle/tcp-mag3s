@@ -3,14 +3,14 @@
 		class="w-full min-h-svh lg:min-h-min h-svh lg:h-auto relative grid grid-flow-col auto-cols-auto justify-between px-4 sm:px-6 md:px-8 lg:px-14 pb-24 lg:pb-0">
 		<!-- Background -->
 		<div :style="background"
-			class="absolute -translate-y-[50%] top-[50%] bottom-0 right-0 left-0 h-[inherit] lg:h-[180px] bg-no-repeat bg-center md:bg-center bg-cover lg:rounded-lg -z-10 animate__animated animate__fadeIn">
+			class="absolute -translate-y-[50%] top-[50%] bottom-0 right-0 left-0 h-[inherit] lg:h-[180px] bg-no-repeat bg-center md:bg-center bg-cover lg:rounded-3xl -z-10 animate__animated animate__fadeIn">
 		</div>
 
 		<!-- gradiente top -->
-		<div class="absolute top-0 left-0 right-0 h-[calc(100vh-80%)] lg:h-32 bg-gradient-to-b from-black to-transparent">
+		<div class="absolute top-0 left-0 right-0 h-[calc(100vh-80%)] lg:h-32 bg-gradient-to-b from-black to-transparent lg:rounded-3xl">
 		</div>
 		<!-- gradiente bottom -->
-		<div class="absolute bottom-0 left-0 right-0 h-screen lg:h-48 bg-gradient-to-t from-black to-transparent"></div>
+		<div class="absolute bottom-0 left-0 right-0 h-screen lg:h-48 bg-gradient-to-t from-black to-transparent lg:rounded-3xl"></div>
 
 		<!-- Lado Esquerdo -->
 		<div class="relative grid lg:grid-flow-col auto-cols-auto col-span-2 lg:items-center items-end">
