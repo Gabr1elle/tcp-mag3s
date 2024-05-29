@@ -223,6 +223,16 @@ export const useStoreApp = defineStore('storeApp', {
 				return false;
 			};
 		},
+		descriptionNextDrawPrize: (state) => {
+			return (payload) => {
+				return `${state.contentApp.banner_text_card_description_two} ${payload}`;
+			}
+		},
+		descriptionAwardCurrent: () => {
+			return (payload) => {
+				return payload;
+			}
+		},
 
 		// Revelar Prêmio
 		descriptionRevealDrawPrize: (state) => {
@@ -250,7 +260,7 @@ export const useStoreApp = defineStore('storeApp', {
 			const { pathAssets } = useRuntimeConfig().public;
 
 			return (payload) => {
-				if (payload === 'luckyNumber')
+				if (payload === 'Prize')
 					return `${pathAssets}${state.contentApp.sessions_image_one}`;
 				if (payload === 'ScratchCard')
 					return `${pathAssets}${state.contentApp.sessions_image_two}`;
@@ -394,13 +404,13 @@ export const useStoreApp = defineStore('storeApp', {
 			this.influencerChosen =
 				this.influencerList.list.find(
 					(item) => item.two === influencer
-			);
+				);
 
 			// Exibe um influencer aleatório caso o usuário não tenha informado um
 			if (!influencer) {
 				this.influencerChosen =
 					this.influencerList.list[
-						generateRandomNumber(this.influencerList.list.length - 1)
+					generateRandomNumber(this.influencerList.list.length - 1)
 					];
 			}
 		},

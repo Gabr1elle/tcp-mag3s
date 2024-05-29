@@ -116,7 +116,6 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		listDrawsLatest: (state) => {
 			return state.gamification.lotteryDraws.listDrawsLatest;
 		},
-
 		lastDrawHeldLink: (state) => {
 			if (state.gamification.lotteryDraws.lastDrawHeld.loading)
 				return `/app/revelar-premio/${state.gamification.lotteryDraws.lastDrawHeld.id}`;
@@ -132,6 +131,17 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		},
 		lastDrawLoading: (state) => {
 			return state.gamification.lotteryDraws.lastDrawHeld.loading;
+		},
+		filterListDrawsLatest: (state) => {
+			return (payload) => {
+				const draws = state.listDrawsLatest.slice().reverse();
+				if (!payload) {
+					return draws;
+				}
+				return draws.filter((item) =>
+					item.name.toLowerCase().includes(payload.toLowerCase())
+				);
+			};
 		},
 
 		// Próximos sorteios
@@ -201,9 +211,22 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 				}
 			};
 		},
+		listDrawsUpcomingFull: (state) => {
+			return state.gamification.lotteryDraws.listDrawsUpcoming;
+		},
 		listDrawsUpcomingLimited: (state) => {
 			return (payload) =>
 				state.gamification.lotteryDraws.listDrawsUpcoming.slice(0, payload);
+		},
+		filterListUpcomingDraws: (state) => {
+			return (payload) => {
+				if (!payload) {
+					return state.listDrawsUpcomingFull;
+				}
+				return state.listDrawsUpcomingFull.filter((item) =>
+					item.name.toLowerCase().includes(payload.toLowerCase())
+				);
+			};
 		},
 
 		// Sorteio Escolhido
@@ -276,6 +299,13 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 		hasLotteryPrizesWonFilter: (state) => {
 			if (state.inventory.loading) {
 				return state.inventory.lotteryPrizesWonFilter.length > 0;
+			}
+		},
+		lotteryDrawsPrizesWinner: (state) => {
+			if (state.inventory.loading) {
+				return state.gamification.lotteryDraws.listDrawsLatest.filter(
+					(draw) => draw.winnerUser
+				);
 			}
 		},
 
@@ -424,6 +454,9 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 							userInfo: this.resetUser.email,
 							code: `Requisição de nova senha`,
 							callbackURL: `${window.location.protocol}//${window.location.host}/confirmar-senha/`,
+						},
+						headers: {
+							Authorization: `Bearer ${useCookie('tokenClient').value}`,
 						},
 					}
 				);
@@ -780,37 +813,34 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 				this.inventory = {
 					userId: data.userId,
 					luckyNumbers: this.luckyNumbers(data.luckyNumbers),
-					lotteryPrizes: data.lotteryPrizes,
-					lotteryPrizesWon: data.lotteryPrizes
-						.filter(
-							(prizeItem) =>
-								prizeItem.status === 991 || prizeItem.status === 311
-						)
-						.map((prize) => {
-							return {
-								id: prize.id,
-								name: prize.baseContent.name,
-								image: prize.baseContent.images.find(
-									(img) => img.subType === 'Splash'
-								).uri,
-								typePrize: prize.baseContent.coreSubType,
-								prizeTypeStyle:
-									prize.baseContent.coreSubType === 'ScratchCard'
-										? false
-										: true,
-							};
-						}),
+					// lotteryPrizes: data.lotteryPrizes,
+					// lotteryPrizesWon: data.lotteryPrizes
+					// 	.filter(
+					// 		(prizeItem) =>
+					// 			prizeItem.status === 991 || prizeItem.status === 311
+					// 	)
+					// 	.map((prize) => {
+					// 		return {
+					// 			id: prize.id,
+					// 			name: prize.baseContent.name,
+					// 			image: prize.baseContent.images.find(
+					// 				(img) => img.subType === 'Splash'
+					// 			).uri,
+					// 			typePrize: prize.baseContent.coreSubType,
+					// 			prizeTypeStyle:
+					// 				prize.baseContent.coreSubType === 'ScratchCard'
+					// 					? false
+					// 					: true,
+					// 		};
+					// 	}),
 					choosePrizeDetails: null,
 					allPrizes: [],
 				};
 
-				// Filtro para Prêmio ganhados pelo usuário
-				this.inventory.lotteryPrizesWonFilter = this.inventory.lotteryPrizesWon;
-
 				// Lista com todos os prêmios (Rabiscadinhas e Números da sorte)
-				this.inventory.lotteryPrizesWon.forEach((item) => {
-					this.inventory.allPrizes.push(item);
-				});
+				// this.inventory.lotteryPrizesWon.forEach((item) => {
+				// 	this.inventory.allPrizes.push(item);
+				// });
 
 				// Saldo de raspadinhas
 				this.gamification.qtdScratchCard = data.scratchCards.filter(
@@ -881,8 +911,16 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 						),
 						image: draw.content.images.find((img) => img.subType === 'Splash')
 							.uri,
+						typePrize: draw.content.coreSubType,
+						winnerUser: draw.winnerUserId === this.inventory.userId,
 					});
 				});
+
+				// Filtro para Prêmio ganhados pelo usuário
+				this.inventory.lotteryPrizesWon = this.gamification.lotteryDraws.listDrawsLatest.filter(
+					(draw) => draw.winnerUser
+				);
+				this.inventory.lotteryPrizesWonFilter = this.inventory.lotteryPrizesWon.slice();
 
 				// Obtendo um Objeto contendo as informações do último sorteio realizado
 				const datesDraws = data.lotteryDraws.map(
@@ -919,37 +957,44 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 					}
 				);
 
+				// Caso exista uma lista com os próximos sorteios
+				if(data.lotteryDraws.length) {
+
 				// Lista de todos os próximos sorteios
-				data.lotteryDraws.forEach((draw) => {
-					this.gamification.lotteryDraws.listDrawsUpcoming.push({
-						id: draw.id,
-						name: draw.content.name,
-						description: draw.content.description,
-						fullDate: $formatDayMonthYearFull(draw.divulgationDate),
-						fullDateYearComplete: $formatDayMonthYearComplete(
-							draw.divulgationDate
-						),
-						date: draw.divulgationDate,
-						drawnNumber: this.luckyNumbers(
-							Array({ luckyNumber: String(draw.extractedDrawnNumber) })
-						),
-						image: draw.content.images.find((img) => img.subType === 'Splash')
-							.uri,
+					data.lotteryDraws.forEach((draw) => {
+						this.gamification.lotteryDraws.listDrawsUpcoming.push({
+							id: draw.id,
+							name: draw.content.name,
+							description: draw.content.description,
+							fullDate: $formatDayMonthYearFull(draw.divulgationDate),
+							fullDateYearComplete: $formatDayMonthYearComplete(
+								draw.divulgationDate
+							),
+							date: draw.divulgationDate,
+							drawnNumber: this.luckyNumbers(
+								Array({ luckyNumber: String(draw.extractedDrawnNumber) })
+							),
+							image: draw.content.images.find((img) => img.subType === 'Splash')
+								.uri,
+						});
 					});
-				});
 
-				// Obtendo um Objeto contendo as informações do próximo sorteio
-				const datesDraws = data.lotteryDraws.map(
-					(item) => item.divulgationDate
-				);
-				const mostRecentDate = $mostRecentDate(datesDraws, 'min');
+					// Obtendo um Objeto contendo as informações do próximo sorteio
+					const datesDraws = data.lotteryDraws.map(
+						(item) => item.divulgationDate
+					);
+					const mostRecentDate = $mostRecentDate(datesDraws, 'min');
 
-				if (this.gamification.lotteryDraws.listDrawsUpcoming.length) {
-					this.gamification.lotteryDraws.nextDraw =
-						this.gamification.lotteryDraws.listDrawsUpcoming.find(
-							(item) =>
-								item.fullDate === $formatDayMonthYearFull(mostRecentDate)
-						);
+					if (this.gamification.lotteryDraws.listDrawsUpcoming.length) {
+						this.gamification.lotteryDraws.nextDraw =
+							this.gamification.lotteryDraws.listDrawsUpcoming.find(
+								(item) =>
+									item.fullDate === $formatDayMonthYearFull(mostRecentDate)
+							);
+					}
+				} else { // caso contrário exibir apenas a informação do último sorteio realizado
+					this.gamification.lotteryDraws.listDrawsUpcoming.push(this.gamification.lotteryDraws.listDrawsLatest.slice().pop());
+					this.gamification.lotteryDraws.nextDraw = this.gamification.lotteryDraws.listDrawsLatest.slice().pop();
 				}
 
 				this.gamification.lotteryDraws.nextDraw.loading = true;
@@ -972,7 +1017,7 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 
 			// Obtendo um Objeto contendo as informações do último sorteio
 			this.gamification.lotteryDraws.lastDraw = {
-				...this.gamification.lotteryDraws.listDrawsUpcoming.pop(),
+				...this.gamification.lotteryDraws.listDrawsUpcoming.slice().pop(),
 				loading: true,
 			};
 
@@ -1111,18 +1156,20 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 			});
 		},
 		filterLotteryPrizesWon(filter) {
-			if (!filter)
-				return (this.inventory.lotteryPrizesWonFilter =
-					this.inventory.lotteryPrizesWon);
+			if (!filter) {
+				return this.lotteryPrizesWonFilter;
+			}
+
 			this.inventory.lotteryPrizesWonFilter =
 				this.inventory.lotteryPrizesWon.filter(
 					(item) => item.typePrize === filter
 				);
 		},
 		prizeDetails(id) {
-			this.inventory.choosePrizeDetails = this.inventory.allPrizes.find(
-				(prize) => prize.id === id
-			);
+			this.inventory.choosePrizeDetails =
+				this.gamification.lotteryDraws.listDrawsLatest.find(
+					(prize) => prize.id === id
+				);
 		},
 
 		// Corrida dos Influencers

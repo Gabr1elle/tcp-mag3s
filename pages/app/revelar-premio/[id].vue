@@ -16,26 +16,30 @@
 			</div>
 			<div>
 				<div v-show="!storeIncentive.showDrawnNumbersToday" class="max-w-[700px] m-auto flex justify-center">
-					<Carousel id="carousel-card-reveal-draw" class="w-full flex flex-col justify-between" autoplay="6500"
-						:wrap-around="true" snap-align="center-odd" :pause-autoplay-on-hover="true">
+					<div @mouseenter="carouselPauseAutoPlay(false)" @mouseleave="carouselPauseAutoPlay(true)" class="w-full">
+						<UCarousel :items="storeIncentive.listDrawsLatest" :ref="carouselSetup.autoPlay ? 'carouselRef' : ''" :ui="carouselSetup.ui" indicators arrows>
 
-						<template #slides>
-							<Slide v-for="slide in storeIncentive.listDrawsLatest" :key="slide" class="flex flex-col">
-								<AppBannersCard :linkSource="`/app/revelar-premio/${slide.id}`" :hasImageDetach="false" imageDetach=""
-									:loading="storeIncentive.loadingChosenDrawFull" :title="store.titleCardNextDraw(slide.date)"
-									:subtitle="store.subtitleCardNextDraw(slide.date)" :countdown="false"
-									:callToAction="store.labelButtonCardNextDraw(slide.date)" :hasDescription="false"
-									:description="false" :imageAward="slide.image" />
-							</Slide>
-						</template>
+							<template #default="{ item }">
+									<AppBannersCard :linkSource="`/app/revelar-premio/${item.id}`" :hasImageDetach="false" imageDetach=""
+										:loading="storeIncentive.loadingChosenDrawFull" :title="store.titleCardNextDraw(item.date)"
+										:subtitle="store.subtitleCardNextDraw(item.date)" :countdown="false"
+										:callToAction="store.labelButtonCardNextDraw(item.date)" :hasDescription="false"
+										:description="false" :imageAward="item.image" />
+							</template>
 
-						<template #addons>
-							<div class="carousel__navegation hidden lg:block">
-								<Navigation />
-							</div>
-							<Pagination />
-						</template>
-					</Carousel>
+							<template #indicator="{ onClick, page, active }">
+								<div :class="active ? 'bullet-active' : 'bullet-outline'" class="cursor-pointer rounded-full min-w-2 min-h-2 lg:min-w-7 lg:min-h-1.5 justify-center" @click="onClick(page)"></div>
+							</template>
+
+							<template #prev="{ onClick, disabled }">
+								<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-back-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+							</template>
+
+							<template #next="{ onClick, disabled }">
+								<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-forward-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+							</template>
+						</UCarousel>
+					</div>
 				</div>
 			</div>
 
@@ -145,6 +149,27 @@ const bgCarouselPaginationActive = computed(() => {
 	return app.colors_emphasis_active_and_hover;
 });
 
+// Carrossel de prêmios
+const carouselRef = ref();
+const carouselSetup = reactive({
+	autoPlay: true,
+	timer: 3500,
+	ui: {
+		item: 'basis-full',
+		indicators: { wrapper: 'relative bottom-0 mt-4' },
+		arrows: {
+			wrapper: 'absolute top-1/2 transform -translate-y-1/2 w-full',
+			next: 'right-0',
+			prev: 'left-0'
+		},
+	},
+});
+
+const carouselPauseAutoPlay = (toggle) => {
+	carouselSetup.autoPlay = toggle;
+};
+
+
 onNuxtReady(async () => {
 	// Modal de revelar prêmio
 	if (storeIncentive.showDrawnNumbersToday) {
@@ -188,6 +213,32 @@ onNuxtReady(async () => {
 	store.selectMenuBehaviour(2, 'showing', app.config_will_have_scratch_card && storeIncentive.hasScratchCardQtd);
 	// Inserindo o link para a opção dos números da sorte no Menu
 	store.selectMenuBehaviour(4, 'path', `/app/revelar-premio/${storeIncentive.gamification.lotteryDraws.nextDraw.id}`);
+
+// Iniciando o carrossel de prêmios
+	const startCarouselInterval = () => {
+		return setInterval(() => {
+			if (!carouselRef.value) return;
+
+			if (carouselRef.value.page === carouselRef.value.pages) {
+				return carouselRef.value.select(0);
+			}
+
+			carouselRef.value.next();
+		}, carouselSetup.timer);
+	};
+
+	let carouselInterval = startCarouselInterval();
+
+	const stopCarouselInterval = () => {
+		clearInterval(carouselInterval);
+	}
+
+	const initCarouselInterval = () => {
+		stopCarouselInterval();
+		carouselInterval = startCarouselInterval();
+	}
+
+	initCarouselInterval();
 });
 </script>
 
@@ -196,44 +247,12 @@ onNuxtReady(async () => {
 	border-color: v-bind(borderSept);
 }
 
-#carousel-card-reveal-draw .carousel__navegation .carousel__prev {
-	/* Your custom styles here */
-	left: -10px;
-	transform: translateY(-20px);
-}
-
-#carousel-card-reveal-draw .carousel__navegation .carousel__next {
-	/* Your custom styles here */
-	right: -10px;
-	transform: translateY(-20px);
-}
-
-#carousel-card-reveal-draw .carousel__navegation .carousel__prev svg,
-#carousel-card-reveal-draw .carousel__navegation .carousel__next svg {
-	/* Your custom styles here */
-	color: v-bind(bgCarouselPaginationActive);
-	width: 120px;
-	height: 120px;
-	transform: scale(1.3);
-}
-
-#carousel-card-reveal-draw .carousel__pagination {
-	/* Your custom styles here */
-	margin: 15px 0 0 0;
-}
-
-#carousel-card-reveal-draw .carousel__pagination-button::after {
-	/* Your custom styles here */
-	width: 25px;
-	border-radius: 15px;
-	height: 6px;
+.bullet-outline {
 	background-color: v-bind(bgCarouselPagination);
-	opacity: .3;
+	opacity: .5;
 }
 
-#carousel-card-reveal-draw .carousel__pagination-button--active::after {
-	/* Your custom styles here */
+.bullet-active {
 	background-color: v-bind(bgCarouselPaginationActive);
-	opacity: 1;
 }
 </style>

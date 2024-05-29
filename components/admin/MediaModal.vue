@@ -103,21 +103,19 @@
 									</UFormGroup>
 								</div>
 
-								<div v-if="store.editMediaValueArchive" class="col-span-2">
-									<Carousel :items-to-show="store.carouselListMaxMedia" :autoplay="2000" :pause-autoplay-on-hover="true"
-										:wrap-around="store.carouselEnableLoop">
-										<Slide v-for="mediaSlide in store.listArchiveMedia" :key="mediaSlide">
-											<div class="carousel__item mx-1 relative h-[200px] max-w-[200px] bg-black">
-
+								<div v-if="store.editMediaValueArchive" @mouseenter="carouselPauseAutoPlay(false)" @mouseleave="carouselPauseAutoPlay(true)" class="col-span-2">
+									<UCarousel :items="store.listArchiveMedia" :ref="carouselSetup.autoPlay ? 'carouselRef' : ''" :ui="carouselSetup.ui" arrows draggable>
+										<template #default="{ item }">
+											<div class="mx-1 relative h-[200px] max-w-[200px] bg-black">
 												<!-- img -->
-												<div v-if="mediaSlide.includes('image')">
-													<img :src="`${pathAssets}${mediaSlide}`" class="h-max" alt="mediaSlide"
-														:srcset="`${pathAssets}${mediaSlide}`">
+												<div v-if="item.includes('image')">
+													<img :src="`${pathAssets}${item}`" class="h-max" alt="mediaSlide"
+														:srcset="`${pathAssets}${item}`">
 												</div>
 
 												<!-- pdf -->
 												<div class="border-2 border-dashed border-sky-400 text-6xl px-8 py-8" v-else>
-													<a :href="`${pathAssets}${mediaSlide}`" target="_blank" rel="noopener noreferrer">
+													<a :href="`${pathAssets}${item}`" target="_blank" rel="noopener noreferrer">
 														<UTooltip text="Abra o Documento">
 															<UIcon name="i-material-symbols-picture-as-pdf" class="cursor-pointer text-red-600" />
 														</UTooltip>
@@ -125,19 +123,23 @@
 												</div>
 
 												<!-- Remover mídia -->
-												<div class="text-red-600 bg-sky-100 text-2xl absolute bottom-0 left-0 w-full">
+												<div class="text-red-600 bg-sky-100 text-2xl absolute bottom-0 left-0 w-full flex justify-center py-2">
 													<UTooltip text="Remover Arquivo">
 														<UIcon name="i-material-symbols-delete" class="cursor-pointer"
-															@click="store.selectArchiveMediaDelete(mediaSlide)" />
+															@click="store.selectArchiveMediaDelete(item)" />
 													</UTooltip>
 												</div>
 											</div>
-										</Slide>
-
-										<template #addons>
-											<Navigation />
 										</template>
-									</Carousel>
+
+										<template #prev="{ onClick, disabled }">
+											<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-back-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" />
+										</template>
+
+										<template #next="{ onClick, disabled }">
+											<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-forward-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" />
+										</template>
+									</UCarousel>
 								</div>
 							</div>
 
@@ -300,6 +302,54 @@ const handleFileUploadMultiple = (event, index) => {
 	store.formMedia.value.list[index].one = event.target.files || event.dataTransfer.files;
 }
 
+// Carrossel de prêmios
+const carouselRef = ref();
+const carouselSetup = reactive({
+	autoPlay: true,
+	timer: 3500,
+	ui: {
+		item: 'span-end',
+		indicators: { wrapper: 'relative bottom-0 mt-4' },
+		arrows: {
+			wrapper: 'absolute top-1/2 transform -translate-y-1/2 w-full',
+			next: 'right-0',
+			prev: 'left-0'
+		},
+	},
+});
+
+const carouselPauseAutoPlay = (toggle) => {
+	carouselSetup.autoPlay = toggle;
+};
+
+onNuxtReady(async () => {
+	// Iniciando o carrossel de prêmios
+	const startCarouselInterval = () => {
+		return setInterval(() => {
+			if (!carouselRef.value) return;
+
+			if (carouselRef.value.page === carouselRef.value.pages) {
+				return carouselRef.value.select(0);
+			}
+
+			carouselRef.value.next();
+		}, carouselSetup.timer);
+	};
+
+	let carouselInterval = startCarouselInterval();
+
+	const stopCarouselInterval = () => {
+		clearInterval(carouselInterval);
+	}
+
+	const initCarouselInterval = () => {
+		stopCarouselInterval();
+		carouselInterval = startCarouselInterval();
+	}
+
+	initCarouselInterval();
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
