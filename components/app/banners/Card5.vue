@@ -24,7 +24,7 @@
 		<div class="flex items-center">
 			<!-- Imagem de destaque -->
 			<div
-				class="animate__animated animate__tada"
+				class="animate__animated animate__fadeIn"
 				:class="
 					props.isPositionElementsOther
 						? 'w-[90px] sm:w-[120px] md:max-w-[135px]'

@@ -15,12 +15,9 @@
 
 			<!-- Imagem de destaque (Brand secundário) -->
 			<div class="m-auto animate__animated animate__zoomIn">
-				<Carousel id="carousel-next-prizes" :autoplay="0" :wrap-around="false" :pause-autoplay-on-hover="true">
-					<Slide v-for="slide in 1" :key="slide">
-						<img class="md:max-w-[90%] lg:w-[150%]" :src="brandMain"
-							onerror="this.src='/imgs/lp/landing_cover_image.png'" alt="">
-					</Slide>
-				</Carousel>
+				<UCarousel :items="[0]" :ui="{ item: 'basis-full' }">
+						<img class="md:max-w-[90%] lg:w-[150%]" :src="brandMain" onerror="this.src='/imgs/lp/landing_cover_image.png'" alt="">
+				</UCarousel>
 			</div>
 		</UContainer>
 	</div>
