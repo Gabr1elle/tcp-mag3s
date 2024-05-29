@@ -240,9 +240,6 @@ export const useStoreIncentive = defineStore('storeIncentive', {
 			return state.gamification.lotteryDraws.revealChosenDraw
 				.fullDateYearComplete;
 		},
-		upcomingDrawsNext: (state) => {
-			return state.gamification.lotteryDraws.listDrawsUpcoming;
-		},
 		revealLatestDrawDateYearFull: (state) => {
 			return state.gamification.lotteryDraws.lastDraw.fullDateYearComplete;
 		},
