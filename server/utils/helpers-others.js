@@ -979,6 +979,14 @@ export const listSchemaDataMedia = [
 		type: typesMedia[2],
 	},
 	{
+		name: 'colors_text_banner_full_cards',
+		description:
+			'Cor do texto padrão utilizado no banner estendidos do hub.',
+		value: '#FFFFFF',
+		tag: 'app',
+		type: typesMedia[2],
+	},
+	{
 		name: 'colors_text_one_dark',
 		description:
 			'Cor do texto padrão utilizado na aplicação para fundos claros.',
@@ -1399,7 +1407,23 @@ export const listSchemaDataMedia = [
 		type: typesMedia[6],
 	},
 	{
+		name: 'config_will_have_carousel_banner_full_main',
+		description:
+			'Habilitar ou não o banner carousel expandido do hub',
+		value: '0',
+		tag: 'app',
+		type: typesMedia[6],
+	},
+	{
 		name: 'carousel_banner_main_qtd_items',
+		description:
+			'Quantidade de itens que serão exibidos no carousel do banner principal do hub',
+		value: '3',
+		tag: 'app',
+		type: typesMedia[0],
+	},
+	{
+		name: 'carousel_banner_full_main_qtd_items',
 		description:
 			'Quantidade de itens que serão exibidos no carousel do banner principal do hub',
 		value: '3',
