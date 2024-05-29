@@ -20,7 +20,7 @@
 					<template #default="{ item }">
 						<div class="flex flex-col justify-center items-center w-full">
 							<!-- Image -->
-							<div v-if="props.loading" class="w-[100px] sm:w-[120px] md:w-[140px] animate__animated animate__tada">
+							<div v-if="props.loading" class="w-[100px] sm:w-[120px] md:w-[140px] animate__animated animate__fadeIn">
 								<img :src="item.image" onerror="this.src='/imgs/premio_02.png'" />
 							</div>
 
