@@ -1,5 +1,5 @@
 <template>
-	<div id="cardOne"
+	<div id="cardFull"
 		class="w-full min-h-svh lg:min-h-min h-svh lg:h-auto relative grid grid-flow-col auto-cols-auto justify-between px-4 sm:px-6 md:px-8 lg:px-14 pb-24 lg:pb-0">
 		<!-- Background -->
 		<div :style="background"
@@ -7,10 +7,17 @@
 		</div>
 
 		<!-- gradiente top -->
-		<div class="absolute top-0 left-0 right-0 h-[calc(100vh-80%)] lg:h-32 bg-gradient-to-b from-black to-transparent lg:rounded-3xl">
+		<div
+			class="absolute top-0 left-0 right-0 h-[calc(100vh-80%)] lg:h-32 bg-gradient-to-b from-black to-transparent lg:rounded-3xl">
 		</div>
 		<!-- gradiente bottom -->
-		<div class="absolute bottom-0 left-0 right-0 h-screen lg:h-48 bg-gradient-to-t from-black to-transparent lg:rounded-3xl"></div>
+		<div
+			class="absolute bottom-0 left-0 right-0 h-screen lg:h-48 bg-gradient-to-t from-black to-transparent lg:rounded-3xl">
+		</div>
+		<!-- gradiente left -->
+		<div
+			class="absolute top-0 bottom-0 left-0 right-0 h-full bg-gradient-to-r from-black to-transparent lg:rounded-3xl hidden lg:block">
+		</div>
 
 		<!-- Lado Esquerdo -->
 		<div class="relative grid lg:grid-flow-col auto-cols-auto col-span-2 lg:items-center items-end">
@@ -158,12 +165,12 @@ onNuxtReady(() => {
 });
 </script>
 
-<style>
-#cardOne .arrow {
+<style scoped>
+#cardFull .arrow {
 	background-color: v-bind(colorBgButton);
 }
 
-#cardOne .bg-skeleton {
+#cardFull .bg-skeleton {
 	background-color: v-bind(bgSkeleton);
 }
 </style>

@@ -38,7 +38,7 @@
 			</div>
 
 			<div v-if="!storeIncentive.nextDrawLoading()"
-				class="w-full h-screen lg:h-full lg:min-h-44 flex justify-center items-center bg-slate-950 lg:rounded-3xl">
+				class="w-full h-screen lg:h-full lg:min-h-44 flex justify-center items-center bg-black lg:rounded-3xl">
 				<AppOthersSpinLarge />
 			</div>
 		</UContainer>
