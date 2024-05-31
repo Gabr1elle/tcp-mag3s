@@ -1,9 +1,7 @@
-import { MediasModel } from '../../../models/Medias.model';
+import { Medias } from '../../../models/Medias.model';
 import { readFiles } from 'h3-formidable';
 import { firstValues } from 'h3-formidable/helpers';
-import { TagsMediaModel } from '~/server/models/TagsMedia.model';
 import fs from 'fs';
-import path from 'path';
 
 const config = useRuntimeConfig();
 
@@ -56,7 +54,7 @@ export default defineEventHandler(async (event) => {
 	// ⬇️ Verify empty inputs ⬇️
 
 	// Exists Media
-	const getMedia = await MediasModel.findOne({ raw: true, where: { id } });
+	const getMedia = await Medias.Application.findOne({ raw: true, where: { id } });
 	if (!Boolean(getMedia)) {
 		throw createError({
 			statusCode: 422,
@@ -80,7 +78,7 @@ export default defineEventHandler(async (event) => {
 			});
 
 		// check media existis
-		const hasMedia = await MediasModel.findOne({
+		const hasMedia = await Medias.Application.findOne({
 			raw: true,
 			where: { name: name.replace(/[ ]+/g, '_') },
 		});
@@ -96,7 +94,7 @@ export default defineEventHandler(async (event) => {
 
 	// Tag
 	tag = tag.replace(/[ ]+/g, '').trim();
-	const tagData = await TagsMediaModel.findAll({ where: { name: tag } });
+	const tagData = await Medias.Tags.findAll({ where: { name: tag } });
 
 	if (!tag) {
 		throw createError({
@@ -129,7 +127,7 @@ export default defineEventHandler(async (event) => {
 	} else {
 		// change type media to archive
 		if (type !== getMedia.type && type === config.typesMedia[3]) {
-			await MediasModel.update(
+			await Medias.Application.update(
 				{
 					value: '',
 				},
@@ -186,7 +184,7 @@ export default defineEventHandler(async (event) => {
 			}
 		});
 
-		await MediasModel.update(
+		await Medias.Application.update(
 			{
 				value: valueDBNotRemoveArchive,
 			},
@@ -198,7 +196,7 @@ export default defineEventHandler(async (event) => {
 	let listFiles = [];
 	if (files.value) {
 		if (type != 'json') {
-			let valueDB = await MediasModel.findOne({
+			let valueDB = await Medias.Application.findOne({
 				raw: true,
 				where: { id },
 			});
@@ -268,7 +266,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// update media
-	await MediasModel.update(
+	await Medias.Application.update(
 		{
 			name,
 			value: value || getMedia.value,
@@ -280,9 +278,9 @@ export default defineEventHandler(async (event) => {
 
 	// Create new tag
 	let newTag;
-	if (createNewTag) newTag = await TagsMediaModel.create({ name: tag });
+	if (createNewTag) newTag = await Medias.Tags.create({ name: tag });
 
-	const media = await MediasModel.findOne({
+	const media = await Medias.Application.findOne({
 		raw: false,
 		where: { id },
 		attributes: { exclude: ['createdAt', 'updatedAt'] },

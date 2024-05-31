@@ -1,7 +1,6 @@
-import { MediasModel } from '../../../models/Medias.model';
+import { Medias } from '../../../models/Medias.model';
 import { readFiles } from 'h3-formidable';
 import { firstValues } from 'h3-formidable/helpers';
-import { TagsMediaModel } from '~/server/models/TagsMedia.model';
 import fs from 'fs';
 
 const config = useRuntimeConfig();
@@ -66,7 +65,7 @@ export default defineEventHandler(async (event) => {
 			});
 
 		// check media existis
-		const hasMedia = await MediasModel.findOne({
+		const hasMedia = await Medias.Application.findOne({
 			where: { name: name.replace(/[ ]+/g, '_') },
 		});
 		if (hasMedia)
@@ -78,7 +77,7 @@ export default defineEventHandler(async (event) => {
 
 	// Tag
 	tag = tag.replace(/[ ]+/g, '').trim();
-	const tagData = await TagsMediaModel.findAll({ where: { name: tag } });
+	const tagData = await Medias.Tags.findAll({ where: { name: tag } });
 
 	if (!tag) {
 		throw createError({
@@ -197,7 +196,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Create new media
-	const media = await MediasModel.create({
+	const media = await Medias.Application.create({
 		name,
 		value,
 		tag,
@@ -206,7 +205,7 @@ export default defineEventHandler(async (event) => {
 
 	// Create new tag
 	let newTag;
-	if (createNewTag) newTag = await TagsMediaModel.create({ name: tag });
+	if (createNewTag) newTag = await Medias.Tags.create({ name: tag });
 
 	return {
 		statusCode: 200,
