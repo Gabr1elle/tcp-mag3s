@@ -7,10 +7,17 @@ export const createSchemaDataMedia = async () => {
 			where: { name: media.name },
 		});
 
+		// Create Tags of the media if it doesn't exist
+		try {
+			await createTagsMedia(media.tag);
+		}
+		catch (err) {
+			console.log(err);
+		}
+
 		if (!Boolean(mediaData)) {
 			try {
 				await Medias.Application.create(media);
-				await createTagsMedia(media.tag);
 			} catch (err) {
 				console.log(err);
 			}
