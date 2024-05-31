@@ -1,15 +1,15 @@
-import { TypesMediaModel } from './../models/TypesMedia.model';
+import { Medias } from './../models/Medias.model';
 const config = useRuntimeConfig();
 const types = config.typesMedia;
 
 // Create Types of the media if it doesn't exist
 export const createTypesMedia = async () => {
-  const typesMediaData = await TypesMediaModel.findAll({ raw: true });
+  const typesMediaData = await Medias.Types.findAll({ raw: true });
 
   if (!typesMediaData.length) {
 		for (const type of types) {
 			try {
-				await TypesMediaModel.create({ name: type });
+				await Medias.Types.create({ name: type });
 			} catch (err) {
 				console.log(err);
 			}
