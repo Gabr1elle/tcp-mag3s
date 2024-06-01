@@ -16,10 +16,6 @@ User.init({
 		type: DataTypes.STRING,
 		required: true
 	},
-	email: {
-		type: DataTypes.STRING,
-		required: true
-	},
 }, { sequelize, modelName: 'users' });
 
 class Post extends Model { }
@@ -142,8 +138,8 @@ Users.Admin.hasMany(Post);
 Post.belongsTo(Users.Admin);
 
 // Users App
-User.hasMany(Comment, { as: 'UserComents' });
-Comment.belongsTo(User, { as: 'UserComents' });
+User.hasMany(Comment, { as: 'UserComents', foreignKey: 'userId'});
+Comment.belongsTo(User, { as: 'UserComents', foreignKey: 'userId'});
 
 User.hasMany(Like);
 Like.belongsTo(User);
@@ -159,7 +155,7 @@ Category.hasMany(Post);
 
 // Esses relacionamentos são para os comentários aninhados (respostas)
 Comment.hasMany(Comment, { as: 'Replies', foreignKey: 'parentId' });
-Post.hasMany(Comment, { as: 'Replies' });
+Post.hasMany(Comment, { as: 'Replies', foreignKey: 'parentId'});
 Comment.belongsTo(Comment, { as: 'Parent', foreignKey: 'parentId' });
 
 export class Blog {
