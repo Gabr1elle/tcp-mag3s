@@ -2,26 +2,11 @@ import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
 	const posts = await Blog.Post.findAll({
-		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'video', 'createdAt'],
+		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'createdAt'],
 		include: [
 			{
 				model: Blog.Category,
 				attributes: ['name'],
-			},
-			{
-				model: Blog.Comment,
-				attributes: ['id', 'content', 'createdAt'],
-			},
-			{
-				model: Blog.Comment,
-				as: 'Replies',
-				include: [
-					{
-						model: Blog.User,
-						as: 'UserComents',
-						attributes: ['nickname'],
-					},
-				],
 			},
 			{
 				model: Blog.Like,
