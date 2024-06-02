@@ -84,7 +84,8 @@ Post.init({
 Post.addHook('beforeValidate', async (post, options) => {
 	if (post.title) {
 		// Substitua espaços por hifens, remova caracteres especiais e converta para minúsculas
-		let slug = post.title.replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').toLowerCase();
+		let titleWithoutAccents = removeAccents(post.title);
+		let slug = titleWithoutAccents.replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').toLowerCase();
 		const originalSlug = slug;
 
 		// Verifique se o slug já existe
@@ -159,8 +160,8 @@ Like.init({
 
 // Relacionamentos
 // User Admin
-Users.Admin.hasMany(Post);
-Post.belongsTo(Users.Admin);
+Users.Admin.hasMany(Post, { foreignKey: 'userAdminId' });
+Post.belongsTo(Users.Admin, { foreignKey: 'userAdminId' });
 
 // Users App
 User.hasMany(Comment, { as: 'UserComents', foreignKey: 'userId' });
