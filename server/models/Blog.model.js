@@ -34,6 +34,10 @@ Post.init({
 		required: true,
 		allowNull: true,
 	},
+	slug: {
+		type: DataTypes.STRING,
+		unique: true
+	},
 	content: {
 		type: DataTypes.TEXT,
 		required: true,
@@ -75,6 +79,27 @@ Post.init({
 		allowNull: false,
 	}
 }, { sequelize, modelName: 'posts' });
+
+// Hook para criar o slug do post
+Post.addHook('beforeValidate', async (post, options) => {
+	if (post.title) {
+		// Substitua espaços por hifens, remova caracteres especiais e converta para minúsculas
+		let slug = post.title.replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').toLowerCase();
+		const originalSlug = slug;
+
+		// Verifique se o slug já existe
+		let count = 1;
+		while (true) {
+			const postExists = await Post.findOne({ where: { slug } });
+			if (!postExists) break; // Se o slug não existe, podemos usá-lo
+
+			// Se o slug existe, adicione um número ao final e verifique novamente
+			slug = `${originalSlug}-${count++}`;
+		}
+
+		post.slug = slug;
+	}
+});
 
 class Category extends Model { }
 Category.init({
@@ -138,8 +163,8 @@ Users.Admin.hasMany(Post);
 Post.belongsTo(Users.Admin);
 
 // Users App
-User.hasMany(Comment, { as: 'UserComents', foreignKey: 'userId'});
-Comment.belongsTo(User, { as: 'UserComents', foreignKey: 'userId'});
+User.hasMany(Comment, { as: 'UserComents', foreignKey: 'userId' });
+Comment.belongsTo(User, { as: 'UserComents', foreignKey: 'userId' });
 
 User.hasMany(Like);
 Like.belongsTo(User);
@@ -155,7 +180,7 @@ Category.hasMany(Post);
 
 // Esses relacionamentos são para os comentários aninhados (respostas)
 Comment.hasMany(Comment, { as: 'Replies', foreignKey: 'parentId' });
-Post.hasMany(Comment, { as: 'Replies', foreignKey: 'parentId'});
+Post.hasMany(Comment, { as: 'Replies', foreignKey: 'parentId' });
 Comment.belongsTo(Comment, { as: 'Parent', foreignKey: 'parentId' });
 
 export class Blog {
