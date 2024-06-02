@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
 	userIsLoggedIn(event);
 
 	const body = await readBody(event);
+	const params = getRouterParams(event, 'id');
 
 	// Verificar se os campos foram informados
 	if (!body.title) {
@@ -78,27 +79,39 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
-	const post = await Blog.Post.create({
+	// Editar post and return result
+	const post = await Blog.Post.findOne({
+		where: {
+			id: params.id
+		},
+		attributes: [
+			'id', 'title', 'subtitle', 'content', 'image', 'video', 'categoryId', 'lastUpdateUserAdminId'
+		]
+	});
+
+	post.set({
 		title: body.title,
 		subtitle: body.subtitle,
 		content: body.content,
 		image: body.image,
 		video: body.video,
 		categoryId: body.categoryId,
-		createdUserAdminId: event.context.auth.id,
+		lastUpdateUserAdminId: event.context.auth.id,
 	});
+
+	await post.save();
 
 	if (!post) {
 		throw createError({
 			statusCode: 406,
-			message: 'Erro ao criar post!',
+			message: 'Erro ao editar post!',
 			data: null,
 		});
 	}
 
 	return {
 		statusCode: 201,
-		message: 'Post criado com sucesso!',
+		message: 'Post editado com sucesso!',
 		data: post,
 	};
 });
