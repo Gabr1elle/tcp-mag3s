@@ -8,6 +8,15 @@ export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
 	const params = getRouterParams(event, 'id');
 
+	// Verificar se o parâmetro foi informado
+	if (!params.id) {
+		throw createError({
+			statusCode: 406,
+			message: 'ID do Post é obrigatório!',
+			data: null,
+		});
+	}
+
 	// Verificar se os campos foram informados
 	if (!body.title) {
 		throw createError({
