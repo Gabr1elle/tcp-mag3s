@@ -57,13 +57,16 @@ export default defineEventHandler(async (event) => {
 	}
 
 	//put user by nickname
-	user = await Blog.User.update({
-		nickname: body.nickname,
-	}, {
+	user = await Blog.User.findOne({
 		where: {
 			incentiveId: userIncentive.id,
 		},
+		attributes: ['id', 'nickname'],
 	});
+	user.set({
+		nickname: body.nickname,
+	});
+	await user.save();
 
 	if (!user) {
 		throw createError({

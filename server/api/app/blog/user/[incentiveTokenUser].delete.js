@@ -1,6 +1,9 @@
 import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
+	// verify user loggin
+	userIsLoggedIn(event);
+
 	//get user id from incentive system
 	const userIncentive = await getUserIncentive(event);
 
@@ -9,6 +12,7 @@ export default defineEventHandler(async (event) => {
 		where: {
 			incentiveId: userIncentive.id,
 		},
+		attributes: ['id', 'nickname', 'incentiveId'],
 	});
 
 	if (!user) {
@@ -29,6 +33,6 @@ export default defineEventHandler(async (event) => {
 	return {
 		statusCode: 201,
 		message: 'Usuário deletado com sucesso!',
-		data: { userIncentiveId: userIncentive.id },
+		data: user,
 	};
 });
