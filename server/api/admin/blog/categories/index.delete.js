@@ -12,6 +12,21 @@ export default defineEventHandler(async (event) => {
 	}
 
 	if (body.newCategoryId) {
+		// Verifica se a nova categoria existe
+		const newCategory = await Blog.Category.findOne({
+			where: {
+				id: body.newCategoryId,
+			},
+		});
+
+		if (!newCategory) {
+			throw createError({
+				statusCode: 406,
+				message: 'Nova categoria não encontrada!',
+				data: null,
+			});
+		}
+
 		// Atualiza todos os posts que estão associados à categoria antiga para referenciar a nova categoria
 		await Blog.Post.update({ categoryId: body.newCategoryId }, { where: { categoryId: body.id } });
 	} else {
@@ -33,6 +48,7 @@ export default defineEventHandler(async (event) => {
 		}
 	}
 
+	// Deleta a categoria
 	const category = await Blog.Category.destroy({
 		where: {
 			id: body.id,
@@ -42,7 +58,7 @@ export default defineEventHandler(async (event) => {
 	if (!category) {
 		throw createError({
 			statusCode: 406,
-			message: 'Erro ao deletar categoria!',
+			message: 'Categoria não encontrada!',
 			data: null,
 		});
 	}
