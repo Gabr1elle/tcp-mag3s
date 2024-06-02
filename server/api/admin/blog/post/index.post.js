@@ -1,4 +1,3 @@
-import { Users } from '../../../../models/Users.model';
 import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
@@ -59,21 +58,6 @@ export default defineEventHandler(async (event) => {
 		throw createError({
 			statusCode: 406,
 			message: 'Categoria não encontrada!',
-			data: null,
-		});
-	}
-
-	// Verificar se o usuário existe
-	const user = await Users.Admin.findOne({
-		where: {
-			id: event.context.auth.id,
-		},
-	});
-
-	if (!user) {
-		throw createError({
-			statusCode: 406,
-			message: 'Usuário não encontrado!',
 			data: null,
 		});
 	}

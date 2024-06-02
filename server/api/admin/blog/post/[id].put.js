@@ -1,4 +1,3 @@
-import { Users } from '../../../../models/Users.model';
 import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
@@ -73,21 +72,6 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
-	// Verificar se o usuário existe
-	const user = await Users.Admin.findOne({
-		where: {
-			id: event.context.auth.id,
-		},
-	});
-
-	if (!user) {
-		throw createError({
-			statusCode: 406,
-			message: 'Usuário não encontrado!',
-			data: null,
-		});
-	}
-
 	// Editar post and return result
 	const post = await Blog.Post.findOne({
 		where: {
@@ -97,6 +81,14 @@ export default defineEventHandler(async (event) => {
 			'id', 'title', 'subtitle', 'content', 'image', 'video', 'categoryId', 'lastUpdateUserAdminId'
 		]
 	});
+
+	if (!post) {
+		throw createError({
+			statusCode: 406,
+			message: 'Post não encontrado!',
+			data: null,
+		});
+	}
 
 	post.set({
 		title: body.title,
