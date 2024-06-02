@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
 	// verificar se a categoria já existe
 	category = await Blog.Category.findOne({ where: { name: body.name } });
 
-	if (category) {
+	if (category && category.id !== params.id) {
 		throw createError({
 			statusCode: 406,
 			message: 'Categoria já existe, escolha outro nome!',
