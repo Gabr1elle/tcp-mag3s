@@ -28,6 +28,15 @@ export function toLetterFisrtUperCase(str) {
 		.join(' ');
 }
 
+// Remove accents from string
+export function removeAccents(str) {
+	const accentsMap = {
+		'á': 'a', 'ã': 'a', 'à': 'a', 'â': 'a', 'é': 'e', 'ê': 'e', 'í': 'i', 'ó': 'o', 'õ': 'o', 'ô': 'o', 'ú': 'u', 'ç': 'c',
+		'Á': 'A', 'Ã': 'A', 'À': 'A', 'Â': 'A', 'É': 'E', 'Ê': 'E', 'Í': 'I', 'Ó': 'O', 'Õ': 'O', 'Ô': 'O', 'Ú': 'U', 'Ç': 'C'
+	};
+	return str.split('').map(char => accentsMap[char] || char).join('');
+}
+
 // [0]: text, [1]: link, [2]: color, [3]: archive, [4]: icon, [5]: datatime, [6]: boolean, [7]: json
 const { typesMedia } = useRuntimeConfig();
 
