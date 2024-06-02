@@ -2,8 +2,10 @@ import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
+	const params = getRouterParams(event, 'id');
 
-	if (!body.id) {
+	// Verifica se o id da categoria foi informado
+	if (!params.id) {
 		throw createError({
 			statusCode: 406,
 			message: 'Id da categoria é obrigatório!',
@@ -28,13 +30,13 @@ export default defineEventHandler(async (event) => {
 		}
 
 		// Atualiza todos os posts que estão associados à categoria antiga para referenciar a nova categoria
-		await Blog.Post.update({ categoryId: body.newCategoryId }, { where: { categoryId: body.id } });
+		await Blog.Post.update({ categoryId: body.newCategoryId }, { where: { categoryId: params.id } });
 	} else {
 
 		// verificar se a categoria está associada a algum post
 		const posts = await Blog.Post.findAll({
 			where: {
-				categoryId: body.id,
+				categoryId: params.id,
 			},
 		});
 
@@ -51,7 +53,7 @@ export default defineEventHandler(async (event) => {
 	// Deleta a categoria
 	const category = await Blog.Category.destroy({
 		where: {
-			id: body.id,
+			id: params.id,
 		},
 	});
 
