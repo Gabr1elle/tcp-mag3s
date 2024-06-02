@@ -1,6 +1,9 @@
 import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
+	// verify user loggin
+	userIsLoggedIn(event);
+
 	const body = await readBody(event);
 
 	// verificar se o nome da categoria foi informado

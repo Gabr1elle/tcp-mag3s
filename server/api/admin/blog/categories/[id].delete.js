@@ -1,6 +1,9 @@
 import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
+	// verify user loggin
+	userIsLoggedIn(event);
+
 	const body = await readBody(event);
 	const params = getRouterParams(event, 'id');
 
