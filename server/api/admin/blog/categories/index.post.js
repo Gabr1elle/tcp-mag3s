@@ -37,9 +37,7 @@ export default defineEventHandler(async (event) => {
 				data: null,
 			});
 		}
-
 	}
-
 
 	return {
 		statusCode: 201,
