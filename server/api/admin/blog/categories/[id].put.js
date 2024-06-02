@@ -51,10 +51,11 @@ export default defineEventHandler(async (event) => {
 		});
 	} else {
 		// Atualiza a categoria
-		category = await Blog.Category.update(
-			{ name: body.name },
-			{ where: { id: params.id } }
+		category = await Blog.Category.findOne(
+			{ where: { id: params.id }, attributes: ['id', 'name']},
 		);
+		category.set({ name: body.name });
+		await category.save();
 
 		if (!category) {
 			throw createError({
