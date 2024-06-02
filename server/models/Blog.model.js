@@ -60,9 +60,18 @@ Post.init({
 		required: true,
 		allowNull: false,
 	},
-	createdAt: {
-		type: DataTypes.DATE,
-		defaultValue: new Date(),
+	createdUserAdminId: {
+		type: DataTypes.UUID,
+		required: true,
+		allowNull: false,
+	},
+	lastUpdateUserAdminId: {
+		type: DataTypes.UUID,
+		required: true,
+		allowNull: true,
+	},
+	createdAtFull: {
+		type: DataTypes.VIRTUAL,
 		get() {
 			return new Date(this.getDataValue('createdAt')).toLocaleString('pt-BR', {
 				day: '2-digit',
@@ -71,13 +80,11 @@ Post.init({
 				hour: '2-digit',
 				minute: '2-digit',
 			});
-		}
+		},
+		set() {
+			throw new Error('Do not try to set the `fullName` value!');
+		},
 	},
-	userAdminId: {
-		type: DataTypes.UUID,
-		required: true,
-		allowNull: false,
-	}
 }, { sequelize, modelName: 'posts' });
 
 // Hook para criar o slug do post
@@ -160,8 +167,8 @@ Like.init({
 
 // Relacionamentos
 // User Admin
-Users.Admin.hasMany(Post, { foreignKey: 'userAdminId' });
-Post.belongsTo(Users.Admin, { foreignKey: 'userAdminId' });
+Users.Admin.hasMany(Post, { foreignKey: 'createdUserAdminId' });
+Post.belongsTo(Users.Admin, { foreignKey: 'createdUserAdminId' });
 
 // Users App
 User.hasMany(Comment, { as: 'UserComents', foreignKey: 'userId' });
