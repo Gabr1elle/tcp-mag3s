@@ -12,8 +12,12 @@
 			<AdmAsideBar />
 
 			<div v-if="doYouHaveMedia" class="py-24">
+
+				<h1 class="text-2xl font-semibold animate__animated animate__fadeInDown">CMS</h1>
+				<p class="text-gray-500 animate__animated animate__fadeInUp">Gerencie as mídias do site</p>
+
 				<!-- Filtros -->
-				<div class="mb-8 grid grid-cols-[minmax(200px,1fr)_auto_auto] gap-5">
+				<div class="pt-8 mb-8 grid grid-cols-[minmax(200px,1fr)_auto_auto] gap-5">
 					<div>
 						<h2 class="mb-2 text-base font-semibold">Filtre por Tags:</h2>
 						<div class="flex pb-2 overflow-x-auto">
