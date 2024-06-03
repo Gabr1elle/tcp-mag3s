@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
 
 	// Listar todos os posts
 	const posts = await Blog.Post.findAll({
+		order: [['updatedAt', 'DESC']],
 		include: [
 			{
 				model: Blog.Category,
@@ -25,6 +26,6 @@ export default defineEventHandler(async (event) => {
 	return {
 		statusCode: 200,
 		message: 'Posts listados com sucesso!',
-		body: posts,
+		data: posts,
 	};
 });
