@@ -1,7 +1,19 @@
 <template>
-	<div>
-		<NuxtPage :page-key="route => route.fullPath" />
+	<div class="min-h-screen">
+		<!-- Header -->
+		<AdmHeader />
+
+		<!-- Content Page -->
+		<div>
+			<NuxtPage :page-key="route => route.fullPath" />
+		</div>
+
+		<!-- Footer -->
+		<AdmFooter />
+
 	</div>
+
+	<!-- Notifications -->
 	<UNotifications />
 </template>
 
