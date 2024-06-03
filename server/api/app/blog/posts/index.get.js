@@ -1,8 +1,11 @@
+import { Sequelize } from 'sequelize';
 import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
 	const posts = await Blog.Post.findAll({
-		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'createdAt'],
+		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'createdAt', 'createdAtFull',
+			[Sequelize.fn('COUNT', Sequelize.col('likes.id')), 'likeCount']
+		],
 		include: [
 			{
 				model: Blog.Category,
@@ -10,9 +13,10 @@ export default defineEventHandler(async (event) => {
 			},
 			{
 				model: Blog.Like,
-				attributes: ['id'],
+				attributes: [],
 			},
 		],
+		group: ['posts.id']
 	});
 
 	if (!posts.length) {
@@ -23,9 +27,15 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
+	// Modifica os posts para incluir a categoria
+	const modifiedPosts = posts.map(post => ({
+		...post.toJSON(),
+		category: post.category.name
+	}));
+
 	return {
 		statusCode: 200,
 		message: 'Posts obtidos com sucesso!',
-		data: posts,
+		data: modifiedPosts,
 	};
 });
