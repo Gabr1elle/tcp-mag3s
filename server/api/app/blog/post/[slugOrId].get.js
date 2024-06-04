@@ -1,11 +1,26 @@
+import { Sequelize, Op } from 'sequelize';
 import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
-	// get post by ID
-	const idPost = getRouterParam(event, 'id');
-	const post = await Blog.Post.findByPk(idPost, {
-		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'video', 'createdAt'],
+	// get post by slug
+	const params = getRouterParams(event, 'slugOrId');
+
+	console.log(params.slugOrId)
+	const post = await Blog.Post.findOne({
+		where: {
+			[Op.or]: [
+				{ slug: params.slugOrId },
+				{ id: params.slugOrId },
+			],
+		},
+		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'createdAt',
+			[Sequelize.literal('(SELECT COUNT(*) FROM `likes` WHERE `likes`.`postId` = `posts`.`id`)'), 'likeCount']
+		],
 		include: [
+			{
+				model: Blog.Like,
+				attributes: [],
+			},
 			{
 				model: Blog.Category,
 				attributes: ['name'],
@@ -16,6 +31,7 @@ export default defineEventHandler(async (event) => {
 				where: {
 					parentId: null,
 				},
+				required: false,
 				include: [
 					{
 						model: Blog.User,
@@ -36,11 +52,8 @@ export default defineEventHandler(async (event) => {
 					},
 				],
 			},
-			{
-				model: Blog.Like,
-				attributes: ['id'],
-			},
 		],
+		group: ['posts.id'],
 	});
 
 	if (!post) {
@@ -54,6 +67,9 @@ export default defineEventHandler(async (event) => {
 	return {
 		statusCode: 200,
 		message: 'Post obtido com sucesso!',
-		data: post,
+		data: {
+			...post.get({ plain: true }),
+			likes: post.get('likeCount'),
+		},
 	};
 });
