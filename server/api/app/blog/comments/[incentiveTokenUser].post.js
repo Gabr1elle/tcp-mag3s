@@ -41,6 +41,18 @@ export default defineEventHandler(async (event) => {
 		},
 	});
 
+	//validate if comment exists by parentId
+	if (body.parentId) {
+		const parentComment = await Blog.Comment.findByPk(body.parentId);
+		if (!parentComment) {
+			throw createError({
+				statusCode: 406,
+				message: 'Para responder a um comentário, informe um ID do comentário principal válido!',
+				data: null,
+			});
+		}
+	}
+
 	//create the comment
 	const comment = await Blog.Comment.create({
 		content: body.content,
