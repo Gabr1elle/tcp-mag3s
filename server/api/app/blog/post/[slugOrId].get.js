@@ -12,15 +12,11 @@ export default defineEventHandler(async (event) => {
 				{ id: params.slugOrId },
 			],
 		},
-		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'createdAt',
+		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'slug', 'createdAt',
 			[Sequelize.literal('(SELECT COUNT(*) FROM `likes` WHERE `likes`.`postId` = `posts`.`id`)'), 'likeCount'],
 			[Sequelize.literal('(SELECT `name` FROM `categories` WHERE `categories`.`id` = `posts`.`categoryId`)'), 'category']
 		],
 		include: [
-			{
-				model: Blog.Like,
-				attributes: [],
-			},
 			{
 				model: Blog.Comment,
 				attributes: ['id', 'content', 'createdAt'],
@@ -65,7 +61,6 @@ export default defineEventHandler(async (event) => {
 		message: 'Post obtido com sucesso!',
 		data: {
 			...post.get({ plain: true }),
-			likes: post.get('likeCount'),
 			category: post.get('category'),
 		},
 	};
