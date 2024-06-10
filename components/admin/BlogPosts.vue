@@ -2,12 +2,18 @@
 	<div>
 		<!-- Lista das postagens cadastradas -->
 		<div v-if="store.hasPosts">
-			<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 animate__animated animate__fadeIn">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 animate__animated animate__fadeIn">
 				<UCard v-for="post in store.blog.posts" :key="post.id" :post="post">
 					<template #header>
-						<h1 class="font-bold">{{ post.title }}</h1>
+						<h1 class="font-bold line-clamp-1">{{ post.title }}</h1>
 						<p class="line-clamp-1">{{ post.content }}</p>
-						URL: <UButton :to="`/blog/${post.slug}`" variant="link" target="_blank">/{{ post.slug }}</UButton>
+						<p class="flex">
+							<span class="me-3">URL:</span>
+							<NuxtLink :to="`/blog/${post.slug}`" variant="link" target="_blank"
+								class="line-clamp-1 text-sky-500 hover:text-sky-700">/{{
+								post.slug
+								}}</NuxtLink>
+						</p>
 					</template>
 
 					<div class="bg-slate-800 h-60 bg-cover bg-center" style="background-image: url('/imgs/bg_default.png')">
@@ -17,7 +23,7 @@
 						<div class="flex justify-between">
 							<UButton variant="link" icon="i-material-symbols-edit" label="Editar" class="text-green-500" />
 							<UButton variant="link" label="Deletar" icon="i-material-symbols-delete" class="text-red-500"
-								@click.prevent="store.blog.isOpenModalDeletePost = !store.blog.isOpenModalDeletePost" />
+								@click.prevent="store.blog.isOpenModalDeletePost = !store.blog.isOpenModalDeletePost; store.blog.selectPostId = post.id" />
 						</div>
 					</template>
 				</UCard>
@@ -46,16 +52,18 @@
 				</template>
 
 				<div>
-					<p class="text-sm text-gray-500 dark:text-gray-400">
+					<p class="text-red-600 font-semibold">ID: {{ store.blog.selectPostId }}</p>
+					<p class="text-red-600">Postagem: {{ store.titleBlogByPostId }}</p>
+					<p class="text-sm text-gray-500 dark:text-gray-400 mt-5">
 						*Esta ação não poderá ser desfeita.
 					</p>
 				</div>
 
 				<template #footer>
 					<div class="flex justify-end">
-						<UButton color="red" variant="solid" label="Deletar" class="me-4" />
-						<UButton color="gray" variant="ghost" label="Cancelar"
-							@click="store.blog.isOpenModalDeletePost = false" />
+						<UButton color="red" variant="solid" label="Deletar" class="me-4"
+							@click="store.deletePost(store.blog.selectPostId, useToast)" />
+						<UButton color="gray" variant="ghost" label="Cancelar" @click="store.blog.isOpenModalDeletePost = false" />
 					</div>
 				</template>
 			</UCard>
