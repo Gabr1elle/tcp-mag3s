@@ -78,6 +78,12 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 				},
 			},
 			searchingMedia: null,
+			blog: {
+				posts: [],
+				post: {},
+				blogHasBeenLoaded: false,
+				isOpenModalDeletePost: false,
+			}
 		};
 	},
 
@@ -142,6 +148,10 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 				});
 			};
 		},
+
+		//Blog
+		getPostsQtd: (state) => state.blog.posts.length,
+		hasPosts: (state) => state.blog.posts.length > 0,
 	},
 
 	actions: {
@@ -659,6 +669,45 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 					this.listArchiveMediaDelete.push(_item.one);
 				}
 			});
+		},
+
+		// Blog
+		async getPosts(useToast) {
+			if (this.blog.blogHasBeenLoaded) return;
+			const toast = useToast();
+
+			try {
+				const { data, error, status } = await useFetch('/api/admin/blog/posts', {
+					method: 'get',
+				});
+
+				if (status.value === 'success') {
+					this.blog.posts = data.value.data;
+					this.blog.contentHasBeenLoaded = true;
+					console.info('Posts do Blog carregado com sucesso!');
+				}
+
+				if (status.value === 'error') {
+					console.error('Erro ao carregar Posts do Blog!');
+					toast.add({
+						id: 'error_getBlogPosts',
+						title: `Erro: ${error.value.data.statusCode}`,
+						description: `${error.value.data.message}`,
+						color: 'red',
+						icon: 'i-material-symbols-warning-outline-rounded',
+						timeout: 3500,
+					});
+				}
+			} catch (error) {
+				toast.add({
+					id: 'error_getBlogPosts',
+					title: `Opss... Algo de errado aconteceu!`,
+					description: `${error}`,
+					color: 'red',
+					icon: 'i-material-symbols-warning-outline-rounded',
+					timeout: 3500,
+				});
+			}
 		},
 	},
 });

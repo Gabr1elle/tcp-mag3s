@@ -13,15 +13,15 @@
 </template>
 
 <script setup>
-import { useStoreBlog } from '~/stores/blog';
-const storeBlog = useStoreBlog();
+import { useStoreAdmin } from '~/stores/admin';
+const storeAdmin = useStoreAdmin();
 
 definePageMeta({
 	layout: 'admin-default',
 	middleware: ["auth-admin"]
 });
 
-await storeBlog.getPosts(useToast);
+await storeAdmin.getPosts(useToast);
 </script>
 
 <style scoped></style>

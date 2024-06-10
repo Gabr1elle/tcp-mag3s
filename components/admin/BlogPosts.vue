@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- Lista das postagens cadastradas -->
-		<div v-if="storeBlog.hasPosts">
+		<div v-if="store.hasPosts">
 			<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 animate__animated animate__fadeIn">
-				<UCard v-for="post in storeBlog.posts" :key="post.id" :post="post">
+				<UCard v-for="post in store.blog.posts" :key="post.id" :post="post">
 					<template #header>
 						<h1 class="font-bold">{{ post.title }}</h1>
 						<p class="line-clamp-1">{{ post.content }}</p>
@@ -17,7 +17,7 @@
 						<div class="flex justify-between">
 							<UButton variant="link" icon="i-material-symbols-edit" label="Editar" class="text-green-500" />
 							<UButton variant="link" label="Deletar" icon="i-material-symbols-delete" class="text-red-500"
-								@click.prevent="storeBlog.isOpenModalDeletePost = !storeBlog.isOpenModalDeletePost" />
+								@click.prevent="store.blog.isOpenModalDeletePost = !store.blog.isOpenModalDeletePost" />
 						</div>
 					</template>
 				</UCard>
@@ -33,7 +33,7 @@
 		</div>
 
 		<!-- Modal delete post  -->
-		<UModal v-model="storeBlog.isOpenModalDeletePost" prevent-close>
+		<UModal v-model="store.blog.isOpenModalDeletePost" prevent-close>
 			<UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
 				<template #header>
 					<div class="flex items-center justify-between">
@@ -41,7 +41,7 @@
 							Tem certeza que deseja deletar esta postagem?*
 						</h3>
 						<UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-							@click="storeBlog.isOpenModalDeletePost = false" />
+							@click="store.blog.isOpenModalDeletePost = false" />
 					</div>
 				</template>
 
@@ -55,7 +55,7 @@
 					<div class="flex justify-end">
 						<UButton color="red" variant="solid" label="Deletar" class="me-4" />
 						<UButton color="gray" variant="ghost" label="Cancelar"
-							@click="storeBlog.isOpenModalDeletePost = false" />
+							@click="store.blog.isOpenModalDeletePost = false" />
 					</div>
 				</template>
 			</UCard>
@@ -64,9 +64,8 @@
 </template>
 
 <script setup>
-import { useStoreBlog } from '~/stores/blog';
-const storeBlog = useStoreBlog();
-
+import { useStoreAdmin } from '~/stores/admin';
+const store = useStoreAdmin();
 </script>
 
 <style scoped></style>
