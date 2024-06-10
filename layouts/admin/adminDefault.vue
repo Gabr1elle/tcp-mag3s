@@ -4,7 +4,7 @@
 		<AdmHeader />
 
 		<!-- Content Page -->
-		<div>
+		<div class="min-h-svh">
 			<NuxtPage :page-key="route => route.fullPath" />
 		</div>
 
