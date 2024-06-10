@@ -49,7 +49,6 @@ import { useStoreAdmin } from '~/stores/admin';
 import { object, string } from 'yup';
 
 definePageMeta({
-	layout: 'admin-default',
 	middleware: ['login'],
 });
 
