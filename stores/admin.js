@@ -81,6 +81,7 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 			blog: {
 				posts: [],
 				post: {},
+				selectPostId: null,
 				blogHasBeenLoaded: false,
 				isOpenModalDeletePost: false,
 			}
@@ -152,6 +153,10 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 		//Blog
 		getPostsQtd: (state) => state.blog.posts.length,
 		hasPosts: (state) => state.blog.posts.length > 0,
+		titleBlogByPostId: (state) => {
+			const post = state.blog.posts.find((post) => post.id === state.blog.selectPostId);
+			return post ? post.title : '';
+		},
 	},
 
 	actions: {
@@ -709,5 +714,51 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 				});
 			}
 		},
+
+		async deletePost(postId, useToast) {
+			const toast = useToast();
+
+			try {
+				const { data, error, status } = await useFetch(`/api/admin/blog/post/${postId}`, {
+					method: 'delete',
+				});
+
+				if (status.value === 'success') {
+					this.blog.posts = this.blog.posts.filter((post) => post.id !== postId);
+					toast.add({
+						id: 'success_deletePost',
+						title: `Post deletado com sucesso!`,
+						description: `${data.value.message}`,
+						color: 'green',
+						icon: 'i-material-symbols-check-circle-rounded',
+						timeout: 3500,
+					});
+				}
+
+				if (status.value === 'error') {
+					toast.add({
+						id: 'error_deletePost',
+						title: `Erro: ${error.value.data.statusCode}`,
+						description: `${error.value.data.message}`,
+						color: 'red',
+						icon: 'i-material-symbols-warning-outline-rounded',
+						timeout: 3500,
+					});
+				}
+
+				// Close Modal Delete Post and reset selectPostId
+				this.blog.isOpenModalDeletePost = false;
+				this.blog.selectPostId = null;
+			} catch (error) {
+				toast.add({
+					id: 'error_deletePost',
+					title: `Erro: ${error.value.data.statusCode}`,
+					description: `${error.value.data.message}`,
+					color: 'red',
+					icon: 'i-material-symbols-warning-outline-rounded',
+					timeout: 3500,
+				});
+			}
+		}
 	},
 });
