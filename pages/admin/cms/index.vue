@@ -13,6 +13,18 @@
 
 			<div v-if="doYouHaveMedia" class="py-24">
 
+				<!-- Botão de voltar -->
+				<AdmBackButton :links="[{
+					label: 'Dashboard',
+					icon: 'i-heroicons-home',
+					to: '/admin/dashboard'
+				}, {
+					label: 'CMS',
+					icon: 'i-heroicons-square-3-stack-3d',
+					to: '/admin/cms'
+				}]" />
+
+				<!-- Título e Descrição -->
 				<h1 class="text-2xl font-semibold animate__animated animate__fadeInDown">CMS</h1>
 				<p class="text-gray-500 animate__animated animate__fadeInUp">Gerencie as mídias do site</p>
 
