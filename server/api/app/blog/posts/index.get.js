@@ -3,7 +3,7 @@ import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
 	const posts = await Blog.Post.findAll({
-		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'createdAt', 'createdAtFull',
+		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'slug', 'createdAt', 'createdAtFull',
 			[Sequelize.fn('COUNT', Sequelize.col('likes.id')), 'likeCount']
 		],
 		include: [

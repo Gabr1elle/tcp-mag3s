@@ -81,7 +81,6 @@ export default defineEventHandler(async (event) => {
 		data: {
 			...post.get({ plain: true }),
 			category: post.get('category'),
-			slug: post.get('slug'),
 		},
 	};
 });
