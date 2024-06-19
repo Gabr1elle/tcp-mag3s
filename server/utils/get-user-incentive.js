@@ -1,7 +1,12 @@
 const config = useRuntimeConfig();
 
 export const getUserIncentive = async (event) => {
-	const params = getRouterParams(event, 'incentiveTokenUser');
+	let params = getRouterParams(event, 'incentiveTokenUser');
+
+	if (!params.incentiveTokenUser) {
+		const query = getQuery(event);
+		params.incentiveTokenUser = query.incentiveTokenUser;
+	}
 
 	//verify token empty
 	if (!params.incentiveTokenUser) {
