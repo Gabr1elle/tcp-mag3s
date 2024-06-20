@@ -41,16 +41,11 @@ export default defineEventHandler(async (event) => {
 
 					if (medias) {
 						medias.forEach(async (mediaFile) => {
-							const bucket = googleCloudStorage.bucket(config.gcsBucketname);
-							const fileUp = bucket.file(
-								`${config.gcsSubfolder}${config.gcsSubfolderEnvironment}${mediaFile}`
-							);
-
+							// Delete in Google Cloud Storage
 							try {
-								await fileUp.delete();
-								console.log('Arquivo excluído com sucesso');
+								await deleteFileInGCS(mediaFile);
 							} catch (error) {
-								console.error(`Erro ao excluir a imagem: ${error}`);
+								return error;
 							}
 						});
 					}
