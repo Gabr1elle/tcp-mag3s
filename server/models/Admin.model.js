@@ -1,7 +1,7 @@
 import { DataTypes, Model, UUIDV4 } from "sequelize";
 
-export class Admin extends Model { }
-Admin.init(
+export class Users extends Model { }
+Users.init(
 	{
 		id: {
 			type: DataTypes.UUID,
@@ -47,7 +47,7 @@ Role.init(
 	{ sequelize, tableName: "roleusers" }
 );
 
-export class Users {
-	static Admin = Admin;
+export class Admin {
+	static Users = Users;
 	static Role = Role;
 }
