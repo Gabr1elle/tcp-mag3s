@@ -1,5 +1,5 @@
 import { DataTypes, Model, UUIDV4 } from 'sequelize';
-import { Users } from './Users.model';
+import { Admin } from './Admin.model';
 
 class User extends Model { }
 User.init({
@@ -167,8 +167,8 @@ Like.init({
 
 // Relacionamentos
 // User Admin
-Users.Admin.hasMany(Post, { foreignKey: 'createdUserAdminId' });
-Post.belongsTo(Users.Admin, { foreignKey: 'createdUserAdminId' });
+Admin.Users.hasMany(Post, { foreignKey: 'createdUserAdminId' });
+Post.belongsTo(Admin.Users, { foreignKey: 'createdUserAdminId' });
 
 // Users App
 User.hasMany(Comment, { as: 'UserComents', foreignKey: 'userId' });
