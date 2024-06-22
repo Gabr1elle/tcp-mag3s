@@ -1,4 +1,4 @@
-import {Blog} from '../../../../models/Blog.model';
+import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
@@ -40,6 +40,15 @@ export default defineEventHandler(async (event) => {
 			incentiveId: userIncentive.id,
 		},
 	});
+
+	// verify if the user exists
+	if (!user) {
+		throw createError({
+			statusCode: 406,
+			message: 'Não existe usuário para comentar!',
+			data: null,
+		});
+	}
 
 	//validate if comment exists by parentId
 	if (body.parentId) {

@@ -1,4 +1,4 @@
-import { Users } from '../../../models/Users.model';
+import { Admin } from '../../../models/Admin.model';
 
 export default defineEventHandler(async (event) => {
 	// verify user loggin
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// verify user exists
-	const checkUserExists = await Users.Admin.findOne({
+	const checkUserExists = await Admin.Users.findOne({
 		where: { email: body.email },
 	});
 	if (checkUserExists) {
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Create new user
-	const user = await Users.Admin.create({
+	const user = await Admin.Users.create({
 		name: body.name,
 		email: body.email,
 		password: await genPassHash(body.password).then((hash) => hash),

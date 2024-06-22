@@ -1,10 +1,10 @@
-import { Users } from '../../../models/Users.model';
+import { Admin } from '../../../models/Admin.model';
 
 export default defineEventHandler(async (event) => {
 	// verify user loggin
 	userIsLoggedIn(event);
 
-	const users = await Users.Admin.findAll();
+	const users = await Admin.Users.findAll();
 
 	return {
 		statusCode: 200,

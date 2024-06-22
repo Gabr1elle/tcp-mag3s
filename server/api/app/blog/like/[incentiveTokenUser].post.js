@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
 	if (!user) {
 		throw createError({
 			statusCode: 406,
-			message: 'Usuário não encontrado!',
+			message: 'Não existe usuário para dar like!',
 			data: null,
 		});
 	}

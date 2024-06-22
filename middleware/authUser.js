@@ -42,6 +42,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 				httpOnly: false,
 			});
 			cookieAuth.value = data.access_token;
+
+			const cookieAuthExpired = useCookie('tokenUserExpired', {
+				maxAge: +data.expires_in,
+				sameSite: 'lax',
+				httpOnly: false,
+			});
+			cookieAuthExpired.value = new Date(data.request.date).toISOString();
 			return;
 		}
 
