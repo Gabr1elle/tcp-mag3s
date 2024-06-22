@@ -47,7 +47,34 @@ Role.init(
 	{ sequelize, tableName: "roleusers" }
 );
 
+export class SystemLog extends Model { }
+SystemLog.init(
+	{
+		id: {
+			type: DataTypes.UUID,
+			defaultValue: UUIDV4,
+			primaryKey: true,
+			allowNull: false,
+		},
+		message: {
+			type: DataTypes.STRING,
+			required: true,
+		},
+		level: {
+			type: DataTypes.STRING,
+			required: true,
+		},
+		timestamp: {
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW,
+			allowNull: false,
+		},
+	},
+	{ sequelize, tableName: "systemLogs" }
+);
+
 export class Admin {
 	static Users = Users;
 	static Role = Role;
+	static SystemLog = SystemLog;
 }
