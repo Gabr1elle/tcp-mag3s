@@ -15,6 +15,7 @@ export default defineNitroPlugin(async (nitro) => {
 		await createTypesMedia();
 		await createSchemaDataMedia();
 	} catch (err) {
+		logger.error(`Não foi possível conectar ao banco de dados: ${err}`);
 		throw new Error(`Não foi possível conectar ao banco: ${err}`);
 	}
 

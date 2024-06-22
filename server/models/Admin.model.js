@@ -57,11 +57,11 @@ SystemLog.init(
 			allowNull: false,
 		},
 		message: {
-			type: DataTypes.STRING,
+			type: DataTypes.TEXT,
 			required: true,
 		},
 		level: {
-			type: DataTypes.STRING,
+			type: DataTypes.TEXT,
 			required: true,
 		},
 		timestamp: {
