@@ -80,6 +80,7 @@ export default defineEventHandler(async (event) => {
 		message: 'Post obtido com sucesso!',
 		data: {
 			...post.get({ plain: true }),
+			userLiked: post.get('userLiked') ? true : false,
 			category: post.get('category'),
 		},
 	};

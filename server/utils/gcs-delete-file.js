@@ -1,10 +1,10 @@
 const config = useRuntimeConfig();
 
-export const deleteFileInGCS = async (file) => {
+export const deleteFileInGCS = async (file, otherFolder = null) => {
 	try {
 		const bucket = googleCloudStorage.bucket(config.gcsBucketname);
 		const fileDelete = bucket.file(
-			`${config.gcsSubfolder}${config.gcsSubfolderEnvironment}${file}`
+			`${config.gcsSubfolder}${otherFolder || config.gcsSubfolderEnvironment}${file}`
 		);
 
 		try {
