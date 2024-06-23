@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
 	// Form Data
 	let fields;
 	try {
-		fields = await fileHandling(event, true, 1, 2 * 1024 * 1024, 2);
+		fields = await fileHandling(event, true, ['png', 'jpg', 'jpeg'], 1, 2 * 1024 * 1024, 2);
 	} catch (error) {
 		return error;
 	}

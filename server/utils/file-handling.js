@@ -2,7 +2,7 @@ import { readFiles } from 'h3-formidable';
 import { firstValues } from 'h3-formidable/helpers';
 import { errors as formidableErrors } from 'formidable';
 
-export const fileHandling = async (event, hasMultipleFields, maxFiles = 10, maxFileSize = 5 * 1024 * 1024, maxFields = 8) => {
+export const fileHandling = async (event, hasMultipleFields, typeFiles, maxFiles = 10, maxFileSize = 5 * 1024 * 1024, maxFields = 8) => {
 	let cancelUploads = false;
 	let mimeTypeFile = 'image'; // default
 	let otherFields; //fields form data
@@ -16,8 +16,8 @@ export const fileHandling = async (event, hasMultipleFields, maxFiles = 10, maxF
 			maxFileSize: maxFileSize,
 			maxFields: maxFields,
 			filter: ({ originalFilename }) => { // keep only images, text and csv
-				// Valid extensions for images, text and csv files
-				const validExtensions = new Set(['png', 'jpg', 'jpeg', 'pdf']);
+				// Valid extensions for images, videos and docs files
+				const validExtensions = new Set(typeFiles);
 
 				// Extract file extension
 				const fileExtension = originalFilename.split('.').pop().toLowerCase();
@@ -28,6 +28,8 @@ export const fileHandling = async (event, hasMultipleFields, maxFiles = 10, maxF
 				// Determine the MIME type based on the file extension
 				if (['png', 'jpg', 'jpeg'].includes(fileExtension)) {
 					mimeTypeFile = 'image';
+				} else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+					mimeTypeFile = 'video';
 				} else {
 					mimeTypeFile = 'doc';
 				}
