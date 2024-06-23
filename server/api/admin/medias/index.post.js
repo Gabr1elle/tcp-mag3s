@@ -1,7 +1,4 @@
 import { Medias } from '../../../models/Medias.model';
-import { readFiles } from 'h3-formidable';
-import { firstValues } from 'h3-formidable/helpers';
-import fs from 'fs';
 
 const config = useRuntimeConfig();
 
@@ -12,7 +9,7 @@ export default defineEventHandler(async (event) => {
 	// Form Data
 	let fields;
 	try {
-		fields = await fileHandling(event, true);
+		fields = await fileHandling(event, true, ['png', 'jpg', 'jpeg', 'pdf']);
 	} catch (error) {
 		return error;
 	}
