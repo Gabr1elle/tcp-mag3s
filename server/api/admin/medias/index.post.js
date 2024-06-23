@@ -1,8 +1,4 @@
-import { MediasModel } from '../../../models/Medias.model';
-import { readFiles } from 'h3-formidable';
-import { firstValues } from 'h3-formidable/helpers';
-import { TagsMediaModel } from '~/server/models/TagsMedia.model';
-import fs from 'fs';
+import { Medias } from '../../../models/Medias.model';
 
 const config = useRuntimeConfig();
 
@@ -10,43 +6,27 @@ export default defineEventHandler(async (event) => {
 	// verify user loggin
 	userIsLoggedIn(event);
 
-	let validArchive = false;
-	let { fields, form, files } = await readFiles(event, {
-		includeFields: true,
-		multiples: true,
-		maxFiles: 10,
-		maxFilesSize: 5 * 1024 * 1024,
-		maxFields: 8,
-		filter: function ({ mimetype }) {
-			// keep only images and pdf's
-			let valid =
-				mimetype && (mimetype.includes('image') || mimetype.includes('pdf'));
+	// Form Data
+	let fields;
+	try {
+		fields = await fileHandling(event, true, ['png', 'jpg', 'jpeg', 'pdf']);
+	} catch (error) {
+		return error;
+	}
 
-			if (!valid) {
-				validArchive = true;
-			}
-
-			return valid;
-		},
-	});
-
-	// Gets first values of fields
-	const exceptions = ['thisshouldbeanarray'];
-	const fieldsSingle = firstValues(form, fields, exceptions);
-
-	const name = fieldsSingle.name.toLowerCase();
-	let value = files.value || fieldsSingle.value;
-	let tag = fieldsSingle.tag.toLowerCase();
-	const createNewTag = Boolean(+fieldsSingle.newtag);
-	const type = fieldsSingle.type;
+	const name = fields.otherFields.name.toLowerCase();
+	let value = fields.files.value || fields.otherFields.value;
+	let tag = fields.otherFields.tag.toLowerCase();
+	const createNewTag = Boolean(+fields.otherFields.newtag);
+	const type = fields.otherFields.type;
 
 	// Type json list
 	const filesJson = [];
-	if (type === 'json' && Object.keys(files).length > 0) {
-		for (const file in files) {
-			filesJson.push({ archive: files[file][0], posArr: file.split('-')[1] });
+	if (type === 'json' && Object.keys(fields.files).length > 0) {
+		for (const file in fields.files) {
+			filesJson.push({ archive: fields.files[file][0], posArr: file.split('-')[1] });
 		}
-		files.value = filesJson;
+		fields.files.value = filesJson;
 	}
 	// ⬇️ Verify empty inputs ⬇️
 
@@ -66,7 +46,7 @@ export default defineEventHandler(async (event) => {
 			});
 
 		// check media existis
-		const hasMedia = await MediasModel.findOne({
+		const hasMedia = await Medias.Application.findOne({
 			where: { name: name.replace(/[ ]+/g, '_') },
 		});
 		if (hasMedia)
@@ -78,7 +58,7 @@ export default defineEventHandler(async (event) => {
 
 	// Tag
 	tag = tag.replace(/[ ]+/g, '').trim();
-	const tagData = await TagsMediaModel.findAll({ where: { name: tag } });
+	const tagData = await Medias.Tags.findAll({ where: { name: tag } });
 
 	if (!tag) {
 		throw createError({
@@ -123,55 +103,29 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
-	// Verify type Midia correct
-	if (validArchive) {
-		throw createError({
-			statusCode: 415,
-			message: 'Mídias não suportadas! Envie apenas imagens ou pdf',
-		});
-	}
 
 	// Save media archive
 	let listFiles = [];
-	if (files.value) {
-		for (const fileOrigin of files.value) {
+	if (fields.files.value) {
+		for (const fileOrigin of fields.files.value) {
 			const file = type === 'json' ? fileOrigin.archive : fileOrigin;
-			const extFile = file.mimetype.split('/')[1];
 
-			const fileName = `${Date.now()}-${file.newFilename}-${
-				file.mimetype.split('/')[0]
-			}.${extFile}`;
-
-			const bucket = googleCloudStorage.bucket(config.gcsBucketname);
-			const fileUp = bucket.file(
-				`${config.gcsSubfolder}${config.gcsSubfolderEnvironment}${fileName}`
-			);
-
-			const stream = fileUp.createWriteStream({
-				metadata: {
-					contentType: file.mimetype, // Tipo MIME do arquivo
-				},
-			});
-
-			stream.end(fs.readFileSync(file.filepath));
-
-			stream.on('error', (error) => {
-				console.error(`Erro ao enviar arquivo para o GCS: ${error}`);
-
-				throw createError({
-					statusCode: 500,
-					message: `Erro ao enviar arquivo para o GCS: ${error}`,
-				});
-			});
-
-			stream.on('finish', () => {
-				console.log('Arquivo enviado com sucesso para o GCS');
-			});
+			// Save in Google Cloud Storage
+			let dataFile;
+			try {
+				const urlFileSavedPromise = saveFileInGCS(file);
+				dataFile = {
+					fileName: urlFileSavedPromise.fileName,
+					urlFile: await urlFileSavedPromise.urlFile,
+				};
+			} catch (error) {
+				return error;
+			}
 
 			if (type === 'json') {
-				listFiles.push({ archive: fileName, posArr: fileOrigin.posArr });
+				listFiles.push({ archive: dataFile.fileName, posArr: fileOrigin.posArr });
 			} else {
-				listFiles.push(fileName);
+				listFiles.push(dataFile.fileName);
 			}
 		}
 
@@ -197,7 +151,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Create new media
-	const media = await MediasModel.create({
+	const media = await Medias.Application.create({
 		name,
 		value,
 		tag,
@@ -206,7 +160,7 @@ export default defineEventHandler(async (event) => {
 
 	// Create new tag
 	let newTag;
-	if (createNewTag) newTag = await TagsMediaModel.create({ name: tag });
+	if (createNewTag) newTag = await Medias.Tags.create({ name: tag });
 
 	return {
 		statusCode: 200,

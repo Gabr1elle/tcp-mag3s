@@ -1,5 +1,4 @@
-import { MediasModel } from '../../../models/Medias.model';
-import fs from 'fs';
+import { Medias } from '../../../models/Medias.model';
 
 const config = useRuntimeConfig();
 
@@ -12,13 +11,13 @@ export default defineEventHandler(async (event) => {
 	let media;
 
 	async function getMedias() {
-		medias = await MediasModel.findAll({
+		medias = await Medias.Application.findAll({
 			attributes: { exclude: ['createdAt', 'updatedAt'] },
 		});
 	}
 
 	try {
-		media = await MediasModel.findOne({
+		media = await Medias.Application.findOne({
 			where: { id: idMedia },
 		});
 
@@ -42,16 +41,11 @@ export default defineEventHandler(async (event) => {
 
 					if (medias) {
 						medias.forEach(async (mediaFile) => {
-							const bucket = googleCloudStorage.bucket(config.gcsBucketname);
-							const fileUp = bucket.file(
-								`${config.gcsSubfolder}${config.gcsSubfolderEnvironment}${mediaFile}`
-							);
-
+							// Delete in Google Cloud Storage
 							try {
-								await fileUp.delete();
-								console.log('Arquivo excluído com sucesso');
+								await deleteFileInGCS(mediaFile);
 							} catch (error) {
-								console.error(`Erro ao excluir a imagem: ${error}`);
+								return error;
 							}
 						});
 					}

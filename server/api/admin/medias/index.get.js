@@ -1,12 +1,11 @@
-import { MediasModel } from '../../../models/Medias.model';
-import { TagsMediaModel } from '~/server/models/TagsMedia.model';
+import { Medias } from '../../../models/Medias.model';
 
 export default defineEventHandler(async (event) => {
 	// verify user loggin
 	userIsLoggedIn(event);
 
 	// Tags register
-	const tags = await TagsMediaModel.findAll({
+	const tags = await Medias.Tags.findAll({
 		raw: true,
 		attributes: { exclude: ['createdAt', 'updatedAt'] },
 	});
@@ -18,7 +17,7 @@ export default defineEventHandler(async (event) => {
 	tags.unshift({ id: 'not', name: 'todos', filter: true });
 
 	// check media existis
-	const medias = await MediasModel.findAll({
+	const medias = await Medias.Application.findAll({
 		attributes: { exclude: ['createdAt', 'updatedAt'] },
 	});
 

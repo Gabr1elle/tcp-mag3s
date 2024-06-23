@@ -1,9 +1,4 @@
-import { MediasModel } from '../../../models/Medias.model';
-import { readFiles } from 'h3-formidable';
-import { firstValues } from 'h3-formidable/helpers';
-import { TagsMediaModel } from '~/server/models/TagsMedia.model';
-import fs from 'fs';
-import path from 'path';
+import { Medias } from '../../../models/Medias.model';
 
 const config = useRuntimeConfig();
 
@@ -11,52 +6,36 @@ export default defineEventHandler(async (event) => {
 	// verify user loggin
 	userIsLoggedIn(event);
 
-	let validArchive = false;
-	let { fields, form, files } = await readFiles(event, {
-		includeFields: true,
-		multiples: true,
-		maxFiles: 10,
-		maxFilesSize: 5 * 1024 * 1024,
-		maxFields: 8,
-		filter: function ({ name, originalFilename, mimetype }) {
-			// keep only images and pdf's
-			let valid =
-				mimetype && (mimetype.includes('image') || mimetype.includes('pdf'));
+	// Form Data
+	let fields;
+	try {
+		fields = await fileHandling(event, true, ['png', 'jpg', 'jpeg', 'pdf']);
+	} catch (error) {
+		return error;
+	}
 
-			if (!valid) {
-				validArchive = true;
-			}
-
-			return valid;
-		},
-	});
-
-	// Gets first values of fields
-	const exceptions = ['thisshouldbeanarray'];
-	const fieldsSingle = firstValues(form, fields, exceptions);
-
-	const name = fieldsSingle.name;
-	const id = fieldsSingle.id;
-	let value = files.value || fieldsSingle.value;
-	let value_list_delete = fieldsSingle.value_list_delete;
+	const name = fields.otherFields.name;
+	const id = fields.otherFields.id;
+	let value = fields.files.value || fields.otherFields.value;
+	let value_list_delete = fields.otherFields.value_list_delete;
 	let valueDBNotRemoveArchive;
-	let tag = fieldsSingle.tag;
-	const createNewTag = Boolean(+fieldsSingle.newtag);
-	const type = fieldsSingle.type;
+	let tag = fields.otherFields.tag;
+	const createNewTag = Boolean(+fields.otherFields.newtag);
+	const type = fields.otherFields.type;
 
 	// Type json list
 	const filesJson = [];
-	if (type === 'json' && Object.keys(files).length > 0) {
-		for (const file in files) {
-			filesJson.push({ archive: files[file][0], posArr: file.split('-')[1] });
+	if (type === 'json' && Object.keys(fields.files).length > 0) {
+		for (const file in fields.files) {
+			filesJson.push({ archive: fields.files[file][0], posArr: file.split('-')[1] });
 		}
-		files.value = filesJson;
+		fields.files.value = filesJson;
 	}
 
 	// ⬇️ Verify empty inputs ⬇️
 
 	// Exists Media
-	const getMedia = await MediasModel.findOne({ raw: true, where: { id } });
+	const getMedia = await Medias.Application.findOne({ raw: true, where: { id } });
 	if (!Boolean(getMedia)) {
 		throw createError({
 			statusCode: 422,
@@ -80,7 +59,7 @@ export default defineEventHandler(async (event) => {
 			});
 
 		// check media existis
-		const hasMedia = await MediasModel.findOne({
+		const hasMedia = await Medias.Application.findOne({
 			raw: true,
 			where: { name: name.replace(/[ ]+/g, '_') },
 		});
@@ -96,7 +75,7 @@ export default defineEventHandler(async (event) => {
 
 	// Tag
 	tag = tag.replace(/[ ]+/g, '').trim();
-	const tagData = await TagsMediaModel.findAll({ where: { name: tag } });
+	const tagData = await Medias.Tags.findAll({ where: { name: tag } });
 
 	if (!tag) {
 		throw createError({
@@ -129,7 +108,7 @@ export default defineEventHandler(async (event) => {
 	} else {
 		// change type media to archive
 		if (type !== getMedia.type && type === config.typesMedia[3]) {
-			await MediasModel.update(
+			await Medias.Application.update(
 				{
 					value: '',
 				},
@@ -141,14 +120,6 @@ export default defineEventHandler(async (event) => {
 		if (value && type === config.typesMedia[6]) {
 			value = switchInputTextBoolean(value);
 		}
-	}
-
-	// Verify type Midia correct
-	if (validArchive) {
-		throw createError({
-			statusCode: 415,
-			message: 'Mídias não suportadas! Envie apenas imagens ou pdf',
-		});
 	}
 
 	if (!value && !getMedia.value) {
@@ -173,20 +144,16 @@ export default defineEventHandler(async (event) => {
 				(archiveDelete) => !value_list_delete.split(';').includes(archiveDelete)
 			);
 		value_list_delete.split(';').forEach(async (mediaFile) => {
-			const bucket = googleCloudStorage.bucket(config.gcsBucketname);
-			const fileUp = bucket.file(
-				`${config.gcsSubfolder}${config.gcsSubfolderEnvironment}${mediaFile}`
-			);
 
+			// Delete in Google Cloud Storage
 			try {
-				await fileUp.delete();
-				console.log('Arquivo excluído com sucesso');
+				dataFile = await deleteFileInGCS(mediaFile);
 			} catch (error) {
-				console.error(`Erro ao excluir a imagem: ${error}`);
+				return error;
 			}
 		});
 
-		await MediasModel.update(
+		await Medias.Application.update(
 			{
 				value: valueDBNotRemoveArchive,
 			},
@@ -196,53 +163,34 @@ export default defineEventHandler(async (event) => {
 
 	// Save media archive
 	let listFiles = [];
-	if (files.value) {
+	if (fields.files.value) {
 		if (type != 'json') {
-			let valueDB = await MediasModel.findOne({
+			let valueDB = await Medias.Application.findOne({
 				raw: true,
 				where: { id },
 			});
 			listFiles = valueDB.value ? valueDB.value.split(';').filter(Boolean) : [];
 		}
 
-		for (const fileOrigin of files.value) {
+		for (const fileOrigin of fields.files.value) {
 			const file = type === 'json' ? fileOrigin.archive : fileOrigin;
-			const extFile = file.mimetype.split('/')[1];
 
-			const fileName = `${Date.now()}-${file.newFilename}-${
-				file.mimetype.split('/')[0]
-			}.${extFile}`;
-
-			const bucket = googleCloudStorage.bucket(config.gcsBucketname);
-			const fileUp = bucket.file(
-				`${config.gcsSubfolder}${config.gcsSubfolderEnvironment}${fileName}`
-			);
-
-			const stream = fileUp.createWriteStream({
-				metadata: {
-					contentType: file.mimetype, // Tipo MIME do arquivo
-				},
-			});
-
-			stream.end(fs.readFileSync(file.filepath));
-
-			stream.on('error', (error) => {
-				console.error(`Erro ao enviar arquivo para o GCS: ${error}`);
-
-				throw createError({
-					statusCode: 500,
-					message: `Erro ao enviar arquivo para o GCS: ${error}`,
-				});
-			});
-
-			stream.on('finish', () => {
-				console.log('Arquivo enviado com sucesso para o GCS');
-			});
+			// Save in Google Cloud Storage
+			let dataFile;
+			try {
+				const urlFileSavedPromise = saveFileInGCS(file);
+				dataFile = {
+					fileName: urlFileSavedPromise.fileName,
+					urlFile: await urlFileSavedPromise.urlFile,
+				};
+			} catch (error) {
+				return error;
+			}
 
 			if (type === 'json') {
-				listFiles.push({ archive: fileName, posArr: fileOrigin.posArr });
+				listFiles.push({ archive: dataFile.fileName, posArr: fileOrigin.posArr });
 			} else {
-				listFiles.push(fileName);
+				listFiles.push(dataFile.fileName);
 			}
 		}
 
@@ -268,7 +216,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// update media
-	await MediasModel.update(
+	await Medias.Application.update(
 		{
 			name,
 			value: value || getMedia.value,
@@ -280,9 +228,9 @@ export default defineEventHandler(async (event) => {
 
 	// Create new tag
 	let newTag;
-	if (createNewTag) newTag = await TagsMediaModel.create({ name: tag });
+	if (createNewTag) newTag = await Medias.Tags.create({ name: tag });
 
-	const media = await MediasModel.findOne({
+	const media = await Medias.Application.findOne({
 		raw: false,
 		where: { id },
 		attributes: { exclude: ['createdAt', 'updatedAt'] },

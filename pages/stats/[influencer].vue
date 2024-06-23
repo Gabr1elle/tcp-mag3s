@@ -4,7 +4,7 @@
 			placeholderImageMobile="/imgs/lp/cover_banner_mobile.png" :bgColor="app.layout_background_colors_hotsite"
 			position="fixed" />
 		<UContainer
-			class="grid content-center lg:grid-cols-[minmax(600px,700px)_1fr] 2xl:lg:grid-cols-[minmax(600px,700px)_1fr] lg:px-10 h-full">
+			class="grid content-center lg:grid-cols-[minmax(600px,700px)_1fr] 2xl:lg:grid-cols-[minmax(600px,700px)_1fr] lg:px-10 h-full gap-5">
 
 			<!-- Brand Principal -->
 			<div class="flex flex-col justify-start mb-10 lg:mt-12 xl:mt-6 2xl:ps-12">
@@ -38,12 +38,9 @@
 
 			<!-- Imagem de destaque (Brand secundário) -->
 			<div class="m-auto animate__animated animate__zoomIn">
-				<Carousel id="carousel-next-prizes" :autoplay="0" :wrap-around="false" :pause-autoplay-on-hover="true">
-					<Slide v-for="slide in 1" :key="slide">
-						<img class="md:max-w-[90%] lg:w-[150%]" :src="brandMain"
-							onerror="this.src='/imgs/lp/landing_cover_image.png'" alt="">
-					</Slide>
-				</Carousel>
+				<UCarousel :items="[0]" :ui="{ item: 'basis-full' }">
+					<img class="md:max-w-[90%] lg:w-[150%]" :src="brandMain" onerror="this.src='/imgs/lp/landing_cover_image.png'" alt="">
+				</UCarousel>
 			</div>
 		</UContainer>
 	</div>

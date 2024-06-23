@@ -2,9 +2,9 @@
 	<div class="fixed w-full z-50">
 		<div class="bg-zinc-700 py-2">
 			<UContainer class="flex justify-between items-center">
-				<div>
-					<img width="40" src="/imgs/mag3s.jpeg" alt="" srcset="">
-				</div>
+				<ULink to="/admin/dashboard">
+					<img width="40" src="/imgs/mag3s_dark.svg" alt="" srcset="">
+				</ULink>
 				<div>
 					<UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
 						<UAvatar src="" icon="i-material-symbols-account-circle-full" alt="Avatar" class="cursor-pointer" />

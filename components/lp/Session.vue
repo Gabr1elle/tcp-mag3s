@@ -9,13 +9,12 @@
 					<p class="text-xl lg:text-3xl lg:leading-10 uppercase" v-html="props.description"></p>
 				</div>
 				<div :class="['order-0', orderImage]">
-					<Carousel id="carousel-next-prizes" :autoplay="0" :wrap-around="false" :pause-autoplay-on-hover="true"
-					:mouse-drag="props.images.length > 1" :touch-drag="props.images.length > 1">
-						<Slide v-for="(image,index) in props.images" :key="index">
-							<img :src="`${pathAssets}${image}`"
+					<UCarousel :items="props.images" :ui="{ item: 'basis-full' }">
+						<template #default="slide">
+							<img :src="`${pathAssets}${slide.item}`"
 							onerror="this.src='/imgs/lp/session_placeholder.png'" alt="">
-						</Slide>
-					</Carousel>
+						</template>
+					</UCarousel>
 				</div>
 			</div>
 		</UContainer>

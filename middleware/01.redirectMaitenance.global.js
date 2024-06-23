@@ -8,8 +8,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	await storeApp.getContentApp(useToast);
 
 	// Rotas que não serão redirecionadas
-	if (to.path !== '/maintenance' && to.path !== '/admin/login' && to.path !== '/admin/dashboard') {
-
+	if (!['/maintenance', '/admin/login', '/admin/dashboard', '/admin/cms', '/admin/blog'].includes(to.path)) {
 		// Redirecionar usuário para tela de Manutenção quando habilitado
 		if (storeApp.contentApp.config_maintenance_will_have_app) {
 			// Salvando a URL anterior que o usuário navegou

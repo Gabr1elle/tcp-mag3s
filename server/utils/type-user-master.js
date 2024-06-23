@@ -1,14 +1,13 @@
-import { UserModel } from "./../models/User.model";
-import { RoleUserModel } from "./../models/RoleUser.model";
+import { Admin } from "../models/Admin.model";
 const config = useRuntimeConfig();
 const roles = config.rolesType;
 
 export const checkUserMaster = async (event) => {
-    if (event.context.auth) {
-        const roleUser = await RoleUserModel.findOne({
-            where: { type: event.context.auth.role },
-        });
+	if (event.context.auth) {
+		const roleUser = await Admin.Role.findOne({
+			where: { type: event.context.auth.role },
+		});
 
-        return roleUser.type === roles[0];
-    }
+		return roleUser.type === roles[0];
+	}
 };

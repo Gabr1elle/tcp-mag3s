@@ -1,28 +1,27 @@
-import { UserModel } from './../models/User.model';
-import { RoleUserModel } from './../models/RoleUser.model';
+import { Admin } from '../models/Admin.model';
 const config = useRuntimeConfig();
 const roles = config.rolesType;
 
 // Create Roles to users if it doesn't exist
 async function createRoles() {
-  const rolesData = await RoleUserModel.findAll({ raw: true });
+  const rolesData = await Admin.Role.findAll({ raw: true });
 
   if (!rolesData.length) {
     for (const role of roles) {
       try {
-        await RoleUserModel.create({ type: role });
+        await Admin.Role.create({ type: role });
       } catch (err) {
         console.log(err);
       }
     }
   }
 
-  return await RoleUserModel.findAll({ raw: true });
+  return await Admin.Role.findAll({ raw: true });
 }
 
 // creating a master user if it doesn't exist
 export const createAdmin = async () => {
-  const checkUserExists = await UserModel.findOne({where: {email: config.adminEmail}});
+  const checkUserExists = await Admin.Users.findOne({where: {email: config.adminEmail}});
 
   if(!checkUserExists) {
     const rolesData = await createRoles();
@@ -36,7 +35,7 @@ export const createAdmin = async () => {
     }
 
     try {
-      await UserModel.create(user);
+      await Admin.Users.create(user);
     } catch (err) {
       console.log(err);
     }

@@ -1,4 +1,4 @@
-import { UserModel } from '../../../models/User.model';
+import { Admin } from '../../../models/Admin.model';
 import bcrypt from 'bcrypt';
 
 const config = useRuntimeConfig();
@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 	const login = await readBody(event);
 
 	// verify user exists
-	const user = await UserModel.findOne({
+	const user = await Admin.Users.findOne({
 		where: { email: login.email },
 	});
 	if (!user) {

@@ -78,6 +78,13 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 				},
 			},
 			searchingMedia: null,
+			blog: {
+				posts: [],
+				post: {},
+				selectPostId: null,
+				blogHasBeenLoaded: false,
+				isOpenModalDeletePost: false,
+			}
 		};
 	},
 
@@ -120,7 +127,7 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 				: state.listArchiveMedia.length;
 		},
 		carouselEnableLoop: (state) => {
-			return state.listArchiveMedia.length > 1 ? true : false;
+			return state.listArchiveMedia.length > 1;
 		},
 		filteredMedias: (state) => {
 			return (payload) => {
@@ -141,6 +148,14 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 					}
 				});
 			};
+		},
+
+		//Blog
+		getPostsQtd: (state) => state.blog.posts.length,
+		hasPosts: (state) => state.blog.posts.length > 0,
+		titleBlogByPostId: (state) => {
+			const post = state.blog.posts.find((post) => post.id === state.blog.selectPostId);
+			return post ? post.title : '';
 		},
 	},
 
@@ -303,8 +318,10 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 					timeout: 5000,
 				});
 
-				if (error.response._data.data.redirect) {
-					router.push({ path: '/admin/login' });
+				if (error.response._data.data) {
+					if (error.response._data.data.redirect) {
+						router.push({ path: '/admin/login' });
+					}
 				}
 			}
 
@@ -413,8 +430,10 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 					timeout: 5000,
 				});
 
-				if (error.response._data.data.redirect) {
-					router.push({ path: '/admin/login' });
+				if (error.response._data.data) {
+					if (error.response._data.data.redirect) {
+						router.push({ path: '/admin/login' });
+					}
 				}
 
 				if (error.response._data.data.isDelete) {
@@ -543,8 +562,10 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 					timeout: 5000,
 				});
 
-				if (error.response._data.data.redirect) {
-					router.push({ path: '/admin/login' });
+				if (error.response._data.data) {
+					if (error.response._data.data.redirect) {
+						router.push({ path: '/admin/login' });
+					}
 				}
 			}
 
@@ -660,5 +681,90 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 				}
 			});
 		},
+
+		// Blog
+		async getPosts(useToast) {
+			if (this.blog.blogHasBeenLoaded) return;
+			const toast = useToast();
+
+			try {
+				const { data, error, status } = await useFetch('/api/admin/blog/posts', {
+					method: 'get',
+				});
+
+				if (status.value === 'success') {
+					this.blog.posts = data.value.data;
+					this.blog.contentHasBeenLoaded = true;
+					console.info('Posts do Blog carregado com sucesso!');
+				}
+
+				if (status.value === 'error') {
+					console.error('Erro ao carregar Posts do Blog!');
+					toast.add({
+						id: 'error_getBlogPosts',
+						title: `Erro: ${error.value.data.statusCode}`,
+						description: `${error.value.data.message}`,
+						color: 'red',
+						icon: 'i-material-symbols-warning-outline-rounded',
+						timeout: 3500,
+					});
+				}
+			} catch (error) {
+				toast.add({
+					id: 'error_getBlogPosts',
+					title: `Opss... Algo de errado aconteceu!`,
+					description: `${error}`,
+					color: 'red',
+					icon: 'i-material-symbols-warning-outline-rounded',
+					timeout: 3500,
+				});
+			}
+		},
+
+		async deletePost(postId, useToast) {
+			const toast = useToast();
+
+			try {
+				const { data, error, status } = await useFetch(`/api/admin/blog/post/${postId}`, {
+					method: 'delete',
+				});
+
+				if (status.value === 'success') {
+					this.blog.posts = this.blog.posts.filter((post) => post.id !== postId);
+					toast.add({
+						id: 'success_deletePost',
+						title: `Post deletado com sucesso!`,
+						description: `${data.value.message}`,
+						color: 'green',
+						icon: 'i-material-symbols-check-circle-rounded',
+						timeout: 3500,
+					});
+				}
+
+				if (status.value === 'error') {
+					toast.add({
+						id: 'error_deletePost',
+						title: `Erro: ${error.value.data.statusCode}`,
+						description: `${error.value.data.message}`,
+						color: 'red',
+						icon: 'i-material-symbols-warning-outline-rounded',
+						timeout: 3500,
+					});
+				}
+
+				// Close Modal Delete Post and reset selectPostId
+				this.blog.isOpenModalDeletePost = false;
+				this.blog.selectPostId = null;
+			} catch (error) {
+				toast.add({
+					id: 'error_deletePost',
+					title: `Erro: ${error.value.data.statusCode}`,
+					description: `${error.value.data.message}`,
+					color: 'red',
+					icon: 'i-material-symbols-warning-outline-rounded',
+					timeout: 3500,
+				});
+			}
+		}
 	},
 });

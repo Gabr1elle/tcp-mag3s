@@ -8,19 +8,29 @@
 		<UContainer class="py-12" :class="hasHeader">
 			<div class="max-w-[700px] m-auto">
 				<!-- Banner Principal com Carousel -->
-				<Carousel id="carousel-next-prizes" :autoplay="6500" :wrap-around="true" :pause-autoplay-on-hover="true">
-					<Slide v-for="slide in storeIncentive.listDrawsUpcomingFull" :key="slide" class="flex flex-col">
-						<AppBannersCard :linkSource="storeIncentive.NextDrawLink(slide)" :hasImageDetach="false" imageDetach=""
-							:loading="storeIncentive.nextDrawLoading(true)" :title="slide.fullDate"
-							:subtitle="store.descriptionAwardCurrent(slide.name)" :countdown="false" :callToAction="false"
-							:hasDescription="true" :description="store.descriptionNextDrawPrize(slide.fullDateYearComplete)
-		" :imageAward="slide.image" />
-					</Slide>
+				<div @mouseenter="carouselPauseAutoPlay(false)" @mouseleave="carouselPauseAutoPlay(true)">
+					<UCarousel :items="storeIncentive.listDrawsUpcomingFull" :ref="carouselSetup.autoPlay ? 'carouselRef' : ''" :ui="carouselSetup.ui" indicators arrows>
+						<template #default="{ item }">
+							<AppBannersCard :linkSource="storeIncentive.NextDrawLink(item)" :hasImageDetach="false" imageDetach=""
+								:loading="storeIncentive.nextDrawLoading(true)" :title="item.fullDate"
+								:subtitle="store.descriptionAwardCurrent(item.name)" :countdown="false" :callToAction="false"
+								:hasDescription="true" :description="store.descriptionNextDrawPrize(item.fullDateYearComplete)
+			" :imageAward="item.image" />
+						</template>
 
-					<template #addons>
-						<Pagination />
-					</template>
-				</Carousel>
+						<template #indicator="{ onClick, page, active }">
+							<div :class="active ? 'bullet-active' : 'bullet-outline'" class="cursor-pointer rounded-full min-w-2 min-h-2 lg:min-w-7 lg:min-h-1.5 justify-center" @click="onClick(page)"></div>
+						</template>
+
+						<template #prev="{ onClick, disabled }">
+							<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-back-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+						</template>
+
+						<template #next="{ onClick, disabled }">
+							<UButton :disabled="disabled" @click="onClick" icon="i-ic-round-arrow-forward-ios" variant="link" size="xl" :ui="{padding: {xl: 'px-12 py-12'}}" :padded="true" :style="`color: ${bgCarouselPaginationActive}`" />
+						</template>
+					</UCarousel>
+				</div>
 
 				<!-- Campo de pesquisa -->
 				<AppOthersInputSearching v-if="storeIncentive.listDrawsUpcomingFull" inputPlaceholder="Buscar por prêmio"
@@ -83,25 +93,65 @@ const hasHeader = computed(() => {
 	};
 });
 
+// Carrossel de prêmios
+const carouselRef = ref();
+const carouselSetup = reactive({
+	autoPlay: true,
+	timer: 3500,
+	ui: {
+		item: 'basis-full',
+		indicators: { wrapper: 'relative bottom-0 mt-4' },
+		arrows: {
+			wrapper: 'absolute top-1/2 transform -translate-y-1/2 w-full',
+			next: 'right-0',
+			prev: 'left-0'
+		},
+	},
+});
+
+const carouselPauseAutoPlay = (toggle) => {
+	carouselSetup.autoPlay = toggle;
+};
+
 onNuxtReady(async () => {
 	await storeIncentive.userInventory(useToast);
 	await storeIncentive.lotteryDraws(useToast);
+
+	// Iniciando o carrossel de prêmios
+	const startCarouselInterval = () => {
+		return setInterval(() => {
+			if (!carouselRef.value) return;
+
+			if (carouselRef.value.page === carouselRef.value.pages) {
+				return carouselRef.value.select(0);
+			}
+
+			carouselRef.value.next();
+		}, carouselSetup.timer);
+	};
+
+	let carouselInterval = startCarouselInterval();
+
+	const stopCarouselInterval = () => {
+		clearInterval(carouselInterval);
+	}
+
+	const initCarouselInterval = () => {
+		stopCarouselInterval();
+		carouselInterval = startCarouselInterval();
+	}
+
+	initCarouselInterval();
 });
 </script>
 
 <style>
-#carousel-next-prizes .carousel__pagination-button::after {
-	/* Your custom styles here */
-	width: 25px;
-	border-radius: 15px;
-	height: 6px;
+.bullet-outline {
 	background-color: v-bind(bgCarouselPagination);
-	opacity: 0.3;
+	opacity: .5;
 }
 
-#carousel-next-prizes .carousel__pagination-button--active::after {
-	/* Your custom styles here */
+.bullet-active {
 	background-color: v-bind(bgCarouselPaginationActive);
-	opacity: 1;
 }
 </style>

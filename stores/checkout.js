@@ -281,6 +281,42 @@ export const useStoreCheckout = defineStore('storeCheckout', {
 			this.formRegister.configSimplePayment.processPayment = false;
 		},
 
+		// Criação do usuário do blog
+		async createUserBlog(useToast, tokenUser) {
+			const toast = useToast();
+
+			try {
+				const { data, error, status } = await useFetch(`/api/app/blog/user/${tokenUser}`, {
+					method: 'post',
+				});
+
+				if (status.value === 'success') {
+					console.info('usuário do blog criado', data);
+				}
+
+				if (status.value === 'error') {
+					console.error('Não foi possui criar o usuário do blog', error);
+					toast.add({
+						id: 'error_getContentApp',
+						title: `Erro: ${error.value.data.statusCode}`,
+						description: `${error.value.data.message}`,
+						color: 'red',
+						icon: 'i-material-symbols-warning-outline-rounded',
+						timeout: 3500,
+					});
+				}
+			} catch (error) {
+				toast.add({
+					id: 'error_getContentApp',
+					title: `Opss... Algo de errado aconteceu!`,
+					description: `${error}`,
+					color: 'red',
+					icon: 'i-material-symbols-warning-outline-rounded',
+					timeout: 3500,
+				});
+			}
+		},
+
 		// Registro de Email
 		async registerEmail(useToast, IDpkgChosen, IDpkgOB, pathTo) {
 			const toast = useToast();
@@ -317,6 +353,9 @@ export const useStoreCheckout = defineStore('storeCheckout', {
 					httpOnly: false,
 				});
 				cookieAuth.value = data.access_token;
+
+				// Criando o usuário do blog automaticamente
+				await this.createUserBlog(useToast, data.access_token);
 
 				this.purchasePackage(IDpkgChosen, IDpkgOB, pathTo);
 

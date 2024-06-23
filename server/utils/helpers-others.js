@@ -28,6 +28,15 @@ export function toLetterFisrtUperCase(str) {
 		.join(' ');
 }
 
+// Remove accents from string
+export function removeAccents(str) {
+	const accentsMap = {
+		'á': 'a', 'ã': 'a', 'à': 'a', 'â': 'a', 'é': 'e', 'ê': 'e', 'í': 'i', 'ó': 'o', 'õ': 'o', 'ô': 'o', 'ú': 'u', 'ç': 'c',
+		'Á': 'A', 'Ã': 'A', 'À': 'A', 'Â': 'A', 'É': 'E', 'Ê': 'E', 'Í': 'I', 'Ó': 'O', 'Õ': 'O', 'Ô': 'O', 'Ú': 'U', 'Ç': 'C'
+	};
+	return str.split('').map(char => accentsMap[char] || char).join('');
+}
+
 // [0]: text, [1]: link, [2]: color, [3]: archive, [4]: icon, [5]: datatime, [6]: boolean, [7]: json
 const { typesMedia } = useRuntimeConfig();
 
@@ -979,6 +988,14 @@ export const listSchemaDataMedia = [
 		type: typesMedia[2],
 	},
 	{
+		name: 'colors_text_banner_full_cards',
+		description:
+			'Cor do texto padrão utilizado no banner estendidos do hub.',
+		value: '#FFFFFF',
+		tag: 'app',
+		type: typesMedia[2],
+	},
+	{
 		name: 'colors_text_one_dark',
 		description:
 			'Cor do texto padrão utilizado na aplicação para fundos claros.',
@@ -1399,7 +1416,23 @@ export const listSchemaDataMedia = [
 		type: typesMedia[6],
 	},
 	{
+		name: 'config_will_have_carousel_banner_full_main',
+		description:
+			'Habilitar ou não o banner carousel expandido do hub',
+		value: '0',
+		tag: 'app',
+		type: typesMedia[6],
+	},
+	{
 		name: 'carousel_banner_main_qtd_items',
+		description:
+			'Quantidade de itens que serão exibidos no carousel do banner principal do hub',
+		value: '3',
+		tag: 'app',
+		type: typesMedia[0],
+	},
+	{
+		name: 'carousel_banner_full_main_qtd_items',
 		description:
 			'Quantidade de itens que serão exibidos no carousel do banner principal do hub',
 		value: '3',

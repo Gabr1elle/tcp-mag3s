@@ -32,7 +32,7 @@
 
 		<!-- Imagem de destaque -->
 		<div class="flex items-center col-span-1" :class="props.positionLeftImageDetach ? 'order-1' : 'order-2'">
-			<div class="animate__animated animate__tada"
+			<div class="animate__animated animate__fadeIn"
 				:class="props.positionLeftImageDetach ? 'w-[65px] sm:w-[90px] md:w-[100px]' : 'w-[80px] sm:w-[120px] md:w-[140px]'">
 				<img :src="imageDT" onerror="this.src='/imgs/thumb_premios1.png'"
 					:class="props.positionLeftImageDetach ? 'w-[inherit]' : ''" />

@@ -60,7 +60,7 @@
 
 		<!-- Lado Direito -->
 		<div v-if="props.loading"
-			class="w-[115px] sm:w-[220px] md:w-[240px] lg:w-[180px] col-span-1 flex items-center justify-end animate__animated animate__tada">
+			class="w-[115px] sm:w-[220px] md:w-[240px] lg:w-[180px] col-span-1 flex items-center justify-end animate__animated animate__fadeIn">
 			<img :src="props.imageAward" onerror="this.src='/imgs/exemplo_premio_01.png'" />
 		</div>
 		<div v-if="!props.loading" class="w-[100px] sm:w-[120px] md:w-[140px] h-full flex justify-center items-center">

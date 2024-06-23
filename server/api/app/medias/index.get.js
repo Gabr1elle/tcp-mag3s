@@ -1,7 +1,7 @@
-import { MediasModel } from '../../../models/Medias.model';
+import { Medias } from '../../../models/Medias.model';
 
 export default defineEventHandler(async (event) => {
-	const mediasDB = await MediasModel.findAll();
+	const mediasDB = await Medias.Application.findAll();
 
 	// check media in database exists
 	if (mediasDB.length) {
