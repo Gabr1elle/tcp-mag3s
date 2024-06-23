@@ -2,7 +2,7 @@ import { readFiles } from 'h3-formidable';
 import { firstValues } from 'h3-formidable/helpers';
 import { errors as formidableErrors } from 'formidable';
 
-export const fileHandling = async (event, hasMultipleFiles, maxFiles = 10, maxFileSize = 5 * 1024 * 1024, maxFields = 8) => {
+export const fileHandling = async (event, hasMultipleFields, maxFiles = 10, maxFileSize = 5 * 1024 * 1024, maxFields = 8) => {
 	let cancelUploads = false;
 	let mimeTypeFile = 'image'; // default
 	let otherFields; //fields form data
@@ -11,7 +11,7 @@ export const fileHandling = async (event, hasMultipleFiles, maxFiles = 10, maxFi
 		const { fields, files, form } = await readFiles(event, {
 			// formidable options
 			includeFields: true,
-			multiples: hasMultipleFiles,
+			multiples: hasMultipleFields,
 			maxFiles: maxFiles,
 			maxFileSize: maxFileSize,
 			maxFields: maxFields,
@@ -50,7 +50,7 @@ export const fileHandling = async (event, hasMultipleFiles, maxFiles = 10, maxFi
 		}
 
 		return {
-			files: hasMultipleFiles ? files : files.file[0],
+			files,
 			otherFields,
 			mimeTypeFile,
 		};

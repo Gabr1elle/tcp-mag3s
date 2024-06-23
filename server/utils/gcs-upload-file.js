@@ -2,14 +2,14 @@ import fs from 'fs';
 
 const config = useRuntimeConfig();
 
-export const saveFileInGCS = (file) => {
+export const saveFileInGCS = (file, otherFolder = null) => {
 	try {
 		const extFile = file.originalFilename.split('.')[1];
 		const fileName = `${Date.now()}-${file.newFilename}.${extFile}`;
 
 		const bucket = googleCloudStorage.bucket(config.gcsBucketname);
 		const fileUpload = bucket.file(
-			`${config.gcsSubfolder}${config.gcsSubfolderEnvironment}${fileName}`
+			`${config.gcsSubfolder}${otherFolder || config.gcsSubfolderEnvironment}${fileName}`
 		);
 
 		const stream = fileUpload.createWriteStream({
