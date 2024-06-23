@@ -16,6 +16,10 @@ User.init({
 		type: DataTypes.STRING,
 		required: true
 	},
+	profileImage: {
+		type: DataTypes.STRING,
+		allowNull: true
+	},
 }, { sequelize, modelName: 'users' });
 
 class Post extends Model { }
