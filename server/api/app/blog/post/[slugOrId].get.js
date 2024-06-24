@@ -47,17 +47,17 @@ export default defineEventHandler(async (event) => {
 					{
 						model: Blog.User,
 						as: 'UserComents',
-						attributes: ['nickname'],
+						attributes: ['id', 'nickname', 'profileImage'],
 					},
 					{
 						model: Blog.Comment,
 						as: 'Replies',
-						attributes: ['id', 'content', 'createdAt'],
+						attributes: ['id', 'parentId', 'content', 'createdAt'],
 						include: [
 							{
 								model: Blog.User,
 								as: 'UserComents',
-								attributes: ['nickname'],
+								attributes: ['id', 'nickname', 'profileImage'],
 							},
 						],
 					},
