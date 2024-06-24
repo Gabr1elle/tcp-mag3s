@@ -75,6 +75,23 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
+	// if userId is the owner of the coment and reply, add madeByCurrentUser
+	post.get({ plain: true }).comments.forEach((comment) => {
+		if (comment.UserComents.id === userId) {
+			comment.UserComents.madeByCurrentUser = true;
+		} else {
+			comment.UserComents.madeByCurrentUser = false;
+		}
+
+		comment.Replies.forEach((reply) => {
+			if (reply.UserComents.id === userId) {
+				reply.UserComents.madeByCurrentUser = true;
+			} else {
+				reply.UserComents.madeByCurrentUser = false;
+			}
+		});
+	});
+
 	return {
 		statusCode: 200,
 		message: 'Post obtido com sucesso!',
