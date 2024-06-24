@@ -1,13 +1,21 @@
 <template>
 	<AppLayoutBgDefault />
+	<AppLayoutHeader
+		v-if="app.config_will_have_hotsite"
+		:hasLogout="false"
+		:bgColor="app.header_colors_background_app_two"
+		:textColor="app.header_colors_text_app"
+		:isLogoDark="true"
+	/>
 	<UContainer>
 		<div
 			v-if="storeBlog.hasPostsBlog"
-			class="text-white py-14 grid items-center gap-2 lg:gap-3 auto-rows-auto"
+			class="text-white py-20 grid items-center gap-2 lg:gap-3 auto-rows-auto"
 		>
 			<div v-for="post in posts" :key="post.id" class="mb-8 relative">
+				{{ console.log(post)}}
 				<UCard class="bg-black">
-					<NuxtLink :to="`/blog/${post.id}`">
+					<NuxtLink :to="`/blog/${post.slug}`"> 
 						<div class="grid lg:grid-cols-3 gap-5 items-stretch">
 							<!-- Imagem do post -->
 							<div
@@ -58,11 +66,25 @@
 		<div v-else class="text-white py-14 text-center">
 			<p>Nenhum post encontrado.</p>
 		</div>
+		<!-- Menu Behaviour -->
+		<div v-if="storeIncentive.userLoggedIn">
+			<AppLayoutOverlay :showing="store.isOpenMenuBehaviour" />
+			<div v-if="app.config_will_have_hotsite">
+				<AppLayoutMenuBehaviour />
+				<div class="mt-12 md:mt-32"></div>
+			</div>
+		</div>
 	</UContainer>
 </template>
 
 <script setup>
 import { useStoreBlog } from '/stores/blog';
+import { useStoreApp } from '~/stores/app';
+import { useStoreIncentive } from '~/stores/incentive';
+
+const store = useStoreApp();
+const app = useStoreApp().contentApp;
+const storeIncentive = useStoreIncentive();
 
 const posts = ref();
 const storeBlog = useStoreBlog();
