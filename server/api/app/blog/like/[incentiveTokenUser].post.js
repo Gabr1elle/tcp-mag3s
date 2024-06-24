@@ -6,23 +6,45 @@ export default defineEventHandler(async (event) => {
 	//get user id from incentive system
 	const userIncentive = await getUserIncentive(event);
 
-	//verify if the body.postId is empty
-	if (!body.postId) {
+	//verify if the body.postId and body.commentId is empty
+	if (!body.postId && !body.commentId) {
 		throw createError({
 			statusCode: 406,
-			message: 'ID do post é obrigatório!',
+			message: 'ID do post ou comentário é obrigatório!',
 			data: null,
 		});
 	}
 
-	//validate the post exists
-	const post = await Blog.Post.findByPk(body.postId);
-	if (!post) {
-		throw createError({
-			statusCode: 406,
-			message: 'Post não encontrado!',
-			data: null,
+	//validate the post or comment exists
+	let postOrComment;
+	if (body.postId) {
+		postOrComment = await Blog.Post.findOne({
+			where: {
+				id: body.postId,
+			},
 		});
+
+		if (!postOrComment) {
+			throw createError({
+				statusCode: 406,
+				message: 'Post não encontrado!',
+				data: null,
+			});
+		}
+	} else {
+		postOrComment = await Blog.Comment.findOne({
+			where: {
+				id: body.commentId,
+			},
+		});
+
+		if (!postOrComment) {
+			throw createError({
+				statusCode: 406,
+				message: 'Comentário não encontrado!',
+				data: null,
+			});
+		}
 	}
 
 	// get user idIncentive in table user
@@ -43,10 +65,10 @@ export default defineEventHandler(async (event) => {
 
 	//validate the like exists
 	let like = await Blog.Like.findOne({
-		attributes: ['id', 'postId'],
+		attributes: ['id', `${body.postId ? 'postId' : 'commentId'}`],
 		where: {
 			userId: user.id,
-			postId: post.id,
+			[body.postId ? 'postId' : 'commentId']: postOrComment.id,
 		},
 	});
 
@@ -65,14 +87,14 @@ export default defineEventHandler(async (event) => {
 		//if like not exists, create it
 		await Blog.Like.create({
 			userId: user.id,
-			postId: post.id,
+			[body.postId ? 'postId' : 'commentId']: postOrComment.id,
 		});
 
 		like = await Blog.Like.findOne({
-			attributes: ['id', 'postId'],
+			attributes: ['id', `${body.postId ? 'postId' : 'commentId'}`],
 			where: {
 				userId: user.id,
-				postId: post.id,
+				[body.postId ? 'postId' : 'commentId']: postOrComment.id,
 			},
 		});
 
