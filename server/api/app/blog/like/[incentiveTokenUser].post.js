@@ -56,20 +56,33 @@ export default defineEventHandler(async (event) => {
 
 		return {
 			statusCode: 200,
-			message: 'Você deu deslike 😢!',
-			data: like,
+			message: 'Você deu deslike 😢!', data: {
+				...like.toJSON(),
+				userLiked: false,
+			},
 		};
 	} else {
 		//if like not exists, create it
-		like = await Blog.Like.create({
+		await Blog.Like.create({
 			userId: user.id,
 			postId: post.id,
+		});
+
+		like = await Blog.Like.findOne({
+			attributes: ['id', 'postId'],
+			where: {
+				userId: user.id,
+				postId: post.id,
+			},
 		});
 
 		return {
 			statusCode: 200,
 			message: 'Você deu like 🤙!',
-			data: like,
+			data: {
+				...like.toJSON(),
+				userLiked: true,
+			},
 		};
 	}
 
