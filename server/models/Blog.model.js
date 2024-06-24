@@ -161,7 +161,12 @@ Like.init({
 	},
 	postId: {
 		type: DataTypes.UUID,
-		required: true
+		required: true,
+		allowNull: true // Permite que likes sejam feitos em comentários sem estar associados a um post
+	},
+	commentId: {
+		type: DataTypes.UUID,
+		allowNull: true // Permite que likes sejam feitos em posts sem estar associados a um comentário
 	},
 	userId: {
 		type: DataTypes.UUID,
