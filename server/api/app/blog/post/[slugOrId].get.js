@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
 		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'slug', 'createdAt',
 			[Sequelize.literal('(SELECT COUNT(*) FROM `likes` WHERE `likes`.`postId` = `posts`.`id`)'), 'likeCount'],
 			[Sequelize.literal('(SELECT `name` FROM `categories` WHERE `categories`.`id` = `posts`.`categoryId`)'), 'category'],
-			[Sequelize.literal(`(SELECT EXISTS(SELECT 1 FROM \`likes\` WHERE \`likes\`.\`postId\` = \`posts\`.\`id\` AND \`likes\`.\`userId\` = '${userId}' LIMIT 1))`), 'userLiked'],
+			[Sequelize.literal(`(SELECT EXISTS(SELECT 1 FROM likes WHERE likes.postId = posts.id AND likes.userId = '${userId}' LIMIT 1))`), 'userLiked'],
 		],
 		include: [
 			{
@@ -97,7 +97,7 @@ export default defineEventHandler(async (event) => {
 		message: 'Post obtido com sucesso!',
 		data: {
 			...post.get({ plain: true }),
-			userLiked: post.get('userLiked') ? true : false,
+			userLiked: !!post.get('userLiked'),
 			category: post.get('category'),
 		},
 	};
