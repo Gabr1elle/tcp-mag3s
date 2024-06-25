@@ -13,17 +13,14 @@
 			class="text-white py-20 grid items-center gap-2 lg:gap-3 auto-rows-auto"
 		>
 			<div v-for="post in posts" :key="post.id" class="mb-8 relative">
-				{{ console.log(post)}}
+				{{ console.log(post) }}
 				<UCard class="bg-black">
-					<NuxtLink :to="`/blog/${post.slug}`"> 
+					<NuxtLink :to="`/blog/${post.slug}`">
 						<div class="grid lg:grid-cols-3 gap-5 items-stretch">
 							<!-- Imagem do post -->
-							<div
-								style="
-									background-image: url('https://www.gr6metaverso.com/wp-content/uploads/2022/06/Group-37-1.png-1.webp');
-								"
-								class="bg-cover bg-no-repeat items-start rounded"
-							></div>
+							<div class="bg-cover bg-no-repeat items-start rounded">
+								{{ post.image}}
+							</div>
 
 							<div class="col-span-2">
 								<!-- //Titulo dos posts -->
