@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
-	let dataFile = {};
+	let dataFile = { image: null, video: null };
 	if (fields.files.image || fields.files.video) {
 		// Save in Google Cloud Storage
 		try {
@@ -84,8 +84,8 @@ export default defineEventHandler(async (event) => {
 		title: fields.otherFields.title,
 		subtitle: fields.otherFields.subtitle,
 		content: fields.otherFields.content,
-		image: dataFile.image.urlFile,
-		video: dataFile.video.urlFile,
+		image: dataFile.image ? dataFile.image.urlFile : null,
+		video: dataFile.video ? dataFile.video.urlFile : null,
 		categoryId: fields.otherFields.categoryId,
 		createdUserAdminId: event.context.auth.id,
 	});
