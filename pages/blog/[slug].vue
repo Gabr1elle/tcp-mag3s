@@ -12,9 +12,9 @@
 		v-if="showFullBanner"
 		linkSource=""
 		:hasImageDetach="false"
-		background="('https://www.gr6metaverso.com/wp-content/uploads/2022/06/Group-37-1.png-1.webp')"
+		:background="storeBlog.blog.post.image"
 		:imageDetach="false"
-		loading="false"
+		:loading="false"
 		:title="storeBlog.blog.post.title"
 		subtitle=""
 		countdown=""
@@ -34,12 +34,7 @@
 			<UCard class="bg-black">
 				<div class="grid lg:grid-cols-3 gap-5 items-stretch">
 					<!-- Imagem do post -->
-					<div
-						style="
-							background-image: url('https://www.gr6metaverso.com/wp-content/uploads/2022/06/Group-37-1.png-1.webp');
-						"
-						class="bg-img rounded"
-					></div>
+					<div class="bg-img rounded">{{ post.image }}</div>
 
 					<div class="col-span-2">
 						<!-- //Titulo dos post -->
@@ -58,13 +53,18 @@
 							{{ post.createdAtFull }}
 						</div>
 
+						<!-- Likes -->
 						<div class="flex justify-end items-center gap-3">
 							<UButton variant="ghost" class="flex gap-1 items-center">
 								<UIcon name="i-heroicons-eye" />
 								{{ post.views }}
 							</UButton>
-
-							<UButton variant="ghost" class="flex gap-1 items-center">
+							<UButton
+								variant=""
+								class="flex gap-1 items-center"
+								:class="{ 'text-red-500': post.liked }"
+								@click="onLike"
+							>
 								<UIcon name="i-heroicons-heart" />
 								{{ post.likeCount }}
 							</UButton>
@@ -111,27 +111,6 @@
 							</p>
 							<p class="ml-2">{{ comment.content }}</p>
 						</div>
-						<div class="relative">
-							<button
-								@click="toggleMenu(comment.id)"
-								class="p-2 text-gray-500 hover:text-white"
-							>
-								<!-- ícone de três pontos para excluir o cometário -->
-							</button>
-							<div
-								v-if="comment.showMenu"
-								class="absolute right-0 mt-2 w-48 bg-neutral-500 text-white rounded-lg shadow-lg items-center"
-							>
-								<ul>
-									<li
-										@click="deleteComment(comment.id)"
-										class="px-4 py-2 hover:bg-gray-700 cursor-pointer"
-									>
-										Excluir
-									</li>
-								</ul>
-							</div>
-						</div>
 					</div>
 				</div>
 			</UCard>
@@ -161,72 +140,8 @@ const post = ref();
 const storeBlog = useStoreBlog();
 post.value = storeBlog.blog.post;
 
-const newComment = ref({
-	nickname: '', // Aqui você pode colocar o nickname do usuário
-	content: '',
-});
-
-const toggleMenu = (commentId) => {
-	post.value.comments = post.value.comments.map((comment) => {
-		if (comment.id === commentId) {
-			comment.showMenu = !comment.showMenu;
-		} else {
-			comment.showMenu = false;
-		}
-		return comment;
-	});
-};
-
-const addComment = async () => {
-	if (newComment.value.trim()) {
-		// Verifica se há conteúdo no novo comentário
-		try {
-			// Persiste o novo comentário no servidor
-			await storeBlog.newComment(post.value.id, newComment.value);
-
-			// Adiciona o novo comentário ao post
-			const comment = {
-				id: Date.now(),
-				user: storeBlog.post.comments.userComents.nickname,
-				content: newComment.value.content, // Garante que apenas o conteúdo do comentário seja enviado
-				showMenu: false,
-			};
-			post.value.comments.push(comment);
-
-			// Limpa o campo de novo comentário
-			newComment.value.content = '';
-		} catch (error) {
-			console.error(error);
-		}
-	}
-};
-
-const deleteComment = (commentId) => {
-	post.value.comments = post.value.comments.filter(
-		(comment) => comment.id !== commentId
-	);
-};
-
-const showFullBanner = ref(false);
 definePageMeta({
 	middleware: ['blog-post', 'auth-user'],
-});
-
-onNuxtReady(() => {
-	if (window.innerWidth < 768) {
-		showFullBanner.value = true;
-	}
-});
-onMounted(async () => {
-	try {
-		// Busca os comentários do servidor
-		const comments = await storeBlog.getComments(post.value.id);
-
-		// Adiciona os comentários ao post
-		post.value.comments = comments;
-	} catch (error) {
-		console.error(error);
-	}
 });
 </script>
 

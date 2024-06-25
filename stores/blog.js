@@ -119,16 +119,19 @@ export const useStoreBlog = defineStore('storeBlog', {
 				console.error(error);
 			}
 		},
-		async getUser() {
+		async onLike(postId) {
 			try {
 				const tokenUserIncentive = getCookie('tokenUserIncentive');
-				
+
 				const response = await useFetch(
-					`api/app/blog/user/${tokenUserIncentive}`,
+					`api/app/blog/like/${tokenUserIncentive}`,
 					{
-						method: 'POST',
+						postId: postId,
+					},
+					{
 						headers: {
-							Authorization: `Bearer ${tokenUserIncentive}`,
+							method: 'POST',
+							Authorization: `Bearer ${getCookie('tokenUserIncentive')}`,
 						},
 					}
 				);
