@@ -124,7 +124,7 @@ export default defineEventHandler(async (event) => {
 	});
 	user.set({
 		nickname: fields.otherFields.nickname,
-		profileImage: dataFile.urlFile || null,
+		profileImage: dataFile ? dataFile.urlFile : null,
 	});
 	await user.save();
 
