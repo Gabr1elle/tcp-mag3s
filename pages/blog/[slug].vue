@@ -141,7 +141,7 @@ const storeBlog = useStoreBlog();
 post.value = storeBlog.blog.post;
 
 definePageMeta({
-	middleware: ['blog-post', 'auth-user'],
+	middleware: ['blog-post'],
 });
 </script>
 
