@@ -3,7 +3,22 @@ export const useStoreBlog = defineStore('storeBlog', {
 		return {
 			blog: {
 				posts: [],
-				post: {},
+				post: {
+					createdAtFull: '',
+					id: '',
+					title: '',
+					subtitle: '',
+					slug: '',
+					content: '',
+					likes: 0,
+					views: 0,
+					comments: [],
+					image: '',
+					video: '',
+					likeCount: 0,
+					userLiked: false,
+					category: null,
+				},
 				data: {},
 				contentHasBeenLoaded: false,
 				loading: true, // Adicione o estado de loading
@@ -17,8 +32,8 @@ export const useStoreBlog = defineStore('storeBlog', {
 
 	actions: {
 		// Adicione o método getPost
-		async getPost(slug) {
-			const toast = 'useToast';
+		async getPost(slug, useToast) {
+			const toast = useToast();
 
 			try {
 				this.blog.loading = true;
@@ -54,9 +69,9 @@ export const useStoreBlog = defineStore('storeBlog', {
 					icon: 'i-material-symbols-warning-outline-rounded',
 					timeout: 3500,
 				});
-			} finally {
-				this.blog.loading = false; // Desative o estado de loading após o término do carregamento
 			}
+
+			this.blog.loading = false; // Desative o estado de loading após o término do carregamento
 		},
 
 		// Adicione o método getPostsBlog
