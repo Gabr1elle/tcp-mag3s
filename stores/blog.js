@@ -6,7 +6,7 @@ export const useStoreBlog = defineStore('storeBlog', {
 				post: {},
 				data: {},
 				contentHasBeenLoaded: false,
-				loading: false, // Adicione o estado de loading
+				loading: true, // Adicione o estado de loading
 			},
 		};
 	},
@@ -16,6 +16,7 @@ export const useStoreBlog = defineStore('storeBlog', {
 	},
 
 	actions: {
+		// Adicione o método getPost
 		async getPost(slug) {
 			const toast = 'useToast';
 
@@ -31,7 +32,7 @@ export const useStoreBlog = defineStore('storeBlog', {
 
 				if (status.value === 'success') {
 					this.blog.post = data.value.data;
-					this.blog.contentHasBeenLoaded = true;
+					this.blog.loading = false;
 				}
 
 				if (status.value === 'error') {
@@ -58,19 +59,19 @@ export const useStoreBlog = defineStore('storeBlog', {
 			}
 		},
 
+		// Adicione o método getPostsBlog
 		async getPostsBlog(useToast) {
 			const toast = useToast;
+			this.blog.loading = true;
 
 			try {
-				this.blog.loading = true; // Ative o estado de loading
-
 				const { data, error, status } = await useFetch(`/api/app/blog/posts`, {
 					method: 'get',
 				});
 
 				if (status.value === 'success') {
 					this.blog.posts = data.value.data;
-					this.blog.contentHasBeenLoaded = true;
+					this.blog.loading = false;
 				}
 
 				if (status.value === 'error') {
@@ -92,10 +93,12 @@ export const useStoreBlog = defineStore('storeBlog', {
 					icon: 'i-material-symbols-warning-outline-rounded',
 					timeout: 3500,
 				});
-			} finally {
-				this.blog.loading = false; // Desative o estado de loading após o término do carregamento
 			}
+
+			this.blog.loading = false;
 		},
+
+		// Adicione o método newComment
 		async newComment(postId, content) {
 			try {
 				const tokenUserIncentive = getCookie('tokenUserIncentive');
@@ -119,6 +122,8 @@ export const useStoreBlog = defineStore('storeBlog', {
 				console.error(error);
 			}
 		},
+
+		// Adicione o método onLike
 		async onLike(postId) {
 			try {
 				const tokenUserIncentive = getCookie('tokenUserIncentive');
