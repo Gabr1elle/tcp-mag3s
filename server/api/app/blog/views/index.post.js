@@ -3,9 +3,6 @@ import { Blog } from '../../../../models/Blog.model';
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
 
-	//get user id from incentive system
-	const userIncentive = await getUserIncentive(event);
-
 	//verify if the body.postId is empty
 	if (!body.postId) {
 		throw createError({
@@ -21,22 +18,6 @@ export default defineEventHandler(async (event) => {
 		throw createError({
 			statusCode: 406,
 			message: 'Post não encontrado!',
-			data: null,
-		});
-	}
-
-	// get user idIncentive in table user
-	const user = await Blog.User.findOne({
-		where: {
-			incentiveId: userIncentive.id,
-		},
-	});
-
-	//validate the user exists
-	if (!user) {
-		throw createError({
-			statusCode: 406,
-			message: 'Usuário não encontrado!',
 			data: null,
 		});
 	}
