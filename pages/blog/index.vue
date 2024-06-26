@@ -9,43 +9,71 @@
 	<!-- Conteúdo -->
 	<UContainer class="min-h-screen lg:pt-6">
 		<!-- Posts -->
-		<div v-if="!storeBlog.blog.loading"
-			class="text-white py-16 lg:py-20 grid items-center gap-10 lg:gap-6 auto-rows-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 animate__animated animate__fadeIn">
-			<div v-if="storeBlog.hasPostsBlog" v-for="post in storeBlog.blog.posts" :key="post.id" class="relative">
-				<UCard class="bg-black" :ui="{ body: { base: '', background: '', padding: 'px-6 py-6 sm:p-6' } }">
-					<NuxtLink :to="`/blog/${post.slug}`">
-						<div class="grid grid-cols-1 gap-y-5 lg:gap-y-0 items-stretch">
+		<div v-if="!storeBlog.blog.loading" class="text-white py-16 lg:py-20 animate__animated animate__fadeIn">
 
+			<!-- Breadcump -->
+			<div class="mb-6">
+				<UBreadcrumb :links="links" :ui="configBread">
+					<template #divider>
+						<span class="w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
+					</template>
+				</UBreadcrumb>
+			</div>
+
+			<div class="grid place-items-stretch gap-10 lg:gap-6 auto-rows-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
+				<div v-if="storeBlog.hasPostsBlog" v-for="post in storeBlog.blog.posts" :key="post.id" class="relative">
+					<UCard :ui="configCard">
+						<div class="grid grid-cols-1 gap-y-5 lg:gap-y-0 items-stretch justify-between h-full">
 							<!-- Container Mídias de destaque -->
 							<div>
 								<!-- Imagem destaque -->
-								<div class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[320px] w-full"
+								<div v-if="post.image"
+									class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded h-[320px] w-full rounded-2xl"
 									:style="`background-image: url(${post.image})`">
 								</div>
 
 								<!-- Video destaque -->
-
-								<!-- Placeholder destaque -->
-
-							</div>
-
-							<div class="col-span-2 mt-6">
-								<!-- Data de publicação -->
-								<div class="text-gray-300 opacity-60 text-xs lg:text-sm mb-2">
-									{{ post.createdAtFull }}
+								<div v-else-if="post.video"
+									class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded h-[320px] w-full">
+									<video class="object-cover object-center h-full w-full rounded-2xl" autoplay muted loop playsinline>
+										<source :src="post.video" type="video/mp4">
+									</video>
 								</div>
 
-								<!-- Titulo dos posts -->
-								<h1 class="text-4xl font-bold text-start text-dark mb-2">
-									{{ post.title }}
-								</h1>
+								<!-- Se não há imagem nem vídeo, mostra o placeholder -->
+								<div v-else
+									class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded h-[320px] w-full bg-black">
+								</div>
 
-								<!-- Subtítulo dos posts -->
-								<p class="mb-4">{{ post.subtitle }}</p>
+								<!-- Textos e conteúdos -->
+								<div class="col-span-2 mt-6">
+									<div class="flex justify-between">
+										<!-- Data de publicação -->
+										<div class="text-gray-300 opacity-60 text-xs lg:text-sm mb-2">
+											{{ post.createdAtFull }}
+										</div>
 
-								<!-- Conteúdo do post -->
-								<p class="text-lg my-4 line-clamp" v-html="post.content"></p>
+										<!-- Badge de categorias -->
+										<div class="text-xs lg:text-sm mb-2">
+											<UBadge color="red" variant="solid">{{ post.category }}</UBadge>
+										</div>
+									</div>
 
+									<!-- Titulo dos posts -->
+									<h1 class="text-4xl font-bold text-start text-dark mb-2">
+										{{ post.title }}
+									</h1>
+
+									<!-- Subtítulo dos posts -->
+									<p class="mb-4">{{ post.subtitle }}</p>
+
+									<!-- Conteúdo do post -->
+									<p class="text-lg my-4 line-clamp" v-html="post.content"></p>
+								</div>
+							</div>
+
+							<!-- Badges de curtidas e comentários / Botão leia mais -->
+							<div class="flex flex-col justify-end">
 								<div class="flex justify-end items-center gap-3">
 									<button class="flex gap-1 items-center">
 										<UIcon name="i-heroicons-eye" />
@@ -57,13 +85,21 @@
 										{{ post.likeCount }}
 									</button>
 								</div>
+
+								<div class="flex justify-end items-end mt-3">
+									<div>
+										<NuxtLink :to="`/blog/${post.slug}`">
+											<p class="text-red-400 hover:text-red-500 text-xl">continue lendo...</p>
+										</NuxtLink>
+									</div>
+								</div>
 							</div>
 						</div>
-					</NuxtLink>
-				</UCard>
-			</div>
-			<div v-else class="text-white py-14 text-center">
-				<p>Nenhum post encontrado.</p>
+					</UCard>
+				</div>
+				<div v-else class="text-white py-14 text-center">
+					<p>Nenhum post encontrado.</p>
+				</div>
 			</div>
 		</div>
 
@@ -95,8 +131,29 @@ definePageMeta({
 const store = useStoreApp();
 const app = useStoreApp().contentApp;
 const storeIncentive = useStoreIncentive();
-
 const storeBlog = useStoreBlog();
+
+const configCard = ref({
+	base: 'h-full',
+	background: 'bg-zinc-900',
+	rounded: 'rounded-2xl',
+	body: { base: 'h-full', background: '', padding: 'px-6 py-6 sm:p-6' }
+});
+
+const configBread = ref({
+	li: 'text-red-100', inactive: 'hover:text-red-400',
+	active: 'text-red-500 dark:text-red-400'
+});
+
+const links = [{
+	label: 'Home',
+	icon: 'i-heroicons-home',
+	to: '/app/hub'
+}, {
+	label: 'Blog',
+	icon: 'i-heroicons-square-3-stack-3d',
+	to: '/blog'
+}]
 
 onNuxtReady(async () => {
 	await storeBlog.getPostsBlog();
