@@ -59,7 +59,7 @@ Post.init({
 		type: DataTypes.INTEGER,
 		defaultValue: 0
 	},
-	categoryId: {
+	blogCategoryId: {
 		type: DataTypes.UUID,
 		required: true,
 		allowNull: false,
@@ -89,7 +89,7 @@ Post.init({
 			throw new Error('Do not try to set the `fullName` value!');
 		},
 	},
-}, { sequelize, modelName: 'posts' });
+}, { sequelize, modelName: 'blog_posts' });
 
 // Hook para criar o slug do post
 Post.addHook('beforeValidate', async (post, options) => {
@@ -125,7 +125,7 @@ Category.init({
 		required: true,
 		allowNull: false,
 	}
-}, { sequelize, modelName: 'category' });
+}, { sequelize, modelName: 'blog_categories' });
 
 class Comment extends Model { }
 Comment.init({
@@ -135,10 +135,10 @@ Comment.init({
 		primaryKey: true,
 	},
 	content: {
-		type: DataTypes.TEXT,
+		type: DataTypes.TEXT('long'),
 		required: true
 	},
-	postId: {
+	blogPostId: {
 		type: DataTypes.UUID,
 		required: true
 	},
@@ -150,7 +150,7 @@ Comment.init({
 		type: DataTypes.UUID,
 		allowNull: true
 	}
-}, { sequelize, modelName: 'comments' });
+}, { sequelize, modelName: 'blog_comments' });
 
 class Like extends Model { }
 Like.init({
@@ -159,12 +159,12 @@ Like.init({
 		defaultValue: UUIDV4,
 		primaryKey: true,
 	},
-	postId: {
+	blogPostId: {
 		type: DataTypes.UUID,
 		required: true,
 		allowNull: true // Permite que likes sejam feitos em comentários sem estar associados a um post
 	},
-	commentId: {
+	blogCommentId: {
 		type: DataTypes.UUID,
 		allowNull: true // Permite que likes sejam feitos em posts sem estar associados a um comentário
 	},
@@ -172,7 +172,7 @@ Like.init({
 		type: DataTypes.UUID,
 		required: true
 	}
-}, { sequelize, modelName: 'likes' });
+}, { sequelize, modelName: 'blog_likes' });
 
 // Relacionamentos
 // User Admin
@@ -186,8 +186,8 @@ Comment.belongsTo(User, { as: 'UserComents', foreignKey: 'userId' });
 User.hasMany(Like);
 Like.belongsTo(User);
 
-Post.hasMany(Comment);
-Comment.belongsTo(Post);
+Post.hasMany(Comment, { as: 'comments' });
+Comment.belongsTo(Post, { as: 'comments' });
 
 Post.hasMany(Like);
 Like.belongsTo(Post);

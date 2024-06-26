@@ -30,15 +30,17 @@ export default defineEventHandler(async (event) => {
 				{ id: params.slugOrId },
 			],
 		},
-		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'slug', 'createdAt',
-			[Sequelize.literal('(SELECT COUNT(*) FROM `likes` WHERE `likes`.`postId` = `posts`.`id`)'), 'likeCount'], // get like count for each post
-			[Sequelize.literal(`(SELECT EXISTS(SELECT 1 FROM likes WHERE likes.postId = posts.id AND likes.userId = '${userId}' LIMIT 1))`), 'userLiked'], // check if user current liked the post
-			[Sequelize.literal('(SELECT `name` FROM `categories` WHERE `categories`.`id` = `posts`.`categoryId`)'), 'category'], // get category name for each post
+		attributes: ['id', 'title', 'subtitle', 'content', 'image', 'views', 'video', 'slug', 'createdAt', 'createdAtFull',
+			[Sequelize.literal('(SELECT COUNT(*) FROM `blog_likes` WHERE `blog_likes`.`blogPostId` = `blog_posts`.`id`)'), 'likeCount'], // get like count for each post
+			[Sequelize.literal(`(SELECT EXISTS(SELECT 1 FROM blog_likes WHERE blog_likes.blogPostId = blog_posts.id AND blog_likes.userId = '${userId}' LIMIT 1))`), 'userLiked'], // check if user current liked the post
+			[Sequelize.literal('(SELECT `name` FROM `blog_categories` WHERE `blog_categories`.`id` = `blog_posts`.`blogCategoryId`)'), 'category'], // get category name for each post
 		],
 		include: [
 			{
 				model: Blog.Comment,
 				separate: true,
+				order: [['createdAt', 'ASC']],
+				as: 'comments',
 				attributes: ['id', 'content', 'createdAt'],
 				where: {
 					parentId: null,
@@ -49,13 +51,14 @@ export default defineEventHandler(async (event) => {
 						model: Blog.User,
 						as: 'UserComents',
 						attributes: ['id', 'nickname', 'profileImage',
-							[Sequelize.literal(`(SELECT comments.userId = '${userId}')`), 'madeByCurrentUser'], // if userId is the owner of the coment and reply, add madeByCurrentUser
-							[Sequelize.literal('(SELECT COUNT(*) FROM `likes` WHERE `likes`.`commentId` = `comments`.`id`)'), 'likeCount'], // get like count for each comment
-							[Sequelize.literal(`(SELECT EXISTS(SELECT 1 FROM likes WHERE likes.commentId = comments.id AND likes.userId = '${userId}' LIMIT 1))`), 'userLiked']], // check if user current liked the comment
+							[Sequelize.literal(`(SELECT blog_comments.userId = '${userId}')`), 'madeByCurrentUser'], // if userId is the owner of the coment and reply, add madeByCurrentUser
+							[Sequelize.literal('(SELECT COUNT(*) FROM `blog_likes` WHERE `blog_likes`.`blogCommentId` = `blog_comments`.`id`)'), 'likeCount'], // get like count for each comment
+							[Sequelize.literal(`(SELECT EXISTS(SELECT 1 FROM blog_likes WHERE blog_likes.blogCommentId = blog_comments.id AND blog_likes.userId = '${userId}' LIMIT 1))`), 'userLiked']], // check if user current liked the comment
 					},
 					{
 						model: Blog.Comment,
 						separate: true,
+						order: [['createdAt', 'ASC']],
 						as: 'Replies',
 						attributes: ['id', 'parentId', 'content', 'createdAt'],
 						include: [
@@ -63,16 +66,16 @@ export default defineEventHandler(async (event) => {
 								model: Blog.User,
 								as: 'UserComents',
 								attributes: ['id', 'nickname', 'profileImage',
-									[Sequelize.literal(`(SELECT comments.userId = '${userId}')`), 'madeByCurrentUser'], // if userId is the owner of the coment and reply, add madeByCurrentUser
-									[Sequelize.literal('(SELECT COUNT(*) FROM `likes` WHERE `likes`.`commentId` = `comments`.`id`)'), 'likeCount'], // get like count for each comment
-									[Sequelize.literal(`(SELECT EXISTS(SELECT 1 FROM likes WHERE likes.commentId = comments.id AND likes.userId = '${userId}' LIMIT 1))`), 'userLiked']], // check if user current liked the comment
+									[Sequelize.literal(`(SELECT blog_comments.userId = '${userId}')`), 'madeByCurrentUser'], // if userId is the owner of the coment and reply, add madeByCurrentUser
+									[Sequelize.literal('(SELECT COUNT(*) FROM `blog_likes` WHERE `blog_likes`.`blogCommentId` = `blog_comments`.`id`)'), 'likeCount'], // get like count for each comment
+									[Sequelize.literal(`(SELECT EXISTS(SELECT 1 FROM blog_likes WHERE blog_likes.blogCommentId = blog_comments.id AND blog_likes.userId = '${userId}' LIMIT 1))`), 'userLiked']], // check if user current liked the comment
 							},
 						],
 					},
 				],
 			},
 		],
-		group: ['posts.id'],
+		group: ['blog_posts.id'],
 	});
 
 	if (!post) {
@@ -88,7 +91,6 @@ export default defineEventHandler(async (event) => {
 		message: 'Post obtido com sucesso!',
 		data: {
 			...post.get({ plain: true }),
-			// userLiked: !!post.get('userLiked'),
 			category: post.get('category'),
 		},
 	};

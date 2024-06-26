@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
 		try {
 			if (fields.files.image) {
 				// save image
-				const urlFileSavedPromise = saveFileInGCS(fields.files.image[0], 'blog/');
+				const urlFileSavedPromise = saveFileInGCS(fields.files.image[0], 'blogAssets/');
 				dataFile.image = {
 					fileName: urlFileSavedPromise.fileName,
 					urlFile: await urlFileSavedPromise.urlFile,
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
 
 			if (fields.files.video) {
 				// save video
-				const urlFileSavedPromise = saveFileInGCS(fields.files.video[0], 'blog/');
+				const urlFileSavedPromise = saveFileInGCS(fields.files.video[0], 'blogAssets/');
 				dataFile.video = {
 					fileName: urlFileSavedPromise.fileName,
 					urlFile: await urlFileSavedPromise.urlFile,
@@ -87,7 +87,7 @@ export default defineEventHandler(async (event) => {
 		content: fields.otherFields.content,
 		image: dataFile.image ? dataFile.image.urlFile : null,
 		video: dataFile.video ? dataFile.video.urlFile : null,
-		categoryId: fields.otherFields.categoryId,
+		blogCategoryId: fields.otherFields.categoryId,
 		createdUserAdminId: event.context.auth.id,
 	});
 

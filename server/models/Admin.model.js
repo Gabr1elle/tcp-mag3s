@@ -27,7 +27,7 @@ Users.init(
 			allowNull: false,
 		},
 	},
-	{ sequelize, tableName: "usersAdmin" }
+	{ sequelize, tableName: "users_admin" }
 );
 
 export class Role extends Model { }
@@ -44,7 +44,7 @@ Role.init(
 			required: true,
 		},
 	},
-	{ sequelize, tableName: "roleusers" }
+	{ sequelize, tableName: "users_admin_roles" }
 );
 
 export class SystemLog extends Model { }
@@ -70,7 +70,7 @@ SystemLog.init(
 			allowNull: false,
 		},
 	},
-	{ sequelize, tableName: "systemLogs" }
+	{ sequelize, tableName: "system_logs" }
 );
 
 export class Admin {
