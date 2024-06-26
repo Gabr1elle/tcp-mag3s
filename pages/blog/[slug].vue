@@ -72,7 +72,7 @@
 						<UAvatar size="lg" alt="Usuário" />
 						<UInput v-model="newComment" type="text" placeholder="Escreva um comentário..."
 							class="ml-2 p-2 w-full text-white bg-transparent rounded-lg" />
-						<UButton type="submit" class="ml-2 p-2 bg-transparent text-white rounded">
+						<UButton type="submit" class="ml-2 p-2 bg-transparent text-white rounded" @click="storeBlog.newComment(storeBlog.blog.post.id, newComment)">
 							Comentar
 						</UButton>
 					</UForm>
@@ -116,6 +116,8 @@ import { useStoreIncentive } from '~/stores/incentive';
 const store = useStoreApp();
 const app = useStoreApp().contentApp;
 const storeIncentive = useStoreIncentive();
+
+const newComment = ref('');
 
 const storeBlog = useStoreBlog();
 
