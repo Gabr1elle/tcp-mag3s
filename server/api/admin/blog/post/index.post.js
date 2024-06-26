@@ -80,6 +80,7 @@ export default defineEventHandler(async (event) => {
 		}
 	}
 
+	// Create post
 	const post = await Blog.Post.create({
 		title: fields.otherFields.title,
 		subtitle: fields.otherFields.subtitle,
