@@ -11,43 +11,61 @@
 
 		<!-- Post -->
 		<div v-if="!storeBlog.blog.loading"
-			class="text-white py-16 lg:py-20 grid items-center gap-2 lg:gap-3 auto-rows-auto">
-			<UCard class="bg-black" :ui="{ body: { base: '', background: '', padding: 'px-6 py-6 sm:p-6' } }">
+			class="text-white py-16 lg:py-20 grid items-center gap-2 lg:gap-3 auto-rows-auto animate__animated animate__fadeIn">
+			<UCard :ui="configCard">
+
 				<!-- Breadcump -->
-					<div class="p-3">
-		 				<UBreadcrumb :links="links" />
-					</div>
+				<div class="mb-6">
+					<UBreadcrumb :links="links" :ui="configBread">
+						<template #divider>
+							<span class="w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
+						</template>
+
+						<template #default="{ link, isActive, index }">
+							<p v-if="isActive">
+								{{ link.label }} / {{ storeBlog.blog.post.slug }} - {{ storeBlog.blog.post.category }}
+							</p>
+						</template>
+					</UBreadcrumb>
+				</div>
+
 				<div class=" grid grid-cols-1 gap-y-5 items-stretch">
 					<!-- Container Mídias de destaque -->
-						<div>
-							<!-- Verifica se há imagem cadastrada -->
-							<div v-if="storeBlog.blog.post.image" class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full"
+					<div>
+						<!-- Imagem destaque -->
+						<div v-if="storeBlog.blog.post.image"
+							class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded h-[420px] w-full rounded-2xl"
 							:style="`background-image: url(${storeBlog.blog.post.image})`">
-							</div>
-
-							<!-- Verifica se há vídeo cadastrado -->
-							<div v-else-if="storeBlog.blog.post.video" class="col-span-1 rounded min-h-[420px] w-full">
-									<video class="object-cover h-full w-full" controls>
-											<source :src="storeBlog.blog.post.video" type="video/mp4">
-									</video>
-							</div>
-
-							<!-- Se não há imagem nem vídeo, mostra o placeholder -->
-							<div v-else class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full bg-black">
-							</div>
 						</div>
+
+						<!-- Video destaque -->
+						<div v-else-if="storeBlog.blog.post.video"
+							class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded h-[420px] w-full">
+							<video class="object-cover object-center h-full w-full rounded-2xl" autoplay muted loop playsinline>
+								<source :src="storeBlog.blog.post.video" type="video/mp4">
+							</video>
+						</div>
+
+						<!-- Se não há imagem nem vídeo, mostra o placeholder -->
+						<div v-else
+							class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded h-[420px] w-full bg-black rounded-2xl">
+						</div>
+					</div>
 
 					<div class="col-span-2">
-						
-						<!-- Data de publicação -->
-						<div class="text-gray-300 opacity-60 text-xs lg:text-sm mb-2">
-							{{ storeBlog.blog.post.createdAt }}
+
+						<div class="flex justify-between">
+							<!-- Data de publicação -->
+							<div class="text-gray-300 opacity-60 text-xs lg:text-sm mb-2">
+								{{ storeBlog.blog.post.createdAtFull }}
+							</div>
+
+							<!-- Badge de categorias -->
+							<div class="text-xs lg:text-sm mb-2">
+								<UBadge color="red" variant="solid">{{ storeBlog.blog.post.category }}</UBadge>
+							</div>
 						</div>
 
-						<!-- Badge de categorias --> 
-						<div class="text-xs lg:text-sm mb-2">
-							<UBadge color="red" variant="solid">{{ storeBlog.blog.post.category }}</UBadge>
-						</div>
 
 						<!-- Titulo dos post -->
 						<h1 class="text-4xl font-bold text-start text-dark mb-2">
@@ -80,7 +98,7 @@
 				</div>
 
 				<!-- Conteúdo de comentários -->
-				<div class="bg-black mt-14">
+				<div class="mt-14">
 					<h1 class="uppercase text-gray-300">Comentários</h1>
 					<hr class="border-gray-300 border-opacity-50 my-2" />
 
@@ -89,7 +107,8 @@
 						<UAvatar size="lg" alt="Usuário" />
 						<UInput v-model="newComment" type="text" placeholder="Escreva um comentário..."
 							class="ml-2 p-2 w-full text-white bg-transparent rounded-lg" />
-						<UButton type="submit" class="ml-2 p-2 bg-transparent text-white rounded" @click="storeBlog.newComment(storeBlog.blog.post.id, newComment)">
+						<UButton type="submit" class="ml-2 p-2 bg-transparent text-white rounded"
+							@click="storeBlog.newComment(storeBlog.blog.post.id, newComment)">
 							Comentar
 						</UButton>
 					</UForm>
@@ -137,21 +156,26 @@ const storeBlog = useStoreBlog();
 
 const newComment = ref('');
 
+const configCard = ref({ base: 'h-full', background: 'bg-zinc-900', rounded: 'rounded-2xl', body: { base: 'h-full', background: '', padding: 'px-6 py-6 sm:p-6' } });
+
+const configBread = ref({
+	li: 'text-red-100', inactive: 'hover:text-red-400',
+	active: 'text-red-500 dark:text-red-400'
+});
 
 const links = [{
-  label: 'Home',
-  icon: 'i-heroicons-home',
-  to: '/app/hub'
+	label: 'Home',
+	icon: 'i-heroicons-home',
+	to: '/app/hub'
 }, {
-  label: 'Blog Gr6',
-  icon: 'i-heroicons-square-3-stack-3d',
+	label: 'Blog',
+	icon: 'i-heroicons-square-3-stack-3d',
 	to: '/blog'
 }, {
-  label: 'Post',
-  icon: 'i-heroicons-link',
+	label: '',
+	icon: 'i-heroicons-link',
 	to: '/'
-}]
-
+}];
 
 definePageMeta({
 	middleware: ['blog-post'],
