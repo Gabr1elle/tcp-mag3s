@@ -24,6 +24,7 @@
 
 
 <script setup>
+
 import { useVideosStore } from '~/stores/videos';
 const searchQuery = ref('')
 const containerMaxHeight = ref(0)

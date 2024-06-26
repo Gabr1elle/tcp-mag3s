@@ -41,7 +41,7 @@ Post.init({
 	categoryId: {
 		type: DataTypes.UUID,
 		required: true,
-		allowNull: false,
+		allowNull: true,
 	},
 	createdUserAdminId: {
 		type: DataTypes.UUID,
@@ -56,6 +56,10 @@ Post.init({
 	status: {
 		type: DataTypes.BOOLEAN,
 		defaultValue: false
+	},
+	vimeoId:{
+		type: DataTypes.STRING,
+		allowNull: false
 	},
 	createdAtPost: {
 		type: DataTypes.DATE,

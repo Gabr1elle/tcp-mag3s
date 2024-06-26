@@ -15,7 +15,7 @@
           </div>
         </template>
         <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 justify-between items-stretch">
-          <VideoCreate v-for="video in props.videos" :key="video.id" :video="video"/>
+          <VideoCreate v-for="video in props.videos" :key="video.id" :video="video" @selectedCard="populateSelectedCards"/>
         </div>
     </UCard>
   </div>
@@ -31,6 +31,13 @@ const props = defineProps({
   },
 })
 const videosStore = useVideosStore()
+
+const selectedCards = ref([])
+
+const populateSelectedCards = (video) => {
+	console.log(video)
+	// selectedCards.value.push(video)
+}
 
 </script>
 <style lang="scss">

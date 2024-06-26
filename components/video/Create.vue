@@ -3,34 +3,21 @@
 		<div class="absolute right-3 top-3 z-10">
 			<UButton variant="solid" :icon="'i-heroicons-' + (isOpen ? 'minus' : 'plus')" @click="isOpen = !isOpen" />
 		</div>
-		<UCard>
+		<UCard class="alert" :class="invalid ? 'active' : ''">
 			<div class="grid grid-cols-5 gap-5 ">
 				<div :class="isOpen ? 'col-span-3' : 'hidden'" class="grid grid-cols-1 gap-4">
 					<UForm>
 						<UFormGroup label="Título">
-							<UInput v-model="formData.title" icon="i-material-symbols-match-case" />
+							<UInput @input="validateFields" v-model="formData.title" icon="i-material-symbols-match-case" />
 						</UFormGroup>
 						<UFormGroup label="Descrição">
-							<UTextarea v-model="formData.description" icon="i-material-symbols-description" />
+							<UTextarea @input="validateFields" v-model="formData.description" icon="i-material-symbols-description" />
 						</UFormGroup>
 						<div class="grid grid-cols-6 my-2">
 							<div class="col-span-4">
 								<UFormGroup label="Categoria">
-									<USelectMenu v-model="labels" by="id" name="labels" :options="options" option-attribute="name" searchable-placeholder="Procurar categoria"
-									searchable
-										creatable>
-										<template #search>
-												Procurar
-										</template>
-										<template #option="{ option }" >
-												<span class="truncate">{{ option.name }}</span>
-										</template>
-										<template #option-create="{ option }">
-											<span class="flex-shrink-0">Nova categoria:</span>
-											<span class="block truncate">{{ option.name }}</span>
-										</template>
-									</USelectMenu>
-								</UFormGroup>
+								<VideoCategorySearch v-model="formData.category" />
+							</UFormGroup>
 							</div>
 							<div class="col-span-2 flex justify-center">
 								<UFormGroup label="Status">
@@ -44,20 +31,20 @@
 							</div>
 						</UFormGroup>
 						<UFormGroup class="mt-3">
-							<UAccordion :items="items" >
+							<UAccordion :items="items">
 								<template #item>
 									<div class="grid grid-cols-2 gap-4">
 										<UFormGroup label="ID Vimeo">
-											<UInput v-model="formData.id" icon="i-material-symbols-123" disabled />
+											<UInput @input="validateFields" v-model="formData.id" icon="i-material-symbols-123" disabled />
 										</UFormGroup>
 										<UFormGroup label="Data de criação">
-											<UInput v-model="formData.created_at" icon="i-heroicons-calendar" disabled />
+											<UInput @input="validateFields" v-model="formData.created_at" icon="i-heroicons-calendar" disabled />
 										</UFormGroup>
 										<UFormGroup label="Duração (s)">
-											<UInput v-model="formData.duration" icon="i-heroicons-clock" disabled />
+											<UInput @input="validateFields" v-model="formData.duration" icon="i-heroicons-clock" disabled />
 										</UFormGroup>
 										<UFormGroup label="Visualizações">
-											<UInput v-model="formData.views" icon="i-heroicons-eye" disabled />
+											<UInput @input="validateFields" v-model="formData.views" icon="i-heroicons-eye" disabled />
 										</UFormGroup>
 									</div>
 								</template>
@@ -88,64 +75,40 @@
 </template>
 
 <script setup>
-
-function deleteCategory(id) {
-	const index = selected.value.findIndex((label) => label.id === id)
-
-	if (index !== -1) {
-		selected.value.splice(index, 1)
-	}
-}
-
+const emit = defineEmits(['selectedCard'])
 const isOpen = ref(false)
-
+const invalid = ref(false)
 const props = defineProps({
 	video: Object
 })
 
-const items = [{
-  label: 'Mais informações',
-
-  icon: 'i-heroicons-information-circle',
-  defaultOpen: false,
-  content: ''
-}]
-
-const options = ref([
-	{ id: 1, name: 'bug', color: 'd73a4a' },
-	{ id: 2, name: 'documentation', color: '0075ca' },
-	{ id: 3, name: 'duplicate', color: 'cfd3d7' },
-	{ id: 4, name: 'enhancement', color: 'a2eeef' },
-	{ id: 5, name: 'good first issue', color: '7057ff' },
-	{ id: 6, name: 'help wanted', color: '008672' },
-	{ id: 7, name: 'invalid', color: 'e4e669' },
-	{ id: 8, name: 'question', color: 'd876e3' },
-	{ id: 9, name: 'wontfix', color: 'ffffff' }
-])
-
-const selected = ref([])
-
-const labels = computed({
-	get: () => selected.value,
-	set: async (labels) => {
-		const promises = labels.map(async (label) => {
-			if (label.id) {
-				return label
-			}
-
-			const response = {
-				id: options.value.length + 1,
-				name: label.name,
-			}
-
-			options.value.push(response)
-
-			return response
-		})
-
-		selected.value = await Promise.all(promises)
+watch(isOpen, (opened) => {
+	if (opened) {
+		const valid = validateFields();
+		formData.value.status_form = valid;
+		console.log('invalid',invalid.value)
+		emit('selectedCard', formData.value);
 	}
-})
+});
+
+function validateFields() {
+	if (formData.value.title && formData.value.description && formData.value.embed && formData.value.duration && formData.value.views && formData.value.created_at && formData.value.id) {
+		console.log('valid')
+		invalid.value = false;
+		return true;
+	}
+	console.log('invalid', formData.value)
+
+	invalid.value = true;
+	return false;
+}
+
+const items = [{
+	label: 'Mais informações',
+	icon: 'i-heroicons-information-circle',
+	defaultOpen: false,
+	content: ''
+}]
 
 const formData = ref({
 	title: props.video.name,
@@ -173,5 +136,20 @@ const formData = ref({
 	&::-webkit-scrollbar {
 		display: none;
 	}
+}
+.alert {
+	background-color: inherit;
+	&.active{
+		animation: alertBackground 3s infinite alternate;
+	}
+}
+
+@keyframes alertBackground {
+  from {
+    background-color: currentColor;
+  }
+  to {
+    background-color: lightcoral;
+  }
 }
 </style>
