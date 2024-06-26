@@ -19,14 +19,20 @@
 							<!-- Container Mídias de destaque -->
 							<div>
 								<!-- Imagem destaque -->
-								<div class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[320px] w-full"
+								<div v-if="post.image" class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[320px] w-full"
 									:style="`background-image: url(${post.image})`">
 								</div>
 
 								<!-- Video destaque -->
+								<div v-else-if="post.video" class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[320px] w-full">
+									<video class="object-cover h-full w-full" controls>
+										<source :src="post.video" type="video/mp4">
+									</video>
+								</div>
 
-								<!-- Placeholder destaque -->
-
+								<!-- Se não há imagem nem vídeo, mostra o placeholder -->
+								 <div v-else class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[320px] w-full bg-black">
+									</div>
 							</div>
 
 							<div class="col-span-2 mt-6">

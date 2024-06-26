@@ -14,17 +14,23 @@
 			<UCard class="bg-black" :ui="{ body: { base: '', background: '', padding: 'px-6 py-6 sm:p-6' } }">
 				<div class=" grid grid-cols-1 gap-y-5 items-stretch">
 					<!-- Container Mídias de destaque -->
-					<div>
-						<!-- Imagem destaque -->
-						<div class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full"
-							:style="`background-image: url(${storeBlog.blog.post.image})`">
-						</div>
+			<div>
+    		<!-- Verifica se há imagem cadastrada -->
+    		<div v-if="storeBlog.blog.post.image" class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full"
+        :style="`background-image: url(${storeBlog.blog.post.image})`">
+    		</div>
 
-						<!-- Video destaque -->
+				<!-- Verifica se há vídeo cadastrado -->
+				<div v-else-if="storeBlog.blog.post.video" class="col-span-1 rounded min-h-[420px] w-full">
+						<video class="object-cover h-full w-full" controls>
+								<source :src="storeBlog.blog.post.video" type="video/mp4">
+						</video>
+				</div>
 
-						<!-- Placeholder destaque -->
-
-					</div>
+    		<!-- Se não há imagem nem vídeo, mostra o placeholder -->
+   			 <div v-else class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full bg-black">
+         </div>
+			</div>
 
 					<div class="col-span-2">
 						<!-- Data de publicação -->
