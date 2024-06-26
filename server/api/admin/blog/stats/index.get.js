@@ -9,8 +9,8 @@ export default defineEventHandler(async (event) => {
 		posts: await Blog.Post.count(),
 		categories: await Blog.Category.count(),
 		comments: await Blog.Comment.count(),
-		likesInPosts: await Blog.Like.count({ where: { postId: { [Op.ne]: null } } }), // likes in posts
-		likesInComents: await Blog.Like.count({ where: { commentId: { [Op.ne]: null } } }), // likes in comments
+		likesInPosts: await Blog.Like.count({ where: { blogPostId: { [Op.ne]: null } } }), // likes in posts
+		likesInComents: await Blog.Like.count({ where: { blogCommentId: { [Op.ne]: null } } }), // likes in comments
 		likesAll: await Blog.Like.count(), // likes in posts and comments
 		views: await Blog.Post.sum('views'),
 	};

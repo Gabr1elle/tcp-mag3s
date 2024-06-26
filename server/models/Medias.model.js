@@ -70,7 +70,7 @@ Application.init({
 		type: DataTypes.STRING,
 		required: true,
 	},
-}, { sequelize, tableName: 'medias' });
+}, { sequelize, tableName: 'cms_medias' });
 
 export class Tags extends Model { }
 Tags.init(
@@ -86,7 +86,7 @@ Tags.init(
 			required: true,
 		},
 	},
-	{ sequelize, tableName: 'tagsmedias' }
+	{ sequelize, tableName: 'cms_medias_tags' }
 );
 
 export class Types extends Model { }
@@ -103,7 +103,7 @@ Types.init(
 			required: true,
 		},
 	},
-	{ sequelize, tableName: 'typemedias' }
+	{ sequelize, tableName: 'cms_medias_types' }
 );
 
 export class Medias {
