@@ -33,13 +33,13 @@ export default defineEventHandler(async (event) => {
 		}
 
 		// Atualiza todos os posts que estão associados à categoria antiga para referenciar a nova categoria
-		await Blog.Post.update({ categoryId: body.newCategoryId }, { where: { categoryId: params.id } });
+		await Blog.Post.update({ blogCategoryId: body.newCategoryId }, { where: { blogCategoryId: params.id } });
 	} else {
 
 		// verificar se a categoria está associada a algum post
 		const posts = await Blog.Post.findAll({
 			where: {
-				categoryId: params.id,
+				blogCategoryId: params.id,
 			},
 		});
 

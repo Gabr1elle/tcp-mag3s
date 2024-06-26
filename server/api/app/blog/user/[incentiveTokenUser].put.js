@@ -61,11 +61,30 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
+	//get user by id
+	user = await Blog.User.findOne({
+		where: {
+			incentiveId: userIncentive.id,
+		},
+	});
+
 	let dataFile;
 	if (fields.files.imageProfile) {
+		//delete old image
+		if (user.profileImage) {
+			let fileName = user.profileImage.split('/').pop();
+
+			// Delete in Google Cloud Storage
+			try {
+				await deleteFileInGCS(fileName, 'profileImages/');
+			} catch (error) {
+				return error;
+			}
+		}
+
 		// Save in Google Cloud Storage
 		try {
-			const urlFileSavedPromise = saveFileInGCS(fields.files.imageProfile[0], 'profilesImage/');
+			const urlFileSavedPromise = saveFileInGCS(fields.files.imageProfile[0], 'profileImages/');
 			dataFile = {
 				fileName: urlFileSavedPromise.fileName,
 				urlFile: await urlFileSavedPromise.urlFile,
@@ -74,46 +93,16 @@ export default defineEventHandler(async (event) => {
 		} catch (error) {
 			return error;
 		}
-
-		//get user by id
-		user = await Blog.User.findOne({
-			where: {
-				incentiveId: userIncentive.id,
-			},
-		});
-
-		//delete old image
-		if (user.profileImage) {
-			console.info('deletando imagem antiga');
-			let fileName = user.profileImage.split('/').pop();
-
-			// Delete in Google Cloud Storage
-			try {
-				await deleteFileInGCS(fileName, 'profilesImage/');
-			} catch (error) {
-				return error;
-			}
-
-			//put user by id and update profile image
-			user.set({
-				profileImage: null,
-			});
-			await user.save();
-		}
-	} else {
-		//get user by id
-		user = await Blog.User.findOne({
-			where: {
-				incentiveId: userIncentive.id,
-			},
-		});
-		// if user does not send image, keep the old image
-		if (user.profileImage) {
-			dataFile = {
-				urlFile: user.profileImage,
-			};
-		}
 	}
+
+	//put user by id and update profile image
+	if (user.profileImage) {
+		user.set({
+			profileImage: null,
+		});
+		await user.save();
+	}
+
 
 	//put user by id and update nickname and profile image
 	user = await Blog.User.findOne({
@@ -124,7 +113,7 @@ export default defineEventHandler(async (event) => {
 	});
 	user.set({
 		nickname: fields.otherFields.nickname,
-		profileImage: dataFile ? dataFile.urlFile : null,
+		profileImage: dataFile ? dataFile.urlFile : user.profileImage,
 	});
 	await user.save();
 

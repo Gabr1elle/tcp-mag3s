@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 		where: {
 			incentiveId: userIncentive.id,
 		},
-		attributes: ['id', 'nickname', 'incentiveId'],
+		attributes: ['id', 'nickname', 'profileImage', 'incentiveId'],
 	});
 
 	if (!user) {
@@ -21,6 +21,19 @@ export default defineEventHandler(async (event) => {
 			message: 'Usuário do blog não encontrado!',
 			data: null,
 		});
+	}
+
+	//delete old image
+	if (user.profileImage) {
+		let fileName = user.profileImage.split('/').pop();
+
+		// Delete in Google Cloud Storage
+		try {
+			await deleteFileInGCS(fileName, 'profileImages/');
+		} catch (error) {
+			return error;
+		}
+
 	}
 
 	//delete user by userIncentive.id

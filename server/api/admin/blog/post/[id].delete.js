@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
 
 		// Delete in Google Cloud Storage
 		try {
-			await deleteFileInGCS(fileName, 'blog/');
+			await deleteFileInGCS(fileName, 'blogAssets/');
 		} catch (error) {
 			return error;
 		}
@@ -45,12 +45,11 @@ export default defineEventHandler(async (event) => {
 
 		// Delete in Google Cloud Storage
 		try {
-			await deleteFileInGCS(fileName, 'blog/');
+			await deleteFileInGCS(fileName, 'blogAssets/');
 		} catch (error) {
 			return error;
 		}
 	}
-
 
 	// Deletar o post
 	await post.destroy();
