@@ -8,29 +8,34 @@
 
 	<!-- Conteúdo -->
 	<UContainer class="min-h-screen lg:pt-6">
+
 		<!-- Post -->
 		<div v-if="!storeBlog.blog.loading"
 			class="text-white py-16 lg:py-20 grid items-center gap-2 lg:gap-3 auto-rows-auto">
 			<UCard class="bg-black" :ui="{ body: { base: '', background: '', padding: 'px-6 py-6 sm:p-6' } }">
+				<!-- Breadcump -->
+					<div class="p-3">
+		 				<UBreadcrumb :links="links" />
+					</div>
 				<div class=" grid grid-cols-1 gap-y-5 items-stretch">
 					<!-- Container Mídias de destaque -->
-			<div>
-    		<!-- Verifica se há imagem cadastrada -->
-    		<div v-if="storeBlog.blog.post.image" class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full"
-        :style="`background-image: url(${storeBlog.blog.post.image})`">
-    		</div>
+						<div>
+							<!-- Verifica se há imagem cadastrada -->
+							<div v-if="storeBlog.blog.post.image" class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full"
+							:style="`background-image: url(${storeBlog.blog.post.image})`">
+							</div>
 
-				<!-- Verifica se há vídeo cadastrado -->
-				<div v-else-if="storeBlog.blog.post.video" class="col-span-1 rounded min-h-[420px] w-full">
-						<video class="object-cover h-full w-full" controls>
-								<source :src="storeBlog.blog.post.video" type="video/mp4">
-						</video>
-				</div>
+							<!-- Verifica se há vídeo cadastrado -->
+							<div v-else-if="storeBlog.blog.post.video" class="col-span-1 rounded min-h-[420px] w-full">
+									<video class="object-cover h-full w-full" controls>
+											<source :src="storeBlog.blog.post.video" type="video/mp4">
+									</video>
+							</div>
 
-    		<!-- Se não há imagem nem vídeo, mostra o placeholder -->
-				<div v-else class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full bg-black">
-				</div>
-			</div>
+							<!-- Se não há imagem nem vídeo, mostra o placeholder -->
+							<div v-else class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full bg-black">
+							</div>
+						</div>
 
 					<div class="col-span-2">
 						
@@ -128,10 +133,25 @@ import { useStoreIncentive } from '~/stores/incentive';
 const store = useStoreApp();
 const app = useStoreApp().contentApp;
 const storeIncentive = useStoreIncentive();
+const storeBlog = useStoreBlog();
 
 const newComment = ref('');
 
-const storeBlog = useStoreBlog();
+
+const links = [{
+  label: 'Home',
+  icon: 'i-heroicons-home',
+  to: '/app/hub'
+}, {
+  label: 'Blog Gr6',
+  icon: 'i-heroicons-square-3-stack-3d',
+	to: '/blog'
+}, {
+  label: 'Post',
+  icon: 'i-heroicons-link',
+	to: '/'
+}]
+
 
 definePageMeta({
 	middleware: ['blog-post'],
