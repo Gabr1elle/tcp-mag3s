@@ -115,24 +115,17 @@ export const useStoreBlog = defineStore('storeBlog', {
 
 		// Adicione o método newComment
 		async newComment(postId, content) {
-			try {
-				const tokenUserIncentive = getCookie('tokenUserIncentive');
 
-				const response = await useFetch(
-					`api/app/blog/comments/${tokenUserIncentive}`,
-					{
+			try {
+				const data = await $fetch(`/api/app/blog/comments/${getCookie('tokenUser')}`, {
+					method: 'post',
+					body: {
 						content: content,
 						postId: postId,
 					},
-					{
-						headers: {
-							method: 'POST',
-							Authorization: `Bearer ${getCookie('tokenUserIncentive')}`,
-						},
-					}
-				);
+				});
 
-				return response.data;
+				console.log(data);
 			} catch (error) {
 				console.error(error);
 			}

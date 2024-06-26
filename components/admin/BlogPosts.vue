@@ -11,7 +11,7 @@
 							<span class="me-3">URL:</span>
 							<NuxtLink :to="`/blog/${post.slug}`" variant="link" target="_blank"
 								class="line-clamp-1 text-sky-500 hover:text-sky-700">/{{
-								post.slug
+									post.slug
 								}}</NuxtLink>
 						</p>
 					</template>
