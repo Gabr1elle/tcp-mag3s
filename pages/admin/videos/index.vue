@@ -15,8 +15,28 @@
 			<!-- Título e Descrição -->
 			<h1 class="text-2xl font-semibold animate__animated animate__fadeInDown">Videos</h1>
 			<p class="text-gray-500 animate__animated animate__fadeInUp">Gerencie os videos apresentados na plataforma</p>
-
-			<!-- Lista das postagens cadastradas -->
+			<div class="flex gap-4 my-2">
+				<ULink to="/admin/videos/categorias">
+					<div class="rounded px-4 py-2 bg-purple-500 hover:bg-purple-600 transition-all text-white">
+						<div class="flex items-center">
+							<UIcon class="w-5 h-5 me-4 text-indigo-100" name="i-material-symbols-category" />
+							<div>
+								<span class="text-lg font-bold">Categorias</span>
+							</div>
+						</div>
+					</div>
+				</ULink>
+				<ULink to="/admin/videos/tags">
+					<div class="rounded px-4 py-2 bg-purple-500 hover:bg-purple-600 transition-all text-white">
+						<div class="flex items-center">
+							<UIcon class="w-5 h-5 me-4 text-indigo-100" name="i-material-symbols-shoppingmode" />
+							<div>
+								<span class="text-lg font-bold">Tags</span>
+							</div>
+						</div>
+					</div>
+				</ULink>
+			</div>
 			<div>
 				<AdmNoVideos />
 			</div>
