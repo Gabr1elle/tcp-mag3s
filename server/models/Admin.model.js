@@ -1,7 +1,7 @@
 import { DataTypes, Model, UUIDV4 } from "sequelize";
 
-export class Admin extends Model { }
-Admin.init(
+export class Users extends Model { }
+Users.init(
 	{
 		id: {
 			type: DataTypes.UUID,
@@ -47,7 +47,34 @@ Role.init(
 	{ sequelize, tableName: "roleusers" }
 );
 
-export class Users {
-	static Admin = Admin;
+export class SystemLog extends Model { }
+SystemLog.init(
+	{
+		id: {
+			type: DataTypes.UUID,
+			defaultValue: UUIDV4,
+			primaryKey: true,
+			allowNull: false,
+		},
+		message: {
+			type: DataTypes.TEXT,
+			required: true,
+		},
+		level: {
+			type: DataTypes.TEXT,
+			required: true,
+		},
+		timestamp: {
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW,
+			allowNull: false,
+		},
+	},
+	{ sequelize, tableName: "systemLogs" }
+);
+
+export class Admin {
+	static Users = Users;
 	static Role = Role;
+	static SystemLog = SystemLog;
 }

@@ -318,8 +318,10 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 					timeout: 5000,
 				});
 
-				if (error.response._data.data.redirect) {
-					router.push({ path: '/admin/login' });
+				if (error.response._data.data) {
+					if (error.response._data.data.redirect) {
+						router.push({ path: '/admin/login' });
+					}
 				}
 			}
 
@@ -428,8 +430,10 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 					timeout: 5000,
 				});
 
-				if (error.response._data.data.redirect) {
-					router.push({ path: '/admin/login' });
+				if (error.response._data.data) {
+					if (error.response._data.data.redirect) {
+						router.push({ path: '/admin/login' });
+					}
 				}
 
 				if (error.response._data.data.isDelete) {
@@ -558,8 +562,10 @@ export const useStoreAdmin = defineStore('storeAdmin', {
 					timeout: 5000,
 				});
 
-				if (error.response._data.data.redirect) {
-					router.push({ path: '/admin/login' });
+				if (error.response._data.data) {
+					if (error.response._data.data.redirect) {
+						router.push({ path: '/admin/login' });
+					}
 				}
 			}
 

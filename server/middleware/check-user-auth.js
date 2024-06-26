@@ -1,10 +1,10 @@
-import { Users } from '../models/Users.model';
+import { Admin } from '../models/Admin.model';
 
 export default defineEventHandler(async (event) => {
 	const idUser = getCookie(event, 'idUser');
 
 	if (idUser) {
-		const user = await Users.Admin.findOne({
+		const user = await Admin.Users.findOne({
 			raw: true,
 			where: { id: idUser },
 		});

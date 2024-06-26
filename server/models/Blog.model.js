@@ -1,5 +1,5 @@
 import { DataTypes, Model, UUIDV4 } from 'sequelize';
-import { Users } from './Users.model';
+import { Admin } from './Admin.model';
 
 class User extends Model { }
 User.init({
@@ -15,6 +15,10 @@ User.init({
 	nickname: {
 		type: DataTypes.STRING,
 		required: true
+	},
+	profileImage: {
+		type: DataTypes.STRING,
+		allowNull: true
 	},
 }, { sequelize, modelName: 'users' });
 
@@ -157,7 +161,12 @@ Like.init({
 	},
 	postId: {
 		type: DataTypes.UUID,
-		required: true
+		required: true,
+		allowNull: true // Permite que likes sejam feitos em comentários sem estar associados a um post
+	},
+	commentId: {
+		type: DataTypes.UUID,
+		allowNull: true // Permite que likes sejam feitos em posts sem estar associados a um comentário
 	},
 	userId: {
 		type: DataTypes.UUID,
@@ -167,8 +176,8 @@ Like.init({
 
 // Relacionamentos
 // User Admin
-Users.Admin.hasMany(Post, { foreignKey: 'createdUserAdminId' });
-Post.belongsTo(Users.Admin, { foreignKey: 'createdUserAdminId' });
+Admin.Users.hasMany(Post, { foreignKey: 'createdUserAdminId' });
+Post.belongsTo(Admin.Users, { foreignKey: 'createdUserAdminId' });
 
 // Users App
 User.hasMany(Comment, { as: 'UserComents', foreignKey: 'userId' });

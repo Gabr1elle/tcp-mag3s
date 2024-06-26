@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { Blog } from '../../../../models/Blog.model';
 
 export default defineEventHandler(async (event) => {
@@ -8,7 +9,9 @@ export default defineEventHandler(async (event) => {
 		posts: await Blog.Post.count(),
 		categories: await Blog.Category.count(),
 		comments: await Blog.Comment.count(),
-		likes: await Blog.Like.count(),
+		likesInPosts: await Blog.Like.count({ where: { postId: { [Op.ne]: null } } }), // likes in posts
+		likesInComents: await Blog.Like.count({ where: { commentId: { [Op.ne]: null } } }), // likes in comments
+		likesAll: await Blog.Like.count(), // likes in posts and comments
 		views: await Blog.Post.sum('views'),
 	};
 
