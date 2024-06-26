@@ -65,10 +65,10 @@ export default defineEventHandler(async (event) => {
 
 	//validate the like exists
 	let like = await Blog.Like.findOne({
-		attributes: ['id', `${body.postId ? 'postId' : 'commentId'}`],
+		attributes: ['id', `${body.postId ? 'blogPostId' : 'blogCommentId'}`],
 		where: {
 			userId: user.id,
-			[body.postId ? 'postId' : 'commentId']: postOrComment.id,
+			[body.postId ? 'blogPostId' : 'blogCommentId']: postOrComment.id,
 		},
 	});
 
@@ -80,21 +80,21 @@ export default defineEventHandler(async (event) => {
 			statusCode: 200,
 			message: 'Você deu deslike 😢!', data: {
 				...like.toJSON(),
-				userLiked: false,
+				userLiked: 0,
 			},
 		};
 	} else {
 		//if like not exists, create it
 		await Blog.Like.create({
 			userId: user.id,
-			[body.postId ? 'postId' : 'commentId']: postOrComment.id,
+			[body.postId ? 'blogPostId' : 'blogCommentId']: postOrComment.id,
 		});
 
 		like = await Blog.Like.findOne({
-			attributes: ['id', `${body.postId ? 'postId' : 'commentId'}`],
+			attributes: ['id', `${body.postId ? 'blogPostId' : 'blogCommentId'}`],
 			where: {
 				userId: user.id,
-				[body.postId ? 'postId' : 'commentId']: postOrComment.id,
+				[body.postId ? 'blogPostId' : 'blogCommentId']: postOrComment.id,
 			},
 		});
 
@@ -103,7 +103,7 @@ export default defineEventHandler(async (event) => {
 			message: 'Você deu like 🤙!',
 			data: {
 				...like.toJSON(),
-				userLiked: true,
+				userLiked: 1,
 			},
 		};
 	}

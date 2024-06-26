@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
 			id: params.id
 		},
 		attributes: [
-			'id', 'title', 'subtitle', 'content', 'image', 'video', 'categoryId', 'lastUpdateUserAdminId'
+			'id', 'title', 'subtitle', 'content', 'image', 'video', 'blogCategoryId', 'lastUpdateUserAdminId'
 		]
 	});
 
@@ -87,8 +87,21 @@ export default defineEventHandler(async (event) => {
 		// Save in Google Cloud Storage
 		try {
 			if (fields.files.image) {
+				// delete image old
+				if (post.image) {
+					console.info('deletando imagem antiga do post');
+					let fileName = post.image.split('/').pop();
+
+					// Delete in Google Cloud Storage
+					try {
+						await deleteFileInGCS(fileName, 'blogAssets/');
+					} catch (error) {
+						return error;
+					}
+				}
+
 				// save image
-				const urlFileSavedPromise = saveFileInGCS(fields.files.image[0], 'blog/');
+				const urlFileSavedPromise = saveFileInGCS(fields.files.image[0], 'blogAssets/');
 				dataFile.image = {
 					fileName: urlFileSavedPromise.fileName,
 					urlFile: await urlFileSavedPromise.urlFile,
@@ -97,8 +110,21 @@ export default defineEventHandler(async (event) => {
 			}
 
 			if (fields.files.video) {
+				// delete video old
+				if (post.video) {
+					console.info('deletando video antigo do post');
+					let fileName = post.video.split('/').pop();
+
+					// Delete in Google Cloud Storage
+					try {
+						await deleteFileInGCS(fileName, 'blogAssets/');
+					} catch (error) {
+						return error;
+					}
+				}
+
 				// save video
-				const urlFileSavedPromise = saveFileInGCS(fields.files.video[0], 'blog/');
+				const urlFileSavedPromise = saveFileInGCS(fields.files.video[0], 'blogAssets/');
 				dataFile.video = {
 					fileName: urlFileSavedPromise.fileName,
 					urlFile: await urlFileSavedPromise.urlFile,
@@ -117,7 +143,7 @@ export default defineEventHandler(async (event) => {
 		content: fields.otherFields.content,
 		image: dataFile.image ? dataFile.image.urlFile : post.image,
 		video: dataFile.video ? dataFile.video.urlFile : post.video,
-		categoryId: fields.otherFields.categoryId,
+		blogCategoryId: fields.otherFields.categoryId,
 		lastUpdateUserAdminId: event.context.auth.id,
 	});
 

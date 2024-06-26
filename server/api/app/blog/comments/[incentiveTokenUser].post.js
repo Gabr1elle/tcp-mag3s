@@ -15,6 +15,15 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
+	// limited content length to 500 characters
+	if (body.content.length > 500) {
+		throw createError({
+			statusCode: 406,
+			message: 'Conteúdo do comentário ultrapassou o limite de 500 caracteres!',
+			data: null,
+		});
+	}
+
 	//verify if the body.postId is empty
 	if (!body.postId) {
 		throw createError({
@@ -65,7 +74,7 @@ export default defineEventHandler(async (event) => {
 	//create the comment
 	const comment = await Blog.Comment.create({
 		content: body.content,
-		postId: body.postId,
+		blogPostId: body.postId,
 		userId: user.id,
 		parentId: body.parentId || null,
 	});

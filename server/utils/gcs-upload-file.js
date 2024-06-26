@@ -9,7 +9,7 @@ export const saveFileInGCS = (file, otherFolder = null) => {
 
 		const bucket = googleCloudStorage.bucket(config.gcsBucketname);
 		const fileUpload = bucket.file(
-			`${config.gcsSubfolder}${otherFolder || config.gcsSubfolderEnvironment}${fileName}`
+			`${config.gcsSubfolder}${config.gcsSubfolderEnvironment}${otherFolder || 'assets/'}${fileName}`
 		);
 
 		const stream = fileUpload.createWriteStream({
