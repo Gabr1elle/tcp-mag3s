@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Buscar o post e verificar se ele existe
-	const post = await Blog.Post.findOne({where: {id: params.id}, attributes: ['id', 'title', 'slug']});
+	const post = await Blog.Post.findOne({ where: { id: params.id }, attributes: ['id', 'title', 'slug', 'image', 'video'] });
 	if (!post) {
 		throw createError({
 			statusCode: 404,
@@ -25,12 +25,43 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
+	// Deletar a imagem do post
+	if (post.dataValues.image) {
+		console.info('deletando imagem do post');
+		let fileName = post.dataValues.image.split('/').pop();
+
+		// Delete in Google Cloud Storage
+		try {
+			await deleteFileInGCS(fileName, 'blog/');
+		} catch (error) {
+			return error;
+		}
+	}
+
+	// Deletar o vídeo do post
+	if (post.dataValues.video) {
+		console.info('deletando vídeo do post');
+		let fileName = post.dataValues.video.split('/').pop();
+
+		// Delete in Google Cloud Storage
+		try {
+			await deleteFileInGCS(fileName, 'blog/');
+		} catch (error) {
+			return error;
+		}
+	}
+
+
 	// Deletar o post
 	await post.destroy();
 
 	return {
 		status: 200,
 		message: 'Post deletado com sucesso!',
-		data: post,
+		data: {
+			id: post.id,
+			title: post.title,
+			slug: post.slug,
+		},
 	};
 });
