@@ -11,7 +11,7 @@
 							<UIcon class="w-10 h-10 me-4 text-green-100" name="i-material-symbols-media-link-rounded" />
 							<div>
 								<h2 class="text-lg font-bold">CMS</h2>
-								<UCardDescription class="text-base">Gerencie as mídias do site</UCardDescription>
+								<span class="text-base">Gerencie as mídias do site</span>
 							</div>
 						</div>
 					</UCard>
@@ -23,7 +23,19 @@
 							<UIcon class="w-10 h-10 me-4 text-indigo-100" name="i-material-symbols-breaking-news-rounded" />
 							<div>
 								<h2 class="text-lg font-bold">Blog</h2>
-								<UCardDescription class="text-base">Gerencie as postagens do blog</UCardDescription>
+								<span class="text-base">Gerencie as postagens do blog</span>
+							</div>
+						</div>
+					</UCard>
+				</ULink>
+
+				<ULink to="/admin/videos">
+					<UCard class="bg-red-500 hover:bg-red-600 transition-all text-white">
+						<div class="flex items-center">
+							<UIcon class="w-10 h-10 me-4 text-indigo-100" name="i-material-symbols-movie-rounded" />
+							<div>
+								<h2 class="text-lg font-bold">Videos</h2>
+								<span class="text-base">Gerencie os videos apresentados na plataforma</span>
 							</div>
 						</div>
 					</UCard>

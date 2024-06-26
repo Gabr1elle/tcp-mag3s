@@ -34,10 +34,6 @@ Post.init({
 		type: DataTypes.STRING,
 		allowNull: true
 	},
-	video: {
-		type: DataTypes.STRING,
-		allowNull: true
-	},
 	views: {
 		type: DataTypes.INTEGER,
 		defaultValue: 0
@@ -56,6 +52,10 @@ Post.init({
 		type: DataTypes.UUID,
 		required: true,
 		allowNull: true,
+	},
+	status: {
+		type: DataTypes.BOOLEAN,
+		defaultValue: false
 	},
 	createdAtPost: {
 		type: DataTypes.DATE,

@@ -15,7 +15,11 @@ export default defineNuxtConfig({
 		global: true,
 		icons: ['material-symbols', 'ic', 'mdi'],
 	},
-
+	nitro: {
+    experimental: {
+      websocket: true,
+    },
+  },
 	typescript: {
 		shim: false,
 	},
@@ -68,6 +72,10 @@ export default defineNuxtConfig({
 			ApiIncentiveUserTest: '',
 			ApiIncentivePassTest: '',
 		},
+		// Vimeo Api
+		clientId: "",
+    clientSecret: "",
+    accessToken: "",
 	},
 
 	modules: [
