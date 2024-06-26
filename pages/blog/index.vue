@@ -36,9 +36,15 @@
 							</div>
 
 							<div class="col-span-2 mt-6">
+								
 								<!-- Data de publicação -->
 								<div class="text-gray-300 opacity-60 text-xs lg:text-sm mb-2">
 									{{ post.createdAtFull }}
+								</div>
+
+								<!-- Badge de categorias -->
+								<div class="text-xs lg:text-sm mb-2">
+									 <UBadge color="red" variant="solid">{{ post.category }}</UBadge>
 								</div>
 
 								<!-- Titulo dos posts -->

@@ -28,25 +28,31 @@
 				</div>
 
     		<!-- Se não há imagem nem vídeo, mostra o placeholder -->
-   			 <div v-else class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full bg-black">
-         </div>
+				<div v-else class="col-span-1 bg-cover bg-no-repeat bg-center items-start rounded min-h-[420px] w-full bg-black">
+				</div>
 			</div>
 
 					<div class="col-span-2">
+						
 						<!-- Data de publicação -->
 						<div class="text-gray-300 opacity-60 text-xs lg:text-sm mb-2">
 							{{ storeBlog.blog.post.createdAt }}
 						</div>
 
-						<!-- //Titulo dos post -->
+						<!-- Badge de categorias --> 
+						<div class="text-xs lg:text-sm mb-2">
+							<UBadge color="red" variant="solid">{{ storeBlog.blog.post.category }}</UBadge>
+						</div>
+
+						<!-- Titulo dos post -->
 						<h1 class="text-4xl font-bold text-start text-dark mb-2">
 							{{ storeBlog.blog.post.title }}
 						</h1>
 
-						<!-- //Subtítulo dos post -->
+						<!-- Subtítulo dos post -->
 						<p class="mb-4">{{ storeBlog.blog.post.subtitle }}</p>
 
-						<!-- //Conteúdo do post -->
+						<!-- Conteúdo do post -->
 						<p class="text-lg py-4">{{ storeBlog.blog.post.content }}</p>
 
 						<!-- Likes -->
