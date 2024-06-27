@@ -15,7 +15,7 @@
 			<UCard :ui="configCard">
 
 				<!-- Breadcump -->
-				<div class="mb-6 flex justify-center">
+				<div class="mb-6 flex justify-center lg:justify-start">
 					<UBreadcrumb :links="links" :ui="configBread">
 						<template #divider>
 							<span class="w-2 md:w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
