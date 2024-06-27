@@ -12,16 +12,16 @@
 		<div v-if="!storeBlog.blog.loading" class="text-white py-16 lg:py-20 animate__animated animate__fadeIn">
 
 			<!-- Breadcump -->
-			<div class="mb-6">
+			<div class="mb-6 flex justify-center lg:justify-start">
 				<UBreadcrumb :links="links" :ui="configBread">
 					<template #divider>
-						<span class="w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
+						<span class="w-2 md:w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
 					</template>
 				</UBreadcrumb>
 			</div>
 
-			<div class="grid place-items-stretch gap-10 lg:gap-6 auto-rows-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
-				<div v-if="storeBlog.hasPostsBlog" v-for="post in storeBlog.blog.posts" :key="post.id" class="relative">
+			<div class="flex flex-wrap gap-10 md:gap-6">
+				<div v-if="storeBlog.hasPostsBlog" v-for="post in storeBlog.blog.posts" :key="post.id" class="grow w-[350px]">
 					<UCard :ui="configCard">
 						<div class="grid grid-cols-1 gap-y-5 lg:gap-y-0 items-stretch justify-between h-full">
 							<!-- Container Mídias de destaque -->
@@ -60,15 +60,15 @@
 									</div>
 
 									<!-- Titulo dos posts -->
-									<h1 class="text-4xl font-bold text-start text-dark mb-2">
+									<h1 class="text-4xl font-bold text-start text-dark mb-2 line-clamp-1">
 										{{ post.title }}
 									</h1>
 
 									<!-- Subtítulo dos posts -->
-									<p class="mb-4">{{ post.subtitle }}</p>
+									<p class="mb-4 line-clamp-1">{{ post.subtitle }}</p>
 
 									<!-- Conteúdo do post -->
-									<p class="text-lg my-4 line-clamp" v-html="post.content"></p>
+									<p class="text-lg my-4 line-clamp-3" v-html="post.content"></p>
 								</div>
 							</div>
 
@@ -77,12 +77,12 @@
 								<div class="flex justify-end items-center gap-3">
 									<button class="flex gap-1 items-center">
 										<UIcon name="i-heroicons-eye" />
-										{{ post.views }}
+										{{ formatNumber(post.views) }}
 									</button>
 
 									<button class="flex gap-1 items-center">
 										<UIcon name="i-heroicons-heart" />
-										{{ post.likeCount }}
+										{{ formatNumber(post.likeCount) }}
 									</button>
 								</div>
 
@@ -146,11 +146,11 @@ const configBread = ref({
 });
 
 const links = [{
-	label: 'Home',
+	label: 'Hub',
 	icon: 'i-heroicons-home',
 	to: '/app/hub'
 }, {
-	label: 'Blog',
+	label: 'Central de Notícias',
 	icon: 'i-heroicons-square-3-stack-3d',
 	to: '/blog'
 }]
@@ -167,11 +167,4 @@ onNuxtReady(async () => {
 });
 </script>
 
-<style scoped>
-.line-clamp {
-	-webkit-line-clamp: 4;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-}
-</style>
+<style scoped></style>
