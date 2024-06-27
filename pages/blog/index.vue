@@ -102,11 +102,16 @@
 				</div>
 			</div>
 		</div>
-
+		
 		<div v-else class="flex flex-col justify-center items-center h-screen">
 			<AppOthersSpin />
 			<p class="text-white mt-2">Carregando os Posts, aguarde...</p>
 		</div>
+
+				<!-- Paginação -->
+			<div class="flex justify-center items-center py-20">
+				<UPagination v-model="page" :page-count="5" :total="items.length" size="lg"/>
+			</div>
 
 		<!-- Menu Behaviour -->
 		<div v-if="storeIncentive.userLoggedIn">
@@ -139,6 +144,11 @@ const configCard = ref({
 	rounded: 'rounded-2xl',
 	body: { base: 'h-full', background: '', padding: 'px-6 py-6 sm:p-6' }
 });
+
+// Paginação
+const page = ref(1);
+const items = ref(storeBlog.blog.posts);
+
 
 const configBread = ref({
 	li: 'text-red-100', inactive: 'hover:text-red-400',
