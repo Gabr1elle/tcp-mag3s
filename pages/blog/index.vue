@@ -20,8 +20,8 @@
 				</UBreadcrumb>
 			</div>
 
-			<div class="grid place-items-stretch gap-10 lg:gap-6 auto-rows-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
-				<div v-if="storeBlog.hasPostsBlog" v-for="post in storeBlog.blog.posts" :key="post.id" class="relative">
+			<div class="flex flex-wrap gap-10 md:gap-6">
+				<div v-if="storeBlog.hasPostsBlog" v-for="post in storeBlog.blog.posts" :key="post.id" class="grow w-[350px]">
 					<UCard :ui="configCard">
 						<div class="grid grid-cols-1 gap-y-5 lg:gap-y-0 items-stretch justify-between h-full">
 							<!-- Container Mídias de destaque -->
