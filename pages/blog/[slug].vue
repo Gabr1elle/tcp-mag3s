@@ -15,15 +15,18 @@
 			<UCard :ui="configCard">
 
 				<!-- Breadcump -->
-				<div class="mb-6">
+				<div class="mb-6 flex justify-center">
 					<UBreadcrumb :links="links" :ui="configBread">
 						<template #divider>
-							<span class="w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
+							<span class="w-2 md:w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
 						</template>
 
 						<template #default="{ link, isActive, index }">
-							<p v-if="isActive">
+							<p v-if="isActive" class="line-clamp-1 hidden md:block">
 								{{ link.label }} / {{ storeBlog.blog.post.slug }} - {{ storeBlog.blog.post.category }}
+							</p>
+							<p class="line-clamp-1 hidden md:block">
+								{{ link.label }}
 							</p>
 						</template>
 					</UBreadcrumb>
@@ -82,12 +85,12 @@
 						<div class="flex justify-end items-center gap-3">
 							<UButton variant="ghost" class="flex gap-1 items-center">
 								<UIcon name="i-heroicons-eye" />
-								{{ storeBlog.blog.post.views }}
+								{{ formatNumber(storeBlog.blog.post.views) }}
 							</UButton>
 							<UButton variant="" class="flex gap-1 items-center" :class="{ 'text-red-500': storeBlog.blog.post.liked }"
 								@click="onLike">
 								<UIcon name="i-heroicons-heart" />
-								{{ storeBlog.blog.post.likeCount }}
+								{{ formatNumber(storeBlog.blog.post.likeCount) }}
 							</UButton>
 
 							<UButton variant="ghost" class="flex gap-1 items-center">
@@ -164,17 +167,17 @@ const configBread = ref({
 });
 
 const links = [{
-	label: 'Home',
+	label: 'Hub',
 	icon: 'i-heroicons-home',
 	to: '/app/hub'
 }, {
-	label: 'Blog',
+	label: 'Central de Notícias',
 	icon: 'i-heroicons-square-3-stack-3d',
 	to: '/blog'
 }, {
 	label: '',
 	icon: 'i-heroicons-link',
-	to: '/'
+	to: ''
 }];
 
 definePageMeta({

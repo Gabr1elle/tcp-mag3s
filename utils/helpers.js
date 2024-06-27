@@ -188,3 +188,8 @@ export function initMetaPixelCode(instance, idCode) {
 	instance.setPixelId(idCode);
 	instance.enable();
 }
+
+// Function to format numbers
+export const formatNumber = (number) => {
+	return Number(number).toLocaleString('pt-BR');
+}

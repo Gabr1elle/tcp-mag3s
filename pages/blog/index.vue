@@ -12,10 +12,10 @@
 		<div v-if="!storeBlog.blog.loading" class="text-white py-16 lg:py-20 animate__animated animate__fadeIn">
 
 			<!-- Breadcump -->
-			<div class="mb-6">
+			<div class="mb-6  flex justify-center">
 				<UBreadcrumb :links="links" :ui="configBread">
 					<template #divider>
-						<span class="w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
+						<span class="w-2 md:w-6 h-1 mx-3 rounded-full bg-gray-400 dark:bg-gray-300" />
 					</template>
 				</UBreadcrumb>
 			</div>
@@ -77,12 +77,12 @@
 								<div class="flex justify-end items-center gap-3">
 									<button class="flex gap-1 items-center">
 										<UIcon name="i-heroicons-eye" />
-										{{ post.views }}
+										{{ formatNumber(post.views) }}
 									</button>
 
 									<button class="flex gap-1 items-center">
 										<UIcon name="i-heroicons-heart" />
-										{{ post.likeCount }}
+										{{ formatNumber(post.likeCount) }}
 									</button>
 								</div>
 
@@ -146,11 +146,11 @@ const configBread = ref({
 });
 
 const links = [{
-	label: 'Home',
+	label: 'Hub',
 	icon: 'i-heroicons-home',
 	to: '/app/hub'
 }, {
-	label: 'Blog',
+	label: 'Central de Notícias',
 	icon: 'i-heroicons-square-3-stack-3d',
 	to: '/blog'
 }]
