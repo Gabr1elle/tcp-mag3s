@@ -115,15 +115,17 @@ export const useStoreBlog = defineStore('storeBlog', {
 
 		// Adicione o método newComment
 		async newComment(postId, content) {
-
 			try {
-				const data = await $fetch(`/api/app/blog/comments/${getCookie('tokenUser')}`, {
-					method: 'post',
-					body: {
-						content: content,
-						postId: postId,
-					},
-				});
+				const data = await $fetch(
+					`/api/app/blog/comments/${getCookie('tokenUser')}`,
+					{
+						method: 'post',
+						body: {
+							content: content,
+							postId: postId,
+						},
+					}
+				);
 
 				console.log(data);
 			} catch (error) {
@@ -131,20 +133,15 @@ export const useStoreBlog = defineStore('storeBlog', {
 			}
 		},
 
-		// Adicione o método onLike
+		// FUnção de Like
 		async onLike(postId) {
 			try {
-				const tokenUserIncentive = getCookie('tokenUserIncentive');
-
-				const response = await useFetch(
-					`api/app/blog/like/${tokenUserIncentive}`,
+				const response = await $fetch(
+					`/api/app/blog/like/${getCookie('tokenUser')}`,
 					{
-						postId: postId,
-					},
-					{
-						headers: {
-							method: 'POST',
-							Authorization: `Bearer ${getCookie('tokenUserIncentive')}`,
+						method: 'post',
+						body: {
+							postId: postId,
 						},
 					}
 				);

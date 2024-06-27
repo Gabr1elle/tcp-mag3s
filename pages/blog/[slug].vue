@@ -32,7 +32,15 @@
 					</UBreadcrumb>
 				</div>
 
-				<div class=" grid grid-cols-1 gap-y-5 items-stretch">
+				<!-- Like Post Destaque -->
+				<div class="absolute">
+					<UButton variant="link" class="flex gap-1 items-center"   
+						@click="UpdateBlogLiked">
+						<UIcon :name="isLiked ? 'i-material-symbols-favorite' : 'i-material-symbols-favorite-outline'" class=" bg-red-600 text-[40px] " :class="{ 'text-red-500': isLiked }"/>
+					</UButton>
+				</div>
+
+				<div class=" grid grid-cols-1 gap-y-5 items-stretch"> 
 					<!-- Container Mídias de destaque -->
 					<div>
 						<!-- Imagem destaque -->
@@ -69,7 +77,6 @@
 							</div>
 						</div>
 
-
 						<!-- Titulo dos post -->
 						<h1 class="text-4xl font-bold text-start text-dark mb-2">
 							{{ storeBlog.blog.post.title }}
@@ -81,20 +88,24 @@
 						<!-- Conteúdo do post -->
 						<p class="text-lg py-4">{{ storeBlog.blog.post.content }}</p>
 
-						<!-- Likes -->
+						<!-- Views -->
 						<div class="flex justify-end items-center gap-3">
 							<UButton variant="ghost" class="flex gap-1 items-center">
 								<UIcon name="i-heroicons-eye" />
 								{{ formatNumber(storeBlog.blog.post.views) }}
 							</UButton>
-							<UButton variant="" class="flex gap-1 items-center" :class="{ 'text-red-500': storeBlog.blog.post.liked }"
-								@click="onLike">
+
+							<!-- Likes -->
+							<UButton variant="ghost" class="flex gap-1 items-center" :class="{ 'text-red-500': isLiked }"
+								@click="UpdateBlogLiked">
 								<UIcon name="i-heroicons-heart" />
 								{{ formatNumber(storeBlog.blog.post.likeCount) }}
 							</UButton>
 
+						<!-- Comentários -->
 							<UButton variant="ghost" class="flex gap-1 items-center">
 								<UIcon name="i-heroicons-chat-bubble-left" />
+								{{storeBlog.blog.post.comments.length}}
 							</UButton>
 						</div>
 					</div>
@@ -158,6 +169,8 @@ const storeIncentive = useStoreIncentive();
 const storeBlog = useStoreBlog();
 
 const newComment = ref('');
+const onLike = ref('');
+const isLiked = ref(storeBlog.blog.post.userLiked);
 
 const configCard = ref({ base: 'h-full', background: 'bg-zinc-900', rounded: 'rounded-2xl', body: { base: 'h-full', background: '', padding: 'px-6 py-6 sm:p-6' } });
 
@@ -180,6 +193,12 @@ const links = [{
 	to: ''
 }];
 
+const UpdateBlogLiked = async() => {
+	const data = await storeBlog.onLike(storeBlog.blog.post.id) 
+	storeBlog.blog.post.userLiked = data.userLiked;
+	isLiked.value = data.userLiked;
+}
+
 definePageMeta({
 	middleware: ['blog-post'],
 });
@@ -191,6 +210,7 @@ onNuxtReady(async () => {
 	store.selectMenuBehaviour(2, 'showing', app.config_will_have_scratch_card && storeIncentive.hasScratchCardQtd);
 	// Inserindo o link para a opção dos números da sorte no Menu
 	store.selectMenuBehaviour(4, 'path', `/app/revelar-premio/${storeIncentive.gamification.lotteryDraws.nextDraw.id}`);
+
 });
 </script>
 
