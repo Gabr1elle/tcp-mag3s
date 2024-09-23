@@ -77,6 +77,7 @@ export default defineNuxtConfig({
 		'vue3-carousel-nuxt',
 		'@formkit/auto-animate/nuxt',
 		'nuxt3-meta-pixel',
+		'@nuxt/test-utils/module'
 	],
 
 	facebook: {
